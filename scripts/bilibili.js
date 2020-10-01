@@ -5,32 +5,68 @@
 // 可通过传入参数( all/global/cn )来控制显示 全部番剧、国外番剧、国内番剧
 
 const LW = new ListWidget() // widget对象
-LW.url="bilibili://" // 点击小组件跳转到bilibili
+LW.url = "bilibili://" // 点击小组件跳转到bilibili
 let presentSize = "large" // 预览组件的大小,可设置为 large/medium/small
 const mainColor = new Color("#FB7299")
 
+
+
+let userDefineTarget = "global" // 用户界面传入widget的参数：全部/国外/国内/all/global/cn
+let followLimited = false // 是否仅显示追番
+const followType = 1 // 1 、2 对应 追番、追剧，目前追剧相关功能暂未实现.所以这里设为固定值1。该功能要求用户在B站APP - 我的 - 点击头像 - 点击 右上角菜单 - 空间设置 - 打开“公开显示订阅”开关
+let uid = 8165988 // 用户的UID，配合追番功能使用
+let params = [userDefineTarget, followLimited, uid]
+
 if (config.runsInWidget) {
     presentSize = null
+    params = args.widgetParameter ? args.widgetParameter.split(",") : []
 }
 
-
-let userDefineTarget = "cn" // 用户界面传入widget的参数：全部/国外/国内/all/global/cn
-let awp = args.widgetParameter
+let awp = params[0]
 const awpMap = {
     "国产": "cn",
-    "国外": "global",
-    "全部": "all"
+    "国创": "cn",
+    "番剧": "global",
+    "进口": "global",
+    "全部": "all",
 }
+
 awp = awpMap[awp] ? awpMap[awp] : awp
 if (awp === "global" || awp === "cn" || awp === "all") {
     userDefineTarget = awp
 }
 
+let flp = params[1] ? params[1] : false
+
+const flpMap = {
+    "追番": true,
+    "全部": false,
+    "true": true,
+    "false": false
+}
+flp = flpMap[flp] ? flpMap[flp] : flp
+
+if (flp === true || flp === false) {
+    followLimited = flp
+}
+
+uid = params[2]
+
+console.log("uid:", uid)
+if ((uid === undefined || uid === null) & params.length != 1 & followLimited == true) {
+    throw new Error("请在参数中填写uid\n\t参数填写范例：全部,追番,8165988\n\t其中逗号全部为英文逗号\n\n uid获取方式：B站APP - 我的 - 点击头像 - 详情")
+}
 /**
  * 加载番剧timeline
- * @param {string} range: 可选值 global cn
+ * @param {string} range: 可选值 global、cn 分别代表 进口、国产
  */
-function loadItems(range) {
+async function loadItems(range) {
+    let follows = []
+    if (followLimited) {
+        // 仅显示追番
+        // 获取追番列表
+        follows = await loadFollow(followType)
+    }
     return new Request(`https://bangumi.bilibili.com/web_api/timeline_${range}`).loadJSON().then(res => {
         let allSeason = []
         res.result.forEach((val, i) => {
@@ -39,9 +75,26 @@ function loadItems(range) {
         return allSeason;
     }).then(seasons => {
         // 过滤港澳台 和 本周停更
-        return seasons.filter(sea => sea.title.indexOf("港澳台") == -1 & Number(sea.delay) === 0)
+        let result = seasons.filter(sea => sea.title.indexOf("港澳台") == -1 & Number(sea.delay) === 0)
+        if (followLimited) {
+            result = result.filter(sea => follows.indexOf(sea.title) !== -1)
+        }
+        return result
     })
 }
+
+/**
+ * 追番/追剧列表
+ * @param {number} followType : 可选值 1 、2 分别代表 追番、追剧
+ */
+function loadFollow(followType) {
+    // 出于性能以及实际情况考虑，仅处理前30条追番
+    return new Request(`https://api.bilibili.com/x/space/bangumi/follow/list?type=${followType}&ps=30&vmid=${uid}`).loadJSON().then(res => {
+        return res.data.list.map(fd => fd.title)
+    })
+}
+
+
 
 /**
  * 加载season中的square_cover图片并保存至season.img
@@ -137,7 +190,7 @@ async function renderList() {
     const imgWidth = stackHeight // 图片的宽度
     const itemSpacer = 5
     const contentTxtWidth = 250 // 番剧名称的宽度
-    const dividerWidth = timeTxtWidth + imgWidth + contentTxtWidth + itemSpacer*2// 分割线的宽度
+    const dividerWidth = timeTxtWidth + imgWidth + contentTxtWidth + itemSpacer * 2 // 分割线的宽度
     const dividerTxtWidth = 40 // 分割线中的文本的宽度
     const dividerLineWidth = (dividerWidth - dividerTxtWidth) / 2 //左右两侧分割线的宽度
     const dividerHeight = 12 // 分割线的高度
@@ -166,10 +219,10 @@ async function renderList() {
         timeTxtStack.size = new Size(timeTxtWidth, stackHeight)
 
         const imgStack = stack.addStack() // 图片容器
-        
+
         imgStack.size = new Size(imgWidth, stackHeight)
         const stackImg = imgStack.addImage(sea.img) // 图片
-        
+
         stackImg.cornerRadius = 5
         stackImg.imageSize = new Size(stackHeight, stackHeight)
 
@@ -221,15 +274,30 @@ async function renderCutList(maxN) {
 }
 
 if (config.widgetFamily == "large" || presentSize == "large") {
+    const titleSize = 36
     // 大号插件  
-    let titleTxt = LW.addText("最近更新")
-    titleTxt.font = Font.boldSystemFont(36)
+
+    const titleTxt = LW.addText("最近更新")
+    //     titleStack.addSpacer(10)
+    let contentType = "番剧"
+    if (userDefineTarget == "global") {
+        contentType = "番剧"
+    } else if (userDefineTarget == "cn") {
+        contentType = "国创"
+    } else if (userDefineTarget == "all") {
+        contentType = "全部"
+    }
+
+    const subTxt = LW.addText(contentType)
+    subTxt.textColor = Color.white()
+    subTxt.font = Font.thinMonospacedSystemFont(titleSize / 3)
+    titleTxt.font = Font.boldRoundedSystemFont(titleSize)
     titleTxt.textColor = Color.white()
     LW.addSpacer(10);
     await renderCutList(7)
 } else if (config.widgetFamily == "medium" || presentSize == "medium") {
     // 中号的插件
-    await renderCutList(4)
+    await renderCutList(3)
 } else if (config.widgetFamily == "small" || presentSize == "small") {
     // 小号的插件
     let target = seasons[0]

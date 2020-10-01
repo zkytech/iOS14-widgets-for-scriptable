@@ -17,25 +17,77 @@
 
 2. 编辑 小组件，点击`选取 script` 并选择前面导入的脚本。
 
-## 小组件
 
-### bilibili 最近更新番剧列表
-#### 安装
+## bilibili 最近更新番剧列表
+
+### 效果预览
+
+![](./preview/bilibili预览.JPEG)
+
+### 安装
+
 下载[安装脚本](https://github.com/zkytech/iOS14-widgets-for-scriptable/releases/download/1.0.0/bilibili.scriptable)后，用`scriptable`打开
 
-#### 参数
+### 参数
 
-小组件的parameter可以设置为以下几个值
+小组件的parameter可以设置以下几个值
 
-|值|说明|
-|---|---|
-|`global`|进口番剧更新列表|
-|`cn`|国产番剧更新列表|
-|`all`|进口+国产|
+<table>
+    <thead>
+        <tr>
+            <th>参数</th> <th>必填</th> <th>值/示例</th> <th>说明</th> 
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td rowspan="3">type</td> <td rowspan="3">否</td> <td>番剧/global/进口</td> <td>进口番剧</td>
+        </tr>
+        <tr>
+            <td>国创/cn/国产</td> <td>国产动画</td>
+        </tr>
+        <tr>
+            <td>all/全部</td> <td>进口+国产</td>
+        </tr>
+        <tr>
+            <td rowspan="2">onlyFollowed</td> <td rowspan = "2">否</td> <td>追番/true</td> <td>仅显示已追</td>
+        </tr>
+        <tr>
+            <td>全部/false</td> <td>未追番 + 已追番</td>
+        </tr>
+        <tr>
+            <td>uid</td> <td>当onlyFollowed为追番/true时 必填</td> <td>8165988</td> <td>Bilibili账号的UID，如果要设置仅显示追番，必须同时设定这个值。同时要设置空间公开显示番剧订阅</td>
+        </tr>
+    </tbody>
+</table>
 
-![](preview/bilibili设置.PNG)
+在小组件的编辑界面，按照以下格式进行配置
 
-#### 预览
+```javascript
+// 配置格式
+type,onlyFollowed,uid  //注意必须用英文逗号
 
-![](./preview/bilibili大中.PNG)
-![](./preview/bilibili小.PNG)
+// 示例
+示例1: 国创,追番,8165988
+
+示例2: cn,true,8165988
+
+示例3: ,追番,8165988
+
+示例4: ,true,8165988
+
+示例5: 番剧,追番,8165988
+
+示例6: global,true,8165988
+
+示例7: 全部,追番,8165988
+
+示例8: all,true,8165988
+```
+
+配置示例
+
+![](preview/bilibili配置1.jpg)
+
+
+![](preview/bilibili配置2.jpg)
+
