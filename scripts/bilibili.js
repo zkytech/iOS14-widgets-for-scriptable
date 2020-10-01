@@ -135,8 +135,9 @@ async function renderList() {
     const stackHeight = 35 // 每条番剧信息的高度
     const timeTxtWidth = 50 // 时间字符串的宽度
     const imgWidth = stackHeight // 图片的宽度
-    const contentTxtWidth = 230 // 番剧名称的宽度
-    const dividerWidth = timeTxtWidth + imgWidth + contentTxtWidth // 分割线的宽度
+    const itemSpacer = 5
+    const contentTxtWidth = 250 // 番剧名称的宽度
+    const dividerWidth = timeTxtWidth + imgWidth + contentTxtWidth + itemSpacer*2// 分割线的宽度
     const dividerTxtWidth = 40 // 分割线中的文本的宽度
     const dividerLineWidth = (dividerWidth - dividerTxtWidth) / 2 //左右两侧分割线的宽度
     const dividerHeight = 12 // 分割线的高度
@@ -155,6 +156,7 @@ async function renderList() {
             lastDay = nowDay
         }
         const stack = LW.addStack()
+        stack.spacing = itemSpacer
         // 该url会调起bilibili app到相应的番剧页面
         stack.url = `bilibili://bangumi/season/${sea.season_id}`
         stack.layoutHorizontally()
@@ -164,8 +166,10 @@ async function renderList() {
         timeTxtStack.size = new Size(timeTxtWidth, stackHeight)
 
         const imgStack = stack.addStack() // 图片容器
+        
         imgStack.size = new Size(imgWidth, stackHeight)
         const stackImg = imgStack.addImage(sea.img) // 图片
+        
         stackImg.cornerRadius = 5
         stackImg.imageSize = new Size(stackHeight, stackHeight)
 
