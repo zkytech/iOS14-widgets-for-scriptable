@@ -8,14 +8,18 @@
 ### 安装脚本
 安装脚本有两种方法，自行选择：
 方法1：在`scriptable`中新建脚本，然后将`scripts`文件夹下的js文件内容粘贴到脚本中。
-方法2：使用`alook`的下载器或其它工具下载`build`文件夹中文件的`raw`链接，然后用`scriptable`打开，选择`Add to my scripts`即可。
+方法2：下载安装脚本，然后用`scriptable`打开，选择`Add to my scripts`即可。
 
 ### 使用
 1. 在桌面创建小组件 选择 `scriptable`
 
 2. 编辑 小组件，点击`选取 script` 并选择前面导入的脚本。
 
-## bilibili 最近更新
+## 小组件
+
+### bilibili 最近更新番剧
+
+[安装脚本](https://github.com/zkytech/iOS14-widgets-for-scriptable/releases/download/1.0.0/bilibili.scriptable)
 
 ![](./preview/bilibili大中.PNG)
 ![](./preview/bilibili小.PNG)
