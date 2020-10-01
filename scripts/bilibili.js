@@ -1,12 +1,13 @@
 // Variables used by Scriptable.
 // These must be at the very top of the file. Do not edit.
 // icon-color: pink; icon-glyph: video;
-
 // iOS 14 widget --- bilibili最近更新番剧信息
 // 可通过传入参数( all/global/cn )来控制显示 全部番剧、国外番剧、国内番剧
 
 const LW = new ListWidget() // widget对象
+LW.url="bilibili://" // 点击小组件跳转到bilibili
 let presentSize = "large" // 预览组件的大小,可设置为 large/medium/small
+
 
 if (config.runsInWidget) {
     presentSize = null

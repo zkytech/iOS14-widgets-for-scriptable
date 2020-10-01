@@ -18,8 +18,22 @@
 ## 小组件
 
 ### bilibili 最近更新番剧
+#### 安装
+下载[安装脚本](https://github.com/zkytech/iOS14-widgets-for-scriptable/releases/download/1.0.0/bilibili.scriptable)后，用`scriptable`打开
 
-[安装脚本](https://github.com/zkytech/iOS14-widgets-for-scriptable/releases/download/1.0.0/bilibili.scriptable)
+#### 参数
+
+小组件的parameter可以设置为以下几个值
+
+|值|说明|
+|---|---|
+|`global`|进口番剧更新列表|
+|`cn`|进口番剧更新列表|
+|`all`|进口+国产|
+
+![](preview/bilibili设置.PNG)
+
+#### 预览
 
 ![](./preview/bilibili大中.PNG)
 ![](./preview/bilibili小.PNG)
