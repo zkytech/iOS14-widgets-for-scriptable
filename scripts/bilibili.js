@@ -7,7 +7,7 @@
 const LW = new ListWidget() // widget对象
 LW.url="bilibili://" // 点击小组件跳转到bilibili
 let presentSize = "large" // 预览组件的大小,可设置为 large/medium/small
-
+const mainColor = new Color("#FB7299")
 
 if (config.runsInWidget) {
     presentSize = null
@@ -242,12 +242,15 @@ if (config.widgetFamily == "large" || presentSize == "large") {
     await loadImg(target)
     LW.backgroundImage = target.img
     const txt = LW.addText(target.title)
-    txt.textColor = new Color("#FB7299")
+    txt.textColor = mainColor
+    const indexTxt = LW.addText(target.pub_index)
+    indexTxt.font = Font.boldRoundedSystemFont(10)
+    indexTxt.textColor = mainColor
     txt.font = Font.boldRoundedSystemFont(20)
 }
 
 
-LW.backgroundColor = new Color("#FB7299")
+LW.backgroundColor = mainColor
 // LW.backgroundGradient = gradient
 
 if (!config.runsInWidget) {
