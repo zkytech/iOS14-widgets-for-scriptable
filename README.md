@@ -19,7 +19,7 @@
 
 ## 小组件
 
-### bilibili 最近更新番剧
+### bilibili 最近更新番剧列表
 #### 安装
 下载[安装脚本](https://github.com/zkytech/iOS14-widgets-for-scriptable/releases/download/1.0.0/bilibili.scriptable)后，用`scriptable`打开
 
