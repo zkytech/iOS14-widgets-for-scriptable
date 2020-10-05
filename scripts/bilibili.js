@@ -52,7 +52,7 @@ if (flp === true || flp === false) {
 
 uid = params[2]
 
-if ((uid === undefined || uid === null) & params.length != 1 & followLimited == true) {
+if ((uid === undefined || uid === null) && params.length != 1 && followLimited == true) {
     throw new Error("请在参数中填写uid\n\t参数填写范例：全部,追番,8165988\n\t其中逗号全部为英文逗号\n\n uid获取方式：B站APP - 我的 - 点击头像 - 详情")
 }
 /**
@@ -74,7 +74,7 @@ async function loadItems(range) {
         return allSeason;
     }).then(seasons => {
         // 过滤港澳台 和 本周停更
-        let result = seasons.filter(sea => sea.title.indexOf("港澳台") == -1 & Number(sea.delay) === 0)
+        let result = seasons.filter(sea => sea.title.indexOf("港澳台") == -1 && sea.title.indexOf("僅限台灣地區") == -1  && Number(sea.delay) === 0)
         if (followLimited) {
             result = result.filter(sea => follows.indexOf(sea.title) !== -1)
         }
