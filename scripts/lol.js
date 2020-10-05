@@ -55,7 +55,9 @@ async function loadLolPastMatches() {
 let pastMatches = await loadLolPastMatches()
 let runningMatches = await loadLolRunningMatches()
 let upcomingMatches = await loadLolUpcomingMatches()
-
+/**
+ * 渲染大号组件
+ */
 async function renderLarge(){
   let matches = pastMatches.concat(runningMatches).concat(upcomingMatches)
   if (matches.length > 6) {
@@ -67,16 +69,24 @@ async function renderLarge(){
 
   const matchImg = await loadImage(matches[matches.length - 1].league.image_url) // 赛事logo
   const matchImageStack = LW.addStack()
+  matchImageStack.size = new Size(267,50)
   const matchImage = matchImageStack.addImage(matchImg)
-  matchImage.imageSize = new Size(35, 35)
+
+  matchImage.imageSize = new Size(50, 50)
   await renderMatchList(matches)
 }
 
+/**
+ * 渲染中号组件
+ */
 async function renderMedium(){
   let matches = runningMatches.concat(upcomingMatches).slice(0,2)
   await renderMatchList(matches)
 }
 
+/**
+ * 渲染小号组件
+ */
 async function renderSmall(){
   LW.addText("施工中....")
 }
@@ -88,13 +98,13 @@ async function renderMatchList(matches){
 
     const team1 = val.opponents[0].opponent // 队伍1
     const team2 = val.opponents[1].opponent // 队伍2
-    const matchScheduledAt = new Date(val.scheduled_at)
+    const matchScheduledAt = new Date(val.scheduled_at) // 比赛开始时间
     const timeStr = dateFormat("HH:MM", matchScheduledAt)
     if (i === 0 || matchScheduledAt.getDate() !== lastDate) {
-      addDivider(matchScheduledAt, lineWidth, 12, dlineWidth, dateStrWidth)
+      addDivider(matchScheduledAt, lineWidth, 12, dlineWidth, dateStrWidth) // 日期分割线
     }
     lastDate = matchScheduledAt.getDate()
-    // logo
+    // 队伍logo
     const team1Logo = await loadImage(team1.image_url)
     const team2Logo = await loadImage(team2.image_url)
     team1Logo.size = new Size(lineHeight, lineHeight)
@@ -108,7 +118,7 @@ async function renderMatchList(matches){
     }
     const LWl = LW.addStack()
     LWl.size = new Size(lineWidth, lineHeight + teamNameFontSize)
-    const container = LWl.addStack()
+    const container = LWl.addStack() // 多套一层是为了居中
     container.url = val.live_url
     LW.addSpacer(6)
     const timeStrStack = container.addStack()
@@ -118,15 +128,15 @@ async function renderMatchList(matches){
     timeStrStack.centerAlignContent()
     timeStrTxt.font = Font.thinMonospacedSystemFont(lineHeight * 0.7)
     timeStrTxt.textColor = Color.white()
-    const team1Stack = container.addStack()
-    const scoreStack = container.addStack()
-    const team2Stack = container.addStack()
+    const team1Stack = container.addStack() // 队伍1的logo、队名
+    const scoreStack = container.addStack() // 比分、比赛状态信息
+    const team2Stack = container.addStack() // 队伍2的logo、队名
 
     team1Stack.layoutVertically()
     team2Stack.layoutVertically()
     scoreStack.layoutVertically()
-    const scoreStack1 = scoreStack.addStack()
-    const scoreStack2 = scoreStack.addStack()
+    const scoreStack1 = scoreStack.addStack() // 比分
+    const scoreStack2 = scoreStack.addStack() // 比赛状态 (已结束/进行中/未开始)
 
     scoreStack1.size = new Size(lineHeight * 3, lineHeight)
     if (val.status === "not_started") {
@@ -135,9 +145,9 @@ async function renderMatchList(matches){
       vsTxt.textColor = Color.white()
 
     } else {
-      const team1ScoreStack = scoreStack1.addStack()
-      const scoreDividerStack = scoreStack1.addStack()
-      const team2ScoreStack = scoreStack1.addStack()
+      const team1ScoreStack = scoreStack1.addStack() // 队伍1的分数
+      const scoreDividerStack = scoreStack1.addStack() // 冒号
+      const team2ScoreStack = scoreStack1.addStack() // 队伍2的分数
 
       const scoreDividerTxt = scoreDividerStack.addText(":")
       team1ScoreStack.layoutHorizontally()
