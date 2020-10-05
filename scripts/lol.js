@@ -4,6 +4,8 @@
 
 // LOL近期赛事列表小组件
 // 支持中号、大号组件.
+// 如果组件崩溃或出现任何问题，请尝试重新下载 Release：https://github.com/zkytech/iOS14-widgets-for-scriptable/releases/tag/1.0.0
+// 如果仍无法解决，请反馈至：https://github.com/zkytech/iOS14-widgets-for-scriptable/issues
 const mainW = new ListWidget()
 presentSize = "large"
 mainW.backgroundColor = new Color("#282E4D")

@@ -2,8 +2,10 @@
 // These must be at the very top of the file. Do not edit.
 // icon-color: pink; icon-glyph: video;
 // iOS 14 widget --- bilibili最近更新番剧信息
+// 支持大、中、小 组件
 // 可通过传入参数( all/global/cn )来控制显示 全部番剧、国外番剧、国内番剧
-
+// 如果组件崩溃或出现任何问题，请尝试重新下载 Release：https://github.com/zkytech/iOS14-widgets-for-scriptable/releases/tag/1.0.0
+// 如果仍无法解决，请反馈至：https://github.com/zkytech/iOS14-widgets-for-scriptable/issues
 const LW = new ListWidget() // widget对象
 LW.url = "bilibili://" // 点击小组件跳转到bilibili
 let presentSize = "large" // 预览组件的大小,可设置为 large/medium/small
@@ -52,7 +54,6 @@ if (flp === true || flp === false) {
 
 uid = params[2]
 
-console.log("uid:", uid)
 if ((uid === undefined || uid === null) & params.length != 1 & followLimited == true) {
     throw new Error("请在参数中填写uid\n\t参数填写范例：全部,追番,8165988\n\t其中逗号全部为英文逗号\n\n uid获取方式：B站APP - 我的 - 点击头像 - 详情")
 }
