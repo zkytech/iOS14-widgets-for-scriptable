@@ -26,7 +26,7 @@
 
 ### 安装
 
-下载[安装脚本](https://github.com/zkytech/iOS14-widgets-for-scriptable/releases/download/1.0.0/bilibili.scriptable)后，用`scriptable`打开
+下载[安装脚本](https://github.com/zkytech/iOS14-widgets-for-scriptable/releases/download/1.0.1/bilibili.scriptable)后，用`scriptable`打开
 
 ### 参数
 
@@ -101,5 +101,5 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 
 ### 安装
 
-下载[安装脚本](https://github.com/zkytech/iOS14-widgets-for-scriptable/releases/download/1.0.0/lol.scriptable)后，用`scriptable`打开
+下载[安装脚本](https://github.com/zkytech/iOS14-widgets-for-scriptable/releases/download/1.0.1/lol.scriptable)后，用`scriptable`打开
 
