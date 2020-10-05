@@ -10,7 +10,7 @@
 
 方法1：在`scriptable`中新建脚本，然后将`scripts`文件夹下的js文件内容粘贴到脚本中。
 
-方法2：下载安装脚本，然后用`scriptable`打开，选择`Add to my scripts`即可。
+方法2：在[Release页面](https://github.com/zkytech/iOS14-widgets-for-scriptable/releases)下载`.scriptable`安装脚本，然后用`scriptable`打开，选择`Add to my scripts`即可。
 
 ### 使用
 1. 在桌面创建小组件 选择 `scriptable`
@@ -60,6 +60,8 @@
     </tbody>
 </table>
 
+> 获取uid：B站APP - 我的 - 点击头像 - 详情
+
 在小组件的编辑界面，按照以下格式进行配置
 
 ```javascript
@@ -90,4 +92,14 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 
 
 ![](preview/bilibili配置2.jpg)
+
+## LOL近期赛事列表
+
+### 效果预览
+
+![](./preview/LOL预览.PNG)
+
+### 安装
+
+下载[安装脚本](https://github.com/zkytech/iOS14-widgets-for-scriptable/releases/download/1.0.0/lol.scriptable)后，用`scriptable`打开
 
