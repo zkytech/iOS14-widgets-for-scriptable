@@ -365,3 +365,22 @@ if (!config.runsInWidget) {
 Script.setWidget(mainW)
 
 Script.complete()
+
+/**
+ * 自动更新
+ */
+async function update(){
+  const fm = FileManager.iCloud()
+  const folder = fm.documentsDirectory()
+  const req = new Request("https://raw.githubusercontent.com/zkytech/iOS14-widgets-for-scriptable/master/scripts/lol.js")
+  const header=`// Variables used by Scriptable.
+  // These must be at the very top of the file. Do not edit.
+  // icon-color: orange; icon-glyph: magic;`
+  let scriptTxt =await req.loadString()
+  scriptTxt =header + scriptTxt
+  
+  const filename = "/lol.js"
+  fm.writeString(folder + filename, scriptTxt)
+}
+
+await update()

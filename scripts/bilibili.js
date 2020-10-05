@@ -1,6 +1,6 @@
 // Variables used by Scriptable.
 // These must be at the very top of the file. Do not edit.
-// icon-color: orange; icon-glyph: magic;
+// icon-color: purple; icon-glyph: video;
 
 // LOL近期赛事列表小组件
 // 支持中号、大号组件.
@@ -352,3 +352,22 @@ if (!config.runsInWidget) {
 Script.setWidget(mainW)
 
 Script.complete()
+
+/**
+ * 自动更新
+ */
+async function update(){
+  const fm = FileManager.iCloud()
+  const folder = fm.documentsDirectory()
+  const req = new Request("https://raw.githubusercontent.com/zkytech/iOS14-widgets-for-scriptable/master/scripts/bilibili.js")
+  const header=`// Variables used by Scriptable.
+  // These must be at the very top of the file. Do not edit.
+  // icon-color: purple; icon-glyph: video;`
+  let scriptTxt =await req.loadString()
+  scriptTxt =header + scriptTxt
+  
+  const filename = "/bilibili.js"
+  fm.writeString(folder + filename, scriptTxt)
+}
+
+await update()
