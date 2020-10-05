@@ -379,6 +379,10 @@ async function update(){
   let scriptTxt =await req.loadString()
   scriptTxt =header + scriptTxt
   
+  if(!scriptTxt.includes('setWidget')){
+    return
+  }
+  
   const filename = "/lol.js"
   fm.writeString(folder + filename, scriptTxt)
 }
