@@ -360,13 +360,8 @@ async function update(){
   const fm = FileManager.iCloud()
   const folder = fm.documentsDirectory()
   const req = new Request("https://raw.githubusercontent.com/zkytech/iOS14-widgets-for-scriptable/master/scripts/bilibili.js")
-  const header=`// Variables used by Scriptable.
-  // These must be at the very top of the file. Do not edit.
-  // icon-color: purple; icon-glyph: video;`
-  
+
   let scriptTxt =await req.loadString()
-  scriptTxt =header + scriptTxt
-  
 
   if(!scriptTxt.includes('setWidget')){
     return
