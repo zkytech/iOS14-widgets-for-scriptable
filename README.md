@@ -1,4 +1,6 @@
 # iOS 14小组件
+- [bilibili最近更新番剧列表](https://github.com/zkytech/iOS14-widgets-for-scriptable#bilibili%E6%9C%80%E8%BF%91%E6%9B%B4%E6%96%B0%E7%95%AA%E5%89%A7%E5%88%97%E8%A1%A8)
+- [英雄联盟近期赛事列表](https://github.com/zkytech/iOS14-widgets-for-scriptable#bilibili-%E6%9C%80%E8%BF%91%E6%9B%B4%E6%96%B0%E7%95%AA%E5%89%A7%E5%88%97%E8%A1%A8)
 
 ## 使用方法
 ### 安装scriptable
@@ -18,7 +20,7 @@
 2. 编辑 小组件，点击`选取 script` 并选择前面导入的脚本。
 
 
-## bilibili 最近更新番剧列表
+## bilibili最近更新番剧列表
 
 ### 效果预览
 
