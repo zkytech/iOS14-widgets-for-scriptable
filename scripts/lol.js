@@ -25,7 +25,7 @@ if (config.runsInWidget) {
  */
 async function loadLolUpcomingMatches() {
   const req = new Request(
-    "http://cn-sq-bgp.sakurafrp.com:33365/widget/lol/getUpcomingMatches"
+    "https://widget.zkytech.top/widget/lol/getUpcomingMatches"
   )
   return req.loadJSON().then(res => res.data)
 }
@@ -35,7 +35,7 @@ async function loadLolUpcomingMatches() {
  */
 async function loadLolRunningMatches() {
   const req = new Request(
-    "http://cn-sq-bgp.sakurafrp.com:33365/widget/lol/getRunningMatches"
+    "https://widget.zkytech.top/widget/lol/getRunningMatches"
   )
   return req.loadJSON().then(res => res.data)
 }
@@ -45,7 +45,7 @@ async function loadLolRunningMatches() {
  */
 async function loadLolPastMatches() {
   const req = new Request(
-    "http://cn-sq-bgp.sakurafrp.com:33365/widget/lol/getPastMatches"
+    "https://widget.zkytech.top/widget/lol/getPastMatches"
   )
   return req.loadJSON().then(res => res.data)
 }
@@ -57,16 +57,16 @@ let upcomingMatches = await loadLolUpcomingMatches()
 async function renderLarge(){
   let matches = pastMatches.concat(runningMatches).concat(upcomingMatches)
   if (matches.length > 6) {
-    matches = matches.slice(matches.length - 7, matches.length - 1)
+    matches = matches.slice(matches.length - 7, matches.length - 2)
   }
   if (matches.length === 6) {
-    matches = matches.slice(0, 6)
+    matches = matches.slice(0, 5)
   }
 
-  // const matchImg = await loadImage(matches[matches.length - 1].league.image_url) // 赛事logo
-  // const matchImageStack = LW.addStack()
-  // const matchImage = matchImageStack.addImage(matchImg)
-  // matchImage.imageSize = new Size(30, 30)
+  const matchImg = await loadImage(matches[matches.length - 1].league.image_url) // 赛事logo
+  const matchImageStack = LW.addStack()
+  const matchImage = matchImageStack.addImage(matchImg)
+  matchImage.imageSize = new Size(35, 35)
   await renderMatchList(matches)
 }
 
