@@ -109,6 +109,7 @@ async function renderMatchList(matches){
     const LWl = LW.addStack()
     LWl.size = new Size(lineWidth, lineHeight + teamNameFontSize)
     const container = LWl.addStack()
+    container.url = val.live_url
     LW.addSpacer(6)
     const timeStrStack = container.addStack()
     const timeStrTxt = timeStrStack.addText(timeStr)
@@ -139,18 +140,23 @@ async function renderMatchList(matches){
       const team2ScoreStack = scoreStack1.addStack()
 
       const scoreDividerTxt = scoreDividerStack.addText(":")
+      team1ScoreStack.layoutHorizontally()
+      team2ScoreStack.layoutHorizontally()
+      scoreDividerStack.layoutHorizontally()
+      team1ScoreStack.centerAlignContent()
+      team2ScoreStack.centerAlignContent()
+      scoreDividerStack.centerAlignContent()
       const team1ScoreTxt = team1ScoreStack.addText(team1.score.toString())
       const team2ScoreTxt = team2ScoreStack.addText(team2.score.toString())
-      team1ScoreStack.size = new Size(lineHeight, lineHeight)
-      team2ScoreStack.size = new Size(lineHeight, lineHeight)
-      scoreDividerStack.size = new Size(lineHeight, lineHeight)
+      team1ScoreStack.size = new Size(lineHeight*0.65, lineHeight)
+      team2ScoreStack.size = new Size(lineHeight*0.65, lineHeight)
+      scoreDividerStack.size = new Size(lineHeight*0.65, lineHeight)
 
       const widgetTxts = [scoreDividerTxt, team1ScoreTxt, team2ScoreTxt]
       widgetTxts.forEach(txt => {
         txt.centerAlignText()
-        txt.font = Font.thinMonospacedSystemFont(lineHeight)
+        txt.font = Font.boldMonospacedSystemFont(lineHeight)
         txt.textColor = Color.white()
-
       })
 
       if (team1.score > team2.score) {
@@ -209,9 +215,7 @@ async function renderMatchList(matches){
     if(val.status === "finished"){
       statusTxt.textColor = Color.darkGray()
     }
-
   }
-
 }
 
 /**
