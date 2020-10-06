@@ -21,7 +21,7 @@ jobs:
 
       - uses: meeDamian/github-release@2.0
         with:
-          token: ${{ GH_ACTION_TOKEN }}
+          token: ${{ secrets.GH_ACTION_TOKEN }}
           tag: 1.0.1
           name: Release
           files: build/*.scriptable
@@ -34,7 +34,7 @@ jobs:
           ssh-keyscan zkytech.top >> ~/.ssh/known_hosts
           mv build iOS14-widgets-for-scriptable
           scp -r iOS14-widgets-for-scriptable/ root@zkytech.top:/var/www/public/
-    env:
-      GH_ACTION_TOKEN: ${{ secrets.GH_ACTION_TOKEN }}
-      RSA_TOKEN: ${{RSA_TOKEN}} 
+        env:
+          GH_ACTION_TOKEN: ${{ secrets.GH_ACTION_TOKEN }}
+          RSA_TOKEN: ${{ secrets.RSA_TOKEN }} 
           
