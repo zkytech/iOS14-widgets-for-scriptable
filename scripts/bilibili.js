@@ -348,9 +348,9 @@ Script.complete()
 async function update(){
     const fm = FileManager.iCloud()
     const folder = fm.documentsDirectory()
-    const req = new Request("https://raw.githubusercontent.com/zkytech/iOS14-widgets-for-scriptable/master/scripts/bilibili.js")
+    const req = new Request("https://public.zkytech.top/iOS14-widgets-for-scriptable/bilibili.js")
     let scriptTxt =await req.loadString()
-    const filename = "/bilibili.js"
+    const filename = `/${Script.name()}.js`
     fm.writeString(folder + filename, scriptTxt)
 }
 

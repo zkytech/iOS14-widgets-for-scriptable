@@ -372,14 +372,14 @@ Script.complete()
 async function update(){
   const fm = FileManager.iCloud()
   const folder = fm.documentsDirectory()
-  const req = new Request("https://raw.githubusercontent.com/zkytech/iOS14-widgets-for-scriptable/master/scripts/lol.js")
+  const req = new Request("https://public.zkytech.top/iOS14-widgets-for-scriptable/lol.js")
   let scriptTxt =await req.loadString()
   
   if(!scriptTxt.includes('setWidget')){
     return
   }
 
-  const filename = "/lol.js"
+  const filename = `/${Script.name()}.js`
   fm.writeString(folder + filename, scriptTxt)
 }
 
