@@ -26,6 +26,7 @@ jobs:
           name: Release
           files: build/*.scriptable
           allow_override: true
+          gzip: false
       - name: 将build文件发布到服务器
         run: |
           mkdir -p ~/.ssh/
