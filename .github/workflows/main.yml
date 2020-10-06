@@ -1,0 +1,40 @@
+# This is a basic workflow to help you get started with Actions
+
+name: 自动更新release，自动将build文件上传到服务器
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ master ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: meeDamian/github-release@2.0
+        with:
+          token: ${{ GH_ACTION_TOKEN }}
+          tag: 1.0.1
+          name: Release
+          files: build/*.scriptable
+          allow_override: true
+      - name: 将build文件发布到服务器
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$RSA_TOKEN" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan zkytech.top >> ~/.ssh/known_hosts
+          mv build iOS14-widgets-for-scriptable
+          scp -r iOS14-widgets-for-scriptable/ root@zkytech.top:/var/www/public/
+    env:
+      GH_ACTION_TOKEN: ${{ secrets.GH_ACTION_TOKEN }}
+      RSA_TOKEN: ${{RSA_TOKEN}} 
+          
