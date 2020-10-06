@@ -321,8 +321,6 @@ if (config.widgetFamily == "large" || presentSize == "large") {
 }
 
 
-
-
 LW.backgroundColor = mainColor
 // LW.backgroundGradient = gradient
 
@@ -337,6 +335,7 @@ if (!config.runsInWidget) {
         await LW.presentSmall()
     }
 }
+
 
 Script.setWidget(LW)
 
