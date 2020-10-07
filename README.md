@@ -110,7 +110,7 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 
 ### 3.1 效果预览
 
-![](./preview/LOL预览.PNG)
+![](./preview/LOL预览.png)
 
 ### 3.2 安装
 

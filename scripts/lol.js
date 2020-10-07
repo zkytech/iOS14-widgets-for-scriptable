@@ -80,7 +80,9 @@ async function renderLarge(){
  * 渲染中号组件
  */
 async function renderMedium(){
-  let matches = runningMatches.concat(upcomingMatches).slice(0,2)
+  let matches =  runningMatches.concat(upcomingMatches).slice(0,2)
+  const lt = 2 - matches.length
+  matches = pastMatches.slice(pastMatches.length - lt,pastMatches.length).concat(matches)
   await renderMatchList(matches)
 }
 
@@ -88,7 +90,78 @@ async function renderMedium(){
  * 渲染小号组件
  */
 async function renderSmall(){
-  LW.addText("施工中....")
+  const container = LW
+  container.layoutVertically()
+  let matches =  runningMatches.concat(upcomingMatches).slice(0,6)
+  const lt = 6 - matches.length
+  matches = pastMatches.slice(pastMatches.length - lt,pastMatches.length).concat(matches)
+
+  let lastDate = new Date(pastMatches[0].scheduled_at).getDate()
+
+  for (let i = 0; i < matches.length; i++) {
+    const val = matches[i]
+    const team1 = val.opponents[0].opponent // 队伍1
+    const team2 = val.opponents[1].opponent // 队伍2
+    const matchScheduledAt = new Date(val.scheduled_at) // 比赛开始时间
+    const timeStr = dateFormat("HH:MM", matchScheduledAt)
+
+    if (i === 0 || matchScheduledAt.getDate() !== lastDate) {
+      addDivider(matchScheduledAt, lineWidth/2 * 1.2, 12, dlineWidth/2, dateStrWidth) // 日期分割线
+    }
+    lastDate = matchScheduledAt.getDate()
+
+    const line = container.addStack()
+    container.addSpacer(3)
+
+
+
+    line.layoutHorizontally()
+    const timeStack = line.addStack()
+    const leftTeamStack = line.addStack()
+    const scoreStack = line.addStack()
+    const rightTeamStack = line.addStack()
+
+    timeStack.size = new Size(16*3,16)
+    leftTeamStack.size = new Size( 16*2.5, 16)
+    scoreStack.size = new Size(16*2,16)
+    rightTeamStack.size = new Size(16*2.5,16)
+
+    scoreStack.layoutHorizontally()
+    const timeTxt = timeStack.addText(timeStr)
+    const leftTeamTxt = leftTeamStack.addText(team1.acronym)
+    const rightTeamTxt = rightTeamStack.addText(team2.acronym)
+
+
+
+    let [leftScoreTxt,dividerTxt,rightScoreTxt,vsTxt ] = [null,null,null,null,null]
+    if(val.status === "finished" || val.status === "running"){
+      if (team1.id === val.results[0].team_id) {
+        team1.score = val.results[0].score
+        team2.score = val.results[1].score
+      } else {
+        team1.score = val.results[1].score
+        team2.score = val.results[0].score
+      }
+
+      const leftScore = scoreStack.addStack()
+      const dividerStack = scoreStack.addStack()
+      const rightScore = scoreStack.addStack()
+      leftScoreTxt = leftScore.addText(team1.score.toString())
+      dividerTxt = dividerStack.addText(":")
+      rightScoreTxt = rightScore.addText(team2.score.toString())
+    }else{
+      vsTxt = scoreStack.addText("VS")
+    }
+    const txts = [timeTxt,leftTeamTxt,rightTeamTxt,leftScoreTxt,dividerTxt,rightScoreTxt,vsTxt]
+    txts.forEach(t => {
+      if(t){
+        t.font = Font.thinMonospacedSystemFont(15)
+        t.textColor = Color.white()
+      }
+    })
+
+  }
+
 }
 
 async function renderMatchList(matches){
@@ -383,4 +456,4 @@ async function update(){
   fm.writeString(folder + filename, scriptTxt)
 }
 
-await update()
+// await update()
