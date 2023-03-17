@@ -1,7 +1,9 @@
 /**
  * iOS widget --- 长安深蓝SL03桌面小组件
+ * 项目地址: https://github.com/zkytech/iOS14-widgets-for-scriptable
+ * 
  * 传入以下参数: refresh_token
- * 参数获取方法见文档:https://github.com/zkytech/iOS14-widgets-for-scriptable#4-%E6%B7%B1%E8%93%9Dsl03%E8%BD%A6%E8%BE%86%E7%8A%B6%E6%80%81
+ * 参数获取方法见文档: https://gitee.com/zkytech/iOS14-widgets-for-scriptable#4-%E6%B7%B1%E8%93%9Dsl03%E8%BD%A6%E8%BE%86%E7%8A%B6%E6%80%81
  * - 组件依赖深蓝APP登录信息（refresh_token）
  * - 本组件仅用于学习交流
  * - 本组件为开源软件，不会进行收费！！！
@@ -15,7 +17,7 @@ const LW = new ListWidget() // widget对象
 let presentSize = "medium" // 预览组件的大小
 // const mainColor = new Color("#30336b")
 const mainColor = new Color("#000000")
-const car_img_url = "https://qiniu.zkytech.top/SL03/img/%E4%BE%A7%E9%9D%A2%E7%99%BD%E8%89%B2.PNG"
+const car_img_url = "https://cdn.jsdelivr.net/gh/zkytech/iOS14-widgets-for-scriptable@master/statics/%E4%BE%A7%E9%9D%A2%E7%99%BD%E8%89%B2.PNG"
 let project_id=''
 let global_refresh_token=''
 if (config.runsInWidget) {  
@@ -333,11 +335,7 @@ async function renderCarStatus(){
                 u.font = Font.mediumMonospacedSystemFont(14)
                 u.textColor = Color.gray()
             })
-            
-            
-        
-                
-          }
+        }
         console.log("渲染结束")
     
 }
@@ -371,10 +369,13 @@ Script.complete()
 async function update(){
     const fm = FileManager.iCloud()
     const folder = fm.documentsDirectory()
-    const req = new Request("https://cdn.jsdelivr.net/gh/zkytech/iOS14-widgets-for-scriptable@master/scripts/SL03.js")
+    const req = new Request("https://cdn.jsdelivr.net/gh/zkytech/iOS14-widgets-for-scriptable@master/scripts/SL03Widget.js")
     let scriptTxt =await req.loadString()
     const filename = `/${Script.name()}.js`
-    fm.writeString(folder + filename, scriptTxt)
+    if (req.response.statusCode == 200){
+        fm.writeString(folder + filename, scriptTxt)
+    }
+    
 }
 
 
