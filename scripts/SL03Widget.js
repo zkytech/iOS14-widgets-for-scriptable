@@ -17,7 +17,7 @@ const LW = new ListWidget() // widget对象
 let presentSize = "medium" // 预览组件的大小
 // const mainColor = new Color("#30336b")
 const mainColor = new Color("#000000")
-const car_img_url = "https://cdn.jsdelivr.net/gh/zkytech/iOS14-widgets-for-scriptable@master/statics/%E4%BE%A7%E9%9D%A2%E7%99%BD%E8%89%B2.PNG"
+const car_img_url = "https://i.328888.xyz/2023/03/17/LFK8Z.md.png"
 let project_id=''
 let global_refresh_token=''
 if (config.runsInWidget) {  
