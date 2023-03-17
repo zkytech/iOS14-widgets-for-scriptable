@@ -33,7 +33,7 @@ jobs:
           echo "$RSA_TOKEN" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan zkytech.top >> ~/.ssh/known_hosts
-          cp build/* iOS14-widgets-for-scriptable/
+          cp build/* scripts/
           mv scripts iOS14-widgets-for-scriptable
           scp -r iOS14-widgets-for-scriptable/ root@zkytech.top:/var/www/public/
         env:
