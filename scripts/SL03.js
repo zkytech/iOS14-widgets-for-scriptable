@@ -304,7 +304,7 @@ async function renderCarStatus(){
             const content0 = content_container0.addText(total_odometer + "")
             const unit0 = content_container0.addText("km")
             const content1 = content_container1.addText(remained_power_mile + "")
-            const unit1 = content_container1.addText("km/81%")
+            const unit1 = content_container1.addText("km")
             const content2 = content_container2.addText(is_mix ? remained_oil_mile + "" : vehicle_temperature + "" )
             const unit2 = content_container2.addText(is_mix ? "km":"°C")
             const content3 = content_container3.addText(location_str)
@@ -362,7 +362,7 @@ Script.complete()
 async function update(){
     const fm = FileManager.iCloud()
     const folder = fm.documentsDirectory()
-    const req = new Request("https://cdn.jsdelivr.net/gh/zkytech/iOS14-widgets-for-scriptable/SL03.js")
+    const req = new Request("https://cdn.jsdelivr.net/gh/zkytech/iOS14-widgets-for-scriptable@master/scripts/SL03.js")
     let scriptTxt =await req.loadString()
     const filename = `/${Script.name()}.js`
     fm.writeString(folder + filename, scriptTxt)
