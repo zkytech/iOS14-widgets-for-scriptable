@@ -369,7 +369,7 @@ Script.complete()
 async function update(){
     const fm = FileManager.iCloud()
     const folder = fm.documentsDirectory()
-    const req = new Request("https://cdn.jsdelivr.net/gh/zkytech/iOS14-widgets-for-scriptable@master/scripts/SL03Widget.js")
+    const req = new Request("https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/master/scripts/SL03Widget.js")
     let scriptTxt =await req.loadString()
     const filename = `/${Script.name()}.js`
     if (req.response.statusCode == 200){
