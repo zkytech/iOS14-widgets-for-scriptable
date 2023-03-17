@@ -40,7 +40,7 @@
 
 ### 2.2 安装
 
-下载[安装脚本](https://github.com/zkytech/iOS14-widgets-for-scriptable/releases/download/1.0.1/bilibili.scriptable)后，用`scriptable`打开
+下载[安装脚本](https://cdn.jsdelivr.net/gh/zkytech/iOS14-widgets-for-scriptable@master/build/bilibili.scriptable)后，用`scriptable`打开
 
 ### 2.3 参数
 
@@ -115,14 +115,14 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 
 ### 3.2 安装
 
-下载[安装脚本](https://github.com/zkytech/iOS14-widgets-for-scriptable/releases/download/1.0.1/lol.scriptable)后，用`scriptable`打开
+下载[安装脚本](https://cdn.jsdelivr.net/gh/zkytech/iOS14-widgets-for-scriptable@master/build/lol.scriptable)后，用`scriptable`打开
 
 ## 4 深蓝SL03车辆状态
 ### 4.1 效果预览
 ![](./preview/SL03%E9%A2%84%E8%A7%88.jpg)
 
 ### 4.2 安装
-下载[安装脚本](https://github.com/zkytech/iOS14-widgets-for-scriptable/releases/download/1.0.1/SL03.scriptable)后，用`scriptable`打开
+下载[安装脚本](https://cdn.jsdelivr.net/gh/zkytech/iOS14-widgets-for-scriptable@master/build/SL03Widget.scriptable)后，用`scriptable`打开
 
 ### 4.2 参数
 
