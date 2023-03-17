@@ -11,11 +11,12 @@
   * [3 LOL近期赛事列表](#3-lol%E8%BF%91%E6%9C%9F%E8%B5%9B%E4%BA%8B%E5%88%97%E8%A1%A8)
     * [3\.1 效果预览](#31-%E6%95%88%E6%9E%9C%E9%A2%84%E8%A7%88)
     * [3\.2 安装](#32-%E5%AE%89%E8%A3%85)
+  * [4 ]
 
 ## 1 使用方法
 ### 1.1 安装scriptable
 安装[scriptable测试版](https://testflight.apple.com/join/uN1vTqxk) 或 直接安装app store 中的[scriptable](https://apps.apple.com/cn/app/scriptable/id1405459188) .
-> 这里建议安装测试版，因为测试版支持更多特性，且我的脚本一般是以测试版为基础编写的。
+<!-- > 这里建议安装测试版，因为测试版支持更多特性，且我的脚本一般是以测试版为基础编写的。 -->
 
 ### 1.2 安装脚本
 安装脚本有两种方法，自行选择：
@@ -116,3 +117,22 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 
 下载[安装脚本](https://github.com/zkytech/iOS14-widgets-for-scriptable/releases/download/1.0.1/lol.scriptable)后，用`scriptable`打开
 
+## 4 深蓝SL03车辆状态
+### 4.1 效果预览
+![](./preview/SL03%E9%A2%84%E8%A7%88.jpg)
+
+### 4.2 安装
+下载[安装脚本](https://github.com/zkytech/iOS14-widgets-for-scriptable/releases/download/1.0.1/SL03.scriptable)后，用`scriptable`打开
+
+### 4.2 参数
+
+本组件需要获取refresh_token，操作过程涉及抓包。抓包方法请自行百度
+
+1. 安装`Stream` APP，并开启HTTPS抓包
+2. 点击`开始抓包`
+3. 打开`深蓝`APP，进入控车页面，下拉刷新车辆状态。
+4. 回到`Stream` APP，停止抓包
+5. 进入抓包历史，查看刚刚生成的抓包记录，搜索`refresh`，可以看到URI为`/appapi/v1/member/ms/refreshCacToken`的请求
+6. 点击查看请求详情，查看`响应-响应主体-查看json`
+7. 将`refresh_token`的值复制下来
+8. 桌面创建Scriptable中号组件，脚本选择前面安装的`SL03Widget`,将前面复制的`refresh_token`值粘贴到小组件的`parameter`中
