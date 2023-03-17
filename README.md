@@ -122,7 +122,7 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 ![](./preview/SL03%E9%A2%84%E8%A7%88.jpg)
 
 ### 4.2 安装
-下载[安装脚本](https://cdn.jsdelivr.net/gh/zkytech/iOS14-widgets-for-scriptable@master/build/SL03Widget.scriptable)后，用`scriptable`打开
+下载[安装脚本](https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/master/build/SL03Widget.scriptable)后，用`scriptable`打开
 
 ### 4.2 参数
 
