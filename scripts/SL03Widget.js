@@ -5,7 +5,8 @@
 /**
  * iOS widget --- 长安深蓝SL03桌面小组件
  * 项目地址: https://github.com/zkytech/iOS14-widgets-for-scriptable
- *
+ * 联系邮箱: zhangkunyuan@hotmail.com
+ * 
  * 传入以下参数: refresh_token
  * 参数获取方法见文档: https://gitee.com/zkytech/iOS14-widgets-for-scriptable#4-%E6%B7%B1%E8%93%9Dsl03%E8%BD%A6%E8%BE%86%E7%8A%B6%E6%80%81
  * - 组件依赖深蓝APP登录信息（refresh_token）

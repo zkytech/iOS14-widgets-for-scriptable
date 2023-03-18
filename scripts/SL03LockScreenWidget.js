@@ -5,6 +5,7 @@
 
 /**
  * iOS widget(锁屏) --- 长安深蓝SL03电量
+ * 联系邮箱: zhangkunyuan@hotmail.com
  * 项目地址: https://github.com/zkytech/iOS14-widgets-for-scriptable
  *
  * 传入以下参数: refresh_token,模式
