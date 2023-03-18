@@ -27,15 +27,14 @@
 <!-- /vscode-markdown-toc -->
 ## <a name='1-使用方法'></a>1 使用方法
 ### <a name='1.1-安装scriptable'></a>1.1 安装scriptable
-安装[scriptable测试版](https://testflight.apple.com/join/uN1vTqxk) 或 直接安装app store 中的[scriptable](https://apps.apple.com/cn/app/scriptable/id1405459188) .
+安装[Scriptable测试版](https://testflight.apple.com/join/uN1vTqxk) 或 直接安装app store 中的[scriptable](https://apps.apple.com/cn/app/scriptable/id1405459188) .
 <!-- > 这里建议安装测试版，因为测试版支持更多特性，且我的脚本一般是以测试版为基础编写的。 -->
 
 ### <a name='1.2-安装脚本'></a>1.2 安装脚本
-安装脚本有两种方法，自行选择：
 
-方法1：在`scriptable`中新建脚本，然后将`scripts`文件夹下的js文件内容粘贴到脚本中。
+下方各组件的章节内有对应脚本的安装链接，点击下载后用`Scriptable APP`打开。选择`Add to my scripts`即可。
 
-方法2：在[Release页面](https://github.com/zkytech/iOS14-widgets-for-scriptable/releases)下载`.scriptable`安装脚本，然后用`scriptable`打开，选择`Add to my scripts`即可。
+
 ![](./preview/安装脚本.jpg)
 
 ### <a name='1.3-使用'></a>1.3 使用
