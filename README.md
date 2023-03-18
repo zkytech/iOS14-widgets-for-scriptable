@@ -134,7 +134,9 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 锁屏电量
 ![](./preview/SL03%E9%94%81%E5%B1%8F%E9%A2%84%E8%A7%88.jpg)
 ### <a name='4.2-安装'></a>4.2 安装
-下载[桌面组件安装脚本](https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/master/build/SL03Widget.scriptable)/[锁屏组件安装脚本](https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/master/build/SL03LockScreenWidget.scriptable)后，用`scriptable`打开
+
+1. 安装[Scriptable APP](https://apps.apple.com/cn/app/scriptable/id1405459188)
+2. 下载[桌面组件安装脚本](https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/master/build/SL03Widget.scriptable)/[锁屏组件安装脚本](https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/master/build/SL03LockScreenWidget.scriptable)后，用`Scriptable`打开
 
 > 增程车型的油、电续航数据可能会变成-1、0，这种情况是深蓝APP的API问题，我无法解决，请知悉。
 > 车型颜色需要收集比对各种颜色车子的抓包数据来判断是哪个字段，目前没有足够的数据支撑，所以统一白色。
@@ -147,7 +149,7 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 
 本组件需要获取refresh_token，操作过程涉及抓包。抓包方法请自行百度。以桌面组件为例，使用方法如下：
 
-1. 安装`Stream` APP，并开启HTTPS抓包
+1. 安装[Stream APP](https://apps.apple.com/cn/app/stream/id1312141691)，并开启**HTTPS抓包**
 2. 点击`开始抓包`
 3. 打开`深蓝`APP，进入控车页面，下拉刷新车辆状态。
 4. 回到`Stream` APP，停止抓包
