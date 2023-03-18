@@ -136,6 +136,8 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 ![](./preview/SL03%E9%94%81%E5%B1%8F%E9%A2%84%E8%A7%88.jpg)
 ### <a name='4.2-安装'></a>4.2 安装
 
+为了顺利打开下面的链接，**请在safari浏览器中打开本页面**。
+
 1. 安装[Scriptable APP](https://apps.apple.com/cn/app/scriptable/id1405459188)
 2. 下载[桌面组件安装脚本](https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/master/build/SL03Widget.scriptable)/[锁屏组件安装脚本](https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/master/build/SL03LockScreenWidget.scriptable)后，用`Scriptable`打开
 
@@ -152,7 +154,7 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 
 1. 安装[Stream APP](https://apps.apple.com/cn/app/stream/id1312141691)，并开启**HTTPS抓包**
 2. 点击`开始抓包`
-3. 打开`深蓝`APP，进入控车页面，下拉刷新车辆状态。
+3. 打开`深蓝`APP，进入控车页面，下拉刷新车辆状态，为了确保请求能被抓到，建议多刷几次。
 4. 回到`Stream` APP，停止抓包
 5. 进入抓包历史，查看刚刚生成的抓包记录，搜索`refresh`，可以看到URI为`/appapi/v1/member/ms/refreshCacToken`的请求
 6. 点击查看请求详情，查看`响应-响应主体-查看json`
