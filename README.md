@@ -156,15 +156,16 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 
 本组件需要获取refresh_token，操作过程涉及抓包。抓包方法请自行百度。以桌面组件为例，使用方法如下：
 
-1. 安装[Stream APP](https://apps.apple.com/cn/app/stream/id1312141691)，并开启**HTTPS抓包**
+1. 安装[Stream APP](https://apps.apple.com/cn/app/stream/id1312141691)，并开启<font color="red"><b>HTTPS抓包</b></font>功能，必须要显示“<font color="blue">设置成功：CA证书已经安装且信任</font>”。
+![](./preview/HTTPS%E6%8A%93%E5%8C%85%E5%BC%80%E5%90%AF%E7%95%8C%E9%9D%A2.PNG)
 2. 点击`开始抓包`
 3. 打开`深蓝`APP，进入控车页面，下拉刷新车辆状态，为了确保请求能被抓到，建议多刷几次。
 4. 回到`Stream` APP，停止抓包
-5. 进入抓包历史，查看刚刚生成的抓包记录，搜索`refresh`，可以看到URI为`/appapi/v1/member/ms/refreshCacToken`的请求
+5. 进入抓包历史，查看刚刚生成的抓包记录，搜索`refresh`(注意搜索框里不要输入空格)，可以看到URI为`/appapi/v1/member/ms/refreshCacToken`的请求
 6. 点击查看请求详情，查看`响应-响应主体-查看json`
 7. 将`refresh_token`的值复制下来
 8. 桌面创建Scriptable中号组件，脚本选择前面安装的`SL03Widget`,将前面复制的`refresh_token`值粘贴到小组件的`parameter`中
 
 锁屏组件使用方法与上面相同。
 
-![](./preview/refresh_token%E6%8A%93%E5%8F%96%E6%B5%81%E7%A8%8B.JPEG))
+![](./preview/refresh_token%E6%8A%93%E5%8F%96%E6%B5%81%E7%A8%8B.JPEG)
