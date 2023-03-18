@@ -57,7 +57,7 @@ let project_id = "";
 let param_refresh_token = "";
 if (config.runsInWidget) {
   const params = args.widgetParameter ? args.widgetParameter.split(",") : [""];
-  param_refresh_token = param.length > 0 ? params[0].trim() : "";
+  param_refresh_token = params.length > 0 ? params[0].trim() : "";
 }
 presentSize = "medium";
 
