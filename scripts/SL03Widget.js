@@ -21,8 +21,6 @@
 const branch = "dev";
 const force_download = branch != "master";
 
-// Boxjs自动获取token，需配合Quantumult X使用
-const $ = new Env("深蓝")
 
 const {
   getCarId,
@@ -42,17 +40,19 @@ const { update } = await getService(
   force_download
 );
 
-// 更新组件代码
-await update(
-  `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/SL03Widget.js`
-);
+if(branch == "master"){
+  // 更新组件代码
+  await update(
+    `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/SL03Widget.js`
+  );
+}
+
 
 const LW = new ListWidget(); // widget对象
 
 let presentSize = "medium"; // 预览组件的大小
 // const mainColor = new Color("#30336b")
 const mainColor = new Color("#000000");
-const car_img_url = "https://i.328888.xyz/2023/03/17/LFK8Z.md.png";
 let project_id = "";
 let param_refresh_token = "";
 if (config.runsInWidget) {
@@ -81,9 +81,40 @@ Script.setWidget(LW);
 Script.complete();
 
 // 从URL加载图片
-async function loadImage(url) {
-  const req = new Request(url);
-  return await req.loadImage();
+async function loadImage(name,force_download) {
+  const img_map = {
+    "白色车":"https://i.328888.xyz/2023/03/17/LFK8Z.md.png",
+    "LOGO":"https://deepal.com.cn/202303112321/share_logo.png"
+  }
+  const img_url = img_map[name];
+  const file_name = img_url.split("/")[img_url.split("/").length - 1]
+
+  const fm = FileManager.iCloud();
+
+  const script_dir = module.filename.replace(
+    fm.fileName(module.filename, true),
+    ""
+  );
+  let img_dir = fm.joinPath(script_dir, "imgs");
+
+  if (!fm.fileExists(img_dir)) {
+    fm.createDirectory(img_dir, true);
+  }
+
+  let img_file = fm.joinPath(script_dir, "imgs/" + file_name + ".png");
+
+  if (fm.fileExists(img_file) && !force_download) {
+    console.log(`从本地缓存中加载图片:${name}`)
+    fm.downloadFileFromiCloud(img_file);
+  } else {
+    // download once
+    console.log(`开始下载图片:${name}`)
+    const req = new Request(img_url)
+    const img = await req.loadImage()
+    fm.writeImage(img_file, img)
+  }
+
+  return fm.readImage(img_file);
 }
 
 // 渲染组件
@@ -152,7 +183,7 @@ async function renderCarStatus(param_refresh_token) {
     col0.spacing = 6;
     col0.size = new Size(110, 0);
     // 车辆图片
-    const car_img = await loadImage(car_img_url);
+    const car_img = await loadImage("白色车");
     const car_stack = col0.addStack();
 
     const img_container = car_stack.addImage(car_img);
@@ -184,7 +215,7 @@ async function renderCarStatus(param_refresh_token) {
     const car_seires_container = col0.addStack();
     // 车辆logo
     const logo = car_seires_container.addImage(
-      await loadImage("https://deepal.com.cn/202303112321/share_logo.png")
+      await loadImage("LOGO")
     );
     logo.imageSize = new Size(12, 12);
     // 车辆型号
@@ -289,26 +320,26 @@ async function loadText(textUrl) {
   return await req.load();
 }
 
-async function getService(name, url, forceDownload) {
+async function getService(name, url, force_download) {
   const fm = FileManager.iCloud();
-  const scriptDir = module.filename.replace(
+  const script_dir = module.filename.replace(
     fm.fileName(module.filename, true),
     ""
   );
-  let serviceDir = fm.joinPath(scriptDir, "lib/service/" + name);
+  let service_dir = fm.joinPath(script_dir, "lib/service/" + name);
 
-  if (!fm.fileExists(serviceDir)) {
-    fm.createDirectory(serviceDir, true);
+  if (!fm.fileExists(service_dir)) {
+    fm.createDirectory(service_dir, true);
   }
 
-  let libFile = fm.joinPath(scriptDir, "lib/service/" + name + "/index.js");
+  let lib_file = fm.joinPath(script_dir, "lib/service/" + name + "/index.js");
 
-  if (fm.fileExists(libFile) && !forceDownload) {
-    fm.downloadFileFromiCloud(libFile);
+  if (fm.fileExists(lib_file) && !force_download) {
+    fm.downloadFileFromiCloud(lib_file);
   } else {
     // download once
     let indexjs = await loadText(url);
-    fm.write(libFile, indexjs);
+    fm.write(lib_file, indexjs);
   }
 
   let service = importModule("lib/service/" + name);

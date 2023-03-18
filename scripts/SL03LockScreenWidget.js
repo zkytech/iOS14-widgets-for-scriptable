@@ -45,8 +45,9 @@ const {
     `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/lib/service/DrawShape.js`,
     force_download
   );
-await update(`https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/SL03LockScreenWidget.js`)
-
+if(branch == "master"){
+  await update(`https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/SL03LockScreenWidget.js`)
+}
 
 const params = args.widgetParameter ? args.widgetParameter.split(",") : [""];
 param_refresh_token = params[0].trim();
@@ -80,26 +81,26 @@ async function loadText(textUrl) {
   return await req.load();
 }
 
-async function getService(name, url, forceDownload) {
+async function getService(name, url, force_download) {
   const fm = FileManager.iCloud();
-  const scriptDir = module.filename.replace(
+  const script_dir = module.filename.replace(
     fm.fileName(module.filename, true),
     ""
   );
-  let serviceDir = fm.joinPath(scriptDir, "lib/service/" + name);
+  let service_dir = fm.joinPath(script_dir, "lib/service/" + name);
 
-  if (!fm.fileExists(serviceDir)) {
-    fm.createDirectory(serviceDir, true);
+  if (!fm.fileExists(service_dir)) {
+    fm.createDirectory(service_dir, true);
   }
 
-  let libFile = fm.joinPath(scriptDir, "lib/service/" + name + "/index.js");
+  let lib_file = fm.joinPath(script_dir, "lib/service/" + name + "/index.js");
 
-  if (fm.fileExists(libFile) && !forceDownload) {
-    fm.downloadFileFromiCloud(libFile);
+  if (fm.fileExists(lib_file) && !force_download) {
+    fm.downloadFileFromiCloud(lib_file);
   } else {
     // download once
     let indexjs = await loadText(url);
-    fm.write(libFile, indexjs);
+    fm.write(lib_file, indexjs);
   }
 
   let service = importModule("lib/service/" + name);

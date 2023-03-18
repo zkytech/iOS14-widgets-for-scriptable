@@ -53,6 +53,7 @@ async function getToken(param_refresh_token) {
     if (
       param_refresh_token &&
       param_refresh_token != local_refresh_token &&
+      param_refresh_token != "" &&
       result["success"] == false
     ) {
       fm.writeString(refresh_token_file_path, param_refresh_token);
