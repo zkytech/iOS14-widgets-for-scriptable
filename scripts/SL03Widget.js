@@ -6,35 +6,46 @@
  * iOS widget --- 长安深蓝SL03桌面小组件
  * 项目地址: https://github.com/zkytech/iOS14-widgets-for-scriptable
  * 联系邮箱: zhangkunyuan@hotmail.com
- * 
+ *
  * 传入以下参数: refresh_token
  * 参数获取方法见文档: https://gitee.com/zkytech/iOS14-widgets-for-scriptable#4-%E6%B7%B1%E8%93%9Dsl03%E8%BD%A6%E8%BE%86%E7%8A%B6%E6%80%81
  * - 组件依赖深蓝APP登录信息（refresh_token）
  * - 本组件仅用于学习交流
  * - 本组件为开源软件，不会进行收费！！！
- * 
+ *
  *
  *
  *
  */
 // 开发时切换到dev分支
-const branch = "dev"
-const force_download = branch != "master"
+const branch = "dev";
+const force_download = branch != "master";
+
+// Boxjs自动获取token，需配合Quantumult X使用
+const $ = new Env("深蓝")
+
 const {
   getCarId,
   getToken,
   refreshCarData,
   getCarStatus,
   getCarInfo,
-  getCarLocation
-} = await getService("SL03Api",`https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/lib/service/SL03Api.js`,force_download)
-const {
-  update
-} = await getService("UpdateScript", `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/lib/service/UpdateScript.js`, force_download)
-
+  getCarLocation,
+} = await getService(
+  "SL03Api",
+  `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/lib/service/SL03Api.js`,
+  force_download
+);
+const { update } = await getService(
+  "UpdateScript",
+  `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/lib/service/UpdateScript.js`,
+  force_download
+);
 
 // 更新组件代码
-await update(`https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/SL03Widget.js`);
+await update(
+  `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/SL03Widget.js`
+);
 
 const LW = new ListWidget(); // widget对象
 
@@ -48,6 +59,7 @@ if (config.runsInWidget) {
   const params = args.widgetParameter ? args.widgetParameter.split(",") : [""];
   param_refresh_token = params[0].trim();
 }
+if (param_refresh_token == "") param_refresh_token = $.getdata("refresh_token")
 presentSize = "medium";
 
 await renderCarStatus(param_refresh_token);
@@ -68,7 +80,6 @@ if (!config.runsInWidget) {
 Script.setWidget(LW);
 
 Script.complete();
-
 
 // 从URL加载图片
 async function loadImage(url) {
@@ -274,8 +285,6 @@ async function renderCarStatus(param_refresh_token) {
   console.log("渲染结束");
 }
 
-
-
 async function loadText(textUrl) {
   const req = new Request(textUrl);
   return await req.load();
@@ -283,21 +292,24 @@ async function loadText(textUrl) {
 
 async function getService(name, url, forceDownload) {
   const fm = FileManager.iCloud();
-  const scriptDir = module.filename.replace(fm.fileName(module.filename, true), '');
+  const scriptDir = module.filename.replace(
+    fm.fileName(module.filename, true),
+    ""
+  );
   let serviceDir = fm.joinPath(scriptDir, "lib/service/" + name);
 
   if (!fm.fileExists(serviceDir)) {
-      fm.createDirectory(serviceDir, true);
+    fm.createDirectory(serviceDir, true);
   }
 
   let libFile = fm.joinPath(scriptDir, "lib/service/" + name + "/index.js");
-  
+
   if (fm.fileExists(libFile) && !forceDownload) {
-      fm.downloadFileFromiCloud(libFile);
+    fm.downloadFileFromiCloud(libFile);
   } else {
-      // download once
-      let indexjs = await loadText(url);
-      fm.write(libFile, indexjs);
+    // download once
+    let indexjs = await loadText(url);
+    fm.write(libFile, indexjs);
   }
 
   let service = importModule("lib/service/" + name);
@@ -305,7 +317,5 @@ async function getService(name, url, forceDownload) {
   return service;
 }
 
-
-
-
-
+// prettier-ignore
+function Env(t){this.name=t,this.logs=[],this.isSurge=(()=>"undefined"!=typeof $httpClient),this.isQuanX=(()=>"undefined"!=typeof $task),this.log=((...t)=>{this.logs=[...this.logs,...t],t?console.log(t.join("\n")):console.log(this.logs.join("\n"))}),this.msg=((t=this.name,s="",i="")=>{this.isSurge()&&$notification.post(t,s,i),this.isQuanX()&&$notify(t,s,i);const e=["","==============\ud83d\udce3\u7cfb\u7edf\u901a\u77e5\ud83d\udce3=============="];t&&e.push(t),s&&e.push(s),i&&e.push(i),console.log(e.join("\n"))}),this.getdata=(t=>this.isSurge()?$persistentStore.read(t):this.isQuanX()?$prefs.valueForKey(t):void 0),this.setdata=((t,s)=>this.isSurge()?$persistentStore.write(t,s):this.isQuanX()?$prefs.setValueForKey(t,s):void 0),this.get=((t,s)=>this.send(t,"GET",s)),this.wait=((t,s=t)=>i=>setTimeout(()=>i(),Math.floor(Math.random()*(s-t+1)+t))),this.post=((t,s)=>this.send(t,"POST",s)),this.send=((t,s,i)=>{if(this.isSurge()){const e="POST"==s?$httpClient.post:$httpClient.get;e(t,(t,s,e)=>{s&&(s.body=e,s.statusCode=s.status),i(t,s,e)})}this.isQuanX()&&(t.method=s,$task.fetch(t).then(t=>{t.status=t.statusCode,i(null,t,t.body)},t=>i(t.error,t,t)))}),this.done=((t={})=>$done(t))}
