@@ -49,7 +49,7 @@ async function getToken(param_refresh_token) {
     fm.writeString(refresh_token_file_path, refresh_token);
     return access_token;
   } else {
-    console.error("token refresh failed");
+    console.error("token刷新失败，请重新获取refresh_token");
     if (
       param_refresh_token &&
       param_refresh_token != local_refresh_token &&

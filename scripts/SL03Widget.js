@@ -314,7 +314,9 @@ async function renderCarStatus(param_refresh_token) {
   }
   if (token == "" || token == null || token == undefined){
     console.error("请先配置refresh_token")
-    LW.addText("请先配置refresh_token").Font = Font.boldSystemFont(18);
+    const t = LW.addText("请先配置refresh_token")
+    t.font = Font.boldSystemFont(18);
+    t.textColor = Color.red()
   }
   console.log("渲染结束");
 }
