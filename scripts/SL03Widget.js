@@ -17,7 +17,7 @@
  *
  */
 // 开发时切换到dev分支
-const branch = "master"
+const branch = "dev"
 const force_download = branch != "master"
 const {
   getCarId,
