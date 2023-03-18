@@ -38,9 +38,12 @@
 ![](./preview/安装脚本.jpg)
 
 ### <a name='1.3-使用'></a>1.3 使用
-1. 在桌面创建小组件 选择 `scriptable`
 
-2. 编辑 小组件，点击`选取 script` 并选择前面导入的脚本。
+1. 安装scriptable后会自动创建几个Demo脚本，其中有一个脚本是`Random Scriptable API`，先点击运行一次这个脚本。
+
+2. 在桌面创建小组件 选择 `scriptable`
+
+3. 编辑 小组件，点击`选取 script` 并选择前面导入的脚本。
 
 
 ## <a name='2-bilibili最近更新番剧列表'></a>2 bilibili最近更新番剧列表
@@ -140,6 +143,7 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 
 1. 安装[Scriptable APP](https://apps.apple.com/cn/app/scriptable/id1405459188)
 2. 下载[桌面组件安装脚本](https://gitee.com/zkytech/iOS14-widgets-for-scriptable/releases/download/1.0.1/SL03Widget.scriptable)/[锁屏组件安装脚本](https://gitee.com/zkytech/iOS14-widgets-for-scriptable/releases/download/1.0.1/SL03LockScreenWidget.scriptable)后，用`Scriptable`打开
+3. 安装scriptable后会自动创建几个Demo脚本，其中有一个脚本是`Random Scriptable API`，先点击运行一次这个脚本。
 
 > 增程车型的油、电续航数据可能会变成-1、0，这种情况是深蓝APP的API问题，我无法解决，请知悉。
 > 车型颜色需要收集比对各种颜色车子的抓包数据来判断是哪个字段，目前没有足够的数据支撑，所以统一白色。
