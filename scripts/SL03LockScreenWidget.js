@@ -7,7 +7,10 @@
  * iOS widget(锁屏) --- 长安深蓝SL03电量
  * 项目地址: https://github.com/zkytech/iOS14-widgets-for-scriptable
  *
- * 传入以下参数: refresh_token
+ * 传入以下参数: refresh_token,模式
+ *    其中"模式"为可选参数，值为：油/电 ,默认为电。
+ * 
+ * 
  * 参数获取方法见文档: https://gitee.com/zkytech/iOS14-widgets-for-scriptable#4-%E6%B7%B1%E8%93%9Dsl03%E8%BD%A6%E8%BE%86%E7%8A%B6%E6%80%81
  * - 组件依赖深蓝APP登录信息（refresh_token）
  * - 本组件仅用于学习交流
@@ -42,8 +45,10 @@ const {
 await update(`https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${master}/scripts/SL03LockScreenWidget.js`)
 
 
-const params = args.widgetParameter ? args.widgetParameter.split(",") : [];
-param_refresh_token = params[0];
+const params = args.widgetParameter ? args.widgetParameter.split(",") : [""];
+param_refresh_token = params[0].trim();
+mode = "电";
+if(params.length > 1) mode = params[1].trim() == "油"?"油":"电";
 const LW = new ListWidget(); // widget对象
 
 
@@ -51,12 +56,14 @@ const token = await getToken(param_refresh_token);
 const car_id = await getCarId(token);
 const car_status = await getCarStatus(token, car_id);
 // 剩余电量
-const remain_power = car_status.remainPower;
+const remain_power =car_status.remainPower ==undefined || car_status.remainPower < 0 ? 0 : car_status.remainPower;
+const remained_oil_mile = car_status.RemainedOilMile
+const remain_oil = (remained_oil_mile == undefined || remained_oil_mile < 0 ? 0:remained_oil_mile) / 846 * 100
 
 
-const circle = await drawArc(LW, remain_power);
-
-const sf_car = circle.addImage(SFSymbol.named("car.rear.fill").image);
+const circle = await drawArc(LW, mode == "电" ? remain_power : remain_oil);
+const car_symbol_name = mode == "电" ? "car.rear.fill" : "fuelpump.fill"
+const sf_car = circle.addImage(SFSymbol.named(car_symbol_name).image );
 sf_car.imageSize = new Size(26, 26);
 sf_car.tintColor = Color.white();
 

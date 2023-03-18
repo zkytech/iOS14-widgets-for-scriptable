@@ -44,8 +44,8 @@ const car_img_url = "https://i.328888.xyz/2023/03/17/LFK8Z.md.png";
 let project_id = "";
 let param_refresh_token = "";
 if (config.runsInWidget) {
-  const params = args.widgetParameter ? args.widgetParameter.split(",") : [];
-  param_refresh_token = params[0];
+  const params = args.widgetParameter ? args.widgetParameter.split(",") : [""];
+  param_refresh_token = params[0].trim();
 }
 presentSize = "medium";
 

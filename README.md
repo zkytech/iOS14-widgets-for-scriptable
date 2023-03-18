@@ -1,4 +1,4 @@
-> PR请提交到[Github](https://github.com/zkytech/iOS14-widgets-for-scriptable)
+> 联系邮箱：zhangkunyuan@hotmail.com ，PR请提交到[Github](https://github.com/zkytech/iOS14-widgets-for-scriptable)
 # iOS 14小组件
 <!-- vscode-markdown-toc -->
 - [iOS 14小组件](#ios-14小组件)
@@ -139,6 +139,11 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 > 增程车型的油、电续航数据可能会变成-1、0，这种情况是深蓝APP的API问题，我无法解决，请知悉。
 > 车型颜色需要收集比对各种颜色车子的抓包数据来判断是哪个字段，目前没有足够的数据支撑，所以统一白色。
 ### <a name='4.2-参数'></a>4.2 参数
+
+- 桌面组件参数: `refresh_token`
+- 锁屏组件参数: `refresh_token`,`mode`
+  - `mode`为可选值，可以填写:`电`、`油`
+  - 填写实例:`asdasidjoas123jkhbh,电`。注意使用英文逗号分隔两个参数，不要填写多余的空格
 
 本组件需要获取refresh_token，操作过程涉及抓包。抓包方法请自行百度。以桌面组件为例，使用方法如下：
 
