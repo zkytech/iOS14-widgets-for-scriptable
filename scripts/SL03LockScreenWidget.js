@@ -52,7 +52,7 @@ if(branch == "master"){
 }
 
 const params = args.widgetParameter ? args.widgetParameter.split(",") : [""];
-const param_refresh_token = param.length > 0 ? params[0].trim() : "";
+const param_refresh_token = params.length > 0 ? params[0].trim() : "";
 let mode = "电";
 if(params.length > 1) mode = params[1].trim() == "油"?"油":"电";
 const LW = new ListWidget(); // widget对象
