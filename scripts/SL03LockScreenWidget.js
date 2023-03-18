@@ -30,20 +30,20 @@ const {
     getCarLocation,
   } = await getService(
     "SL03Api",
-    `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${master}/scripts/lib/service/SL03Api.js`,
+    `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/lib/service/SL03Api.js`,
     force_download
   );
   const { update } = await getService(
     "UpdateScript",
-    `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${master}/scripts/lib/service/UpdateScript.js`,
+    `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/lib/service/UpdateScript.js`,
     force_download
   );
   const { drawArc } = await getService(
     "DrawShape",
-    `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${master}/scripts/lib/service/DrawShape.js`,
+    `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/lib/service/DrawShape.js`,
     force_download
   );
-await update(`https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${master}/scripts/SL03LockScreenWidget.js`)
+await update(`https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/SL03LockScreenWidget.js`)
 
 
 const params = args.widgetParameter ? args.widgetParameter.split(",") : [""];
