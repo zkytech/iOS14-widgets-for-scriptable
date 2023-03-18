@@ -19,7 +19,8 @@
  */
 // 开发时切换到dev分支
 const branch = "dev";
-const force_download = branch != "master";
+// const force_download = branch != "master";
+const force_download = true;
 
 
 const {
@@ -113,7 +114,7 @@ async function loadImage(name,force_download) {
     try{
       fm.downloadFileFromiCloud(img_file);
     }catch(e){
-      
+
     }
   } else {
     // download once
