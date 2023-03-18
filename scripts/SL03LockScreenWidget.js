@@ -42,7 +42,7 @@ const token = getToken(param_refresh_token);
 const car_id = getCarId(token);
 const car_status = getCarStatus(token, car_id);
 // 剩余电量
-const remain_power = car_tatus.remainPower;
+const remain_power = car_status.remainPower;
 
 
 const circle = await drawArc(LW, remain_power);
