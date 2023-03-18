@@ -37,22 +37,23 @@ async function getToken(param_refresh_token) {
   req.method = "POST";
   req.body = JSON.stringify({
     refreshToken:
-      local_refresh_token != "" ? local_refresh_token : param_refresh_token,
+      local_refresh_token ? local_refresh_token : param_refresh_token,
   });
   req.headers = {
     "Content-Type": "application/json",
   };
   const result = await req.loadJSON();
-  if (result["success"]) {
+  if (result["success"] && result["data"]["refresh_token"] != null) {
     const refresh_token = result["data"]["refresh_token"];
     const access_token = result["data"]["access_token"];
     fm.writeString(refresh_token_file_path, refresh_token);
     return access_token;
   } else {
-    console.error("token refresh failed");
+    console.error("token刷新失败，请重新获取refresh_token");
     if (
       param_refresh_token &&
       param_refresh_token != local_refresh_token &&
+      param_refresh_token != "" &&
       result["success"] == false
     ) {
       fm.writeString(refresh_token_file_path, param_refresh_token);

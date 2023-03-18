@@ -6,16 +6,16 @@
  * iOS widget --- 长安深蓝SL03桌面小组件
  * 项目地址: https://github.com/zkytech/iOS14-widgets-for-scriptable
  * 联系邮箱: zhangkunyuan@hotmail.com
- * 
+ *
  * 传入以下参数: refresh_token
  * 参数获取方法见文档: https://gitee.com/zkytech/iOS14-widgets-for-scriptable#4-%E6%B7%B1%E8%93%9Dsl03%E8%BD%A6%E8%BE%86%E7%8A%B6%E6%80%81
  * - 组件依赖深蓝APP登录信息（refresh_token）
  * - 本组件仅用于学习交流
  * - 本组件为开源软件，不会进行收费！！！
- * 
+
  *
  *
- *
+ * - 不要在脚本里填token，所有参数必须通过组件设置界面填写
  */
 // 开发时切换到dev分支
 const branch = "master"
@@ -26,27 +26,36 @@ const {
   refreshCarData,
   getCarStatus,
   getCarInfo,
-  getCarLocation
-} = await getService("SL03Api",`https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/lib/service/SL03Api.js`,force_download)
-const {
-  update
-} = await getService("UpdateScript", `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/lib/service/UpdateScript.js`, force_download)
+  getCarLocation,
+} = await getService(
+  "SL03Api",
+  `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/lib/service/SL03Api.js`,
+  force_download
+);
+const { update } = await getService(
+  "UpdateScript",
+  `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/lib/service/UpdateScript.js`,
+  force_download
+);
 
+if(branch == "master"){
+  // 更新组件代码
+  await update(
+    `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/SL03Widget.js`
+  );
+}
 
-// 更新组件代码
-await update(`https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/SL03Widget.js`);
 
 const LW = new ListWidget(); // widget对象
 
 let presentSize = "medium"; // 预览组件的大小
 // const mainColor = new Color("#30336b")
 const mainColor = new Color("#000000");
-const car_img_url = "https://i.328888.xyz/2023/03/17/LFK8Z.md.png";
 let project_id = "";
 let param_refresh_token = "";
 if (config.runsInWidget) {
   const params = args.widgetParameter ? args.widgetParameter.split(",") : [""];
-  param_refresh_token = params[0].trim();
+  param_refresh_token = param.length > 0 ? params[0].trim() : "";
 }
 presentSize = "medium";
 
@@ -69,11 +78,41 @@ Script.setWidget(LW);
 
 Script.complete();
 
+// 加载图片
+async function loadImage(name,force_download) {
+  const img_map = {
+    "白色车":"https://i.328888.xyz/2023/03/17/LFK8Z.md.png",
+    "LOGO":"https://deepal.com.cn/202303112321/share_logo.png"
+  }
+  const img_url = img_map[name];
+  const file_name = img_url.split("/")[img_url.split("/").length - 1]
 
-// 从URL加载图片
-async function loadImage(url) {
-  const req = new Request(url);
-  return await req.loadImage();
+  const fm = FileManager.iCloud();
+
+  const script_dir = module.filename.replace(
+    fm.fileName(module.filename, true),
+    ""
+  );
+  let img_dir = fm.joinPath(script_dir, "imgs");
+
+  if (!fm.fileExists(img_dir)) {
+    fm.createDirectory(img_dir, true);
+  }
+
+  let img_file = fm.joinPath(script_dir, "imgs/" + file_name + ".png");
+
+  if (fm.fileExists(img_file) && !force_download) {
+    console.log(`从本地缓存中加载图片:${name}`)
+    fm.downloadFileFromiCloud(img_file);
+  } else {
+    // download once
+    console.log(`开始下载图片:${name}`)
+    const req = new Request(img_url)
+    const img = await req.loadImage()
+    fm.writeImage(img_file, img)
+  }
+
+  return fm.readImage(img_file);
 }
 
 // 渲染组件
@@ -120,19 +159,19 @@ async function renderCarStatus(param_refresh_token) {
     //power_img.cornerRadius=5
     //power_img.imageSize=new Size(300,18)
     /**
-              |    col0 |   col1_0|   col1_1 |
-            * |---------|---------|----------|
-            * |         | 总里程   | 续航里程  |
-            * | 车辆图片 |  xxxkm |   xxkm   |
-            * |         | t_space0| t_space1  |
-            * | ------- |----------|---------|
-            * | 车辆名称 |  温度     | 位置     |
-            * | ------- | xx摄氏度. | xxx省xxx市 |
-              |         | t_space2 | t_space3  |
-            * | 车牌号   |---------------------｜
-              ｜        ｜ 数据更新时间          |
-              | col0   |        col1           |
-            */
+        |    col0 |   col1_0|   col1_1 |
+        |---------|---------|----------|
+        |         | 总里程   | 续航里程  |
+        | 车辆图片 |  xxxkm |   xxkm   |
+        |         | t_space0| t_space1  |
+        | ------- |----------|---------|
+        | 车辆名称 |  温度     | 位置     |
+        | ------- | xx摄氏度. | xxx省xxx市 |
+        |         | t_space2 | t_space3  |
+        | 车牌号   |---------------------｜
+        |        | 数据更新时间          |
+        | col0   |        col1           |
+    */
     const container = LW.addStack();
     container.layoutHorizontally();
     container.spacing = 15;
@@ -142,7 +181,7 @@ async function renderCarStatus(param_refresh_token) {
     col0.spacing = 6;
     col0.size = new Size(110, 0);
     // 车辆图片
-    const car_img = await loadImage(car_img_url);
+    const car_img = await loadImage("白色车");
     const car_stack = col0.addStack();
 
     const img_container = car_stack.addImage(car_img);
@@ -174,7 +213,7 @@ async function renderCarStatus(param_refresh_token) {
     const car_seires_container = col0.addStack();
     // 车辆logo
     const logo = car_seires_container.addImage(
-      await loadImage("https://deepal.com.cn/202303112321/share_logo.png")
+      await loadImage("LOGO")
     );
     logo.imageSize = new Size(12, 12);
     // 车辆型号
@@ -271,41 +310,44 @@ async function renderCarStatus(param_refresh_token) {
       u.textColor = Color.gray();
     });
   }
+  if (token == "" || token == null || token == undefined){
+    console.error("请先配置refresh_token")
+    const t = LW.addText("请先配置refresh_token")
+    t.font = Font.boldSystemFont(18);
+    t.textColor = Color.red()
+  }
   console.log("渲染结束");
 }
-
-
 
 async function loadText(textUrl) {
   const req = new Request(textUrl);
   return await req.load();
 }
 
-async function getService(name, url, forceDownload) {
+async function getService(name, url, force_download) {
   const fm = FileManager.iCloud();
-  const scriptDir = module.filename.replace(fm.fileName(module.filename, true), '');
-  let serviceDir = fm.joinPath(scriptDir, "lib/service/" + name);
+  const script_dir = module.filename.replace(
+    fm.fileName(module.filename, true),
+    ""
+  );
+  let service_dir = fm.joinPath(script_dir, "lib/service/" + name);
 
-  if (!fm.fileExists(serviceDir)) {
-      fm.createDirectory(serviceDir, true);
+  if (!fm.fileExists(service_dir)) {
+    fm.createDirectory(service_dir, true);
   }
 
-  let libFile = fm.joinPath(scriptDir, "lib/service/" + name + "/index.js");
-  
-  if (fm.fileExists(libFile) && !forceDownload) {
-      fm.downloadFileFromiCloud(libFile);
+  let lib_file = fm.joinPath(script_dir, "lib/service/" + name + "/index.js");
+
+  if (fm.fileExists(lib_file) && !force_download) {
+    fm.downloadFileFromiCloud(lib_file);
   } else {
-      // download once
-      let indexjs = await loadText(url);
-      fm.write(libFile, indexjs);
+    // download once
+    let indexjs = await loadText(url);
+    fm.write(lib_file, indexjs);
   }
 
   let service = importModule("lib/service/" + name);
 
   return service;
 }
-
-
-
-
 
