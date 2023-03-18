@@ -43,7 +43,7 @@ async function getToken(param_refresh_token) {
     "Content-Type": "application/json",
   };
   const result = await req.loadJSON();
-  if (result["success"]) {
+  if (result["success"] && result["data"]["refresh_token"] != null) {
     const refresh_token = result["data"]["refresh_token"];
     const access_token = result["data"]["access_token"];
     fm.writeString(refresh_token_file_path, refresh_token);
