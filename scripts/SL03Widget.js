@@ -7,6 +7,7 @@
  * - 组件依赖深蓝APP登录信息（refresh_token）
  * - 本组件仅用于学习交流
  * - 本组件为开源软件，不会进行收费！！！
+ * 
  *
  *
  *
@@ -19,168 +20,55 @@ let presentSize = "medium"; // 预览组件的大小
 const mainColor = new Color("#000000");
 const car_img_url = "https://i.328888.xyz/2023/03/17/LFK8Z.md.png";
 let project_id = "";
-let global_refresh_token = "";
+let param_refresh_token = "";
 if (config.runsInWidget) {
   const params = args.widgetParameter ? args.widgetParameter.split(",") : [];
-  global_refresh_token = params[0];
+  param_refresh_token = params[0];
 }
 presentSize = "medium";
-await renderCarStatus();
-
-// 获取carId
-async function getCarId(token) {
-  console.log("开始获取carId");
-  const req = new Request(
-    "https://app-api.deepal.com.cn/appapi/v1/message/msg/cars"
-  );
-  req.method = "POST";
-  req.body = JSON.stringify({
-    "vcs-app-id": "inCall",
-    token: token,
-    type: "1",
-  });
-  req.headers = {
-    "Content-Type": "application/json",
-  };
-  const result = await req.loadJSON();
-  if (result["success"]) {
-    return result["data"][0].carId;
-  } else {
-    return null;
-  }
-}
-
-// 获取token
-async function getToken() {
-  console.log("开始获取token");
-  const fm = FileManager.iCloud();
-  const refresh_token_file_path = fm.documentsDirectory() + "/refresh_token";
-  fm.downloadFileFromiCloud(refresh_token_file_path);
-  let local_refresh_token = "";
-  if (fm.fileExists(refresh_token_file_path)) {
-    local_refresh_token = fm.readString(refresh_token_file_path);
-  }
-  const req = new Request(
-    "https://app-api.deepal.com.cn/appapi/v1/member/ms/refreshCacToken"
-  );
-  req.method = "POST";
-  req.body = JSON.stringify({
-    refreshToken:
-      local_refresh_token != "" ? local_refresh_token : global_refresh_token,
-  });
-  req.headers = {
-    "Content-Type": "application/json",
-  };
-  const result = await req.loadJSON();
-  if (result["success"]) {
-    const refresh_token = result["data"]["refresh_token"];
-    const access_token = result["data"]["access_token"];
-    fm.writeString(refresh_token_file_path, refresh_token);
-    return access_token;
-  } else {
-    console.error("token refresh failed");
-    if (
-      global_refresh_token &&
-      global_refresh_token != local_refresh_token &&
-      result["success"] == false
-    ) {
-      fm.writeString(refresh_token_file_path, global_refresh_token);
-      return getToken();
-    }
-
-    return null;
-  }
-}
-
-// 发出命令刷新车辆数据(异步)--无效
-async function refreshCarData(project_id) {
-  console.log("开始刷新车辆状态数据");
-  const stm = new Date().getTime();
-  const req = new Request(
-    `https://cbd-api.changan.com.cn:9092/v3/projects/${project_id}/collect?stm=${stm}`
-  );
-  req.method = "POST";
-  await req.loadString();
-}
-
-// 获取车辆状态数据
-async function getCarStatus(token, car_id) {
-  console.log("开始获取车辆状态数据");
-  const req2 = new Request(
-    `https://m.iov.changan.com.cn/app2/api/car/data?keys=*&carId=${car_id}&token=${token}`
-  );
-  req2.method = "POST";
-  const car_status = await req2.loadJSON();
-  if (car_status["success"]) {
-    return car_status["data"];
-  } else {
-    return null;
-  }
-}
-
-// 获取车辆基本信息
-async function getCarInfo(token, car_id) {
-  console.log("开始获取车辆基本信息数据");
-  const req = new Request(
-    `https://m.iov.changan.com.cn/app2/api/v2/car/detail?carId=${car_id}&token=${token}`
-  );
-  req.method = "GET";
-  const car_info = await req.loadJSON();
-  if (car_info["success"]) {
-    return car_info["data"];
-  } else {
-    return null;
-  }
-}
-
-// 获取车辆位置信息
-async function getCarLocation(token, car_id) {
-  console.log("开始获取车辆位置信息");
-  const req = new Request(
-    `https://m.iov.changan.com.cn/appserver/api/cardata/getCarLocation?carId=${car_id}&mapType=GCJ02&token=${token}`
-  );
-  req.method = "POST";
-  const car_location = await req.loadJSON();
-  if (car_location["success"]) {
-    return car_location["data"];
-  } else {
-    return null;
-  }
-}
-
-// 绘制电量条
-function drawPowerImage(remain_power, remain_power_mile) {
-  const draw = new DrawContext();
-  const width = 300;
-  const height = 18;
-  draw.size = new Size(width, height);
-  draw.setFillColor(Color.white());
-  draw.fillRect(new Rect(0, 0, width, height));
-  draw.setFillColor(Color.green());
-  draw.fillRect(new Rect(0, 0, width * (Number(remain_power) / 100), height));
-  draw.setTextAlignedCenter();
-  draw.setFont(new Font("Avenir-Book", 17));
-  draw.drawTextInRect(
-    `${remain_power}%\t${remain_power_mile} km`,
-    new Rect(0, 0, width, height)
-  );
-
-  const img = draw.getImage();
-  // QuickLook.present(img, false)
-  return img;
-}
-
+const {
+  getCarId,
+  getToken,
+  refreshCarData,
+  getCarStatus,
+  getCarInfo,
+  getCarLocation
+} = await getService("SL03Api","https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/master/scripts/lib/service/SL03Api.js",false)
+await renderCarStatus(param_refresh_token);
 // 从URL加载图片
 async function loadImage(url) {
   const req = new Request(url);
   return await req.loadImage();
 }
 
-async function renderCarStatus() {
-  const token = await getToken();
-  console.log("token:" + token);
+async function getService(name, url, forceDownload) {
+  const fm = FileManager.local();
+  const scriptDir = module.filename.replace(fm.fileName(module.filename, true), '');
+  let serviceDir = fm.joinPath(scriptDir, "lib/service/" + name);
+
+  if (!fm.fileExists(serviceDir)) {
+      fm.createDirectory(serviceDir, true);
+  }
+
+  let libFile = fm.joinPath(scriptDir, "lib/service/" + name + "/index.js");
+  
+  if (fm.fileExists(libFile) && !forceDownload) {
+      fm.downloadFileFromiCloud(libFile);
+  } else {
+      // download once
+      let indexjs = await loadText(url);
+      fm.write(libFile, indexjs);
+  }
+
+  let service = importModule("lib/service/" + name);
+
+  return service;
+}
+
+
+async function renderCarStatus(param_refresh_token) {
+  const token = await getToken(param_refresh_token);
   const car_id = await getCarId(token);
-  console.log("car_id:" + car_id);
   // await refreshCarData()
   const car_status = await getCarStatus(token, car_id);
   const car_info = await getCarInfo(token, car_id);
@@ -224,7 +112,7 @@ async function renderCarStatus() {
               |    col0 |   col1_0|   col1_1 |
             * |---------|---------|----------|
             * |         | 总里程   | 续航里程  |
-            * | 车辆图片 |  xxx公里 |   xx%   |
+            * | 车辆图片 |  xxxkm |   xxkm   |
             * |         | t_space0| t_space1  |
             * | ------- |----------|---------|
             * | 车辆名称 |  温度     | 位置     |
