@@ -129,14 +129,16 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 
 ## <a name='4-深蓝sl03车辆状态'></a>4 深蓝SL03车辆状态
 ### <a name='4.1-效果预览'></a>4.1 效果预览
+
 ![](./preview/SL03%E9%A2%84%E8%A7%88.jpg)
 
+![](./preview/SL03%E9%94%81%E5%B1%8F%E9%A2%84%E8%A7%88.jpg)
 ### <a name='4.2-安装'></a>4.2 安装
-下载[安装脚本](https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/master/build/SL03Widget.scriptable)后，用`scriptable`打开
+下载[桌面组件安装脚本](https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/master/build/SL03Widget.scriptable)/[锁屏组件安装脚本](https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/master/build/SL03LockScreenWidget.scriptable)后，用`scriptable`打开
 
 ### <a name='4.2-参数'></a>4.2 参数
 
-本组件需要获取refresh_token，操作过程涉及抓包。抓包方法请自行百度
+本组件需要获取refresh_token，操作过程涉及抓包。抓包方法请自行百度。以桌面组件为例，使用方法如下：
 
 1. 安装`Stream` APP，并开启HTTPS抓包
 2. 点击`开始抓包`
@@ -146,3 +148,5 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 6. 点击查看请求详情，查看`响应-响应主体-查看json`
 7. 将`refresh_token`的值复制下来
 8. 桌面创建Scriptable中号组件，脚本选择前面安装的`SL03Widget`,将前面复制的`refresh_token`值粘贴到小组件的`parameter`中
+
+锁屏组件使用方法与上面相同。

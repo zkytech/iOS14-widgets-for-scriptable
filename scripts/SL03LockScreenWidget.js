@@ -1,3 +1,8 @@
+// Variables used by Scriptable.
+// These must be at the very top of the file. Do not edit.
+// icon-color: blue; icon-glyph: car;
+
+
 /**
  * iOS widget(锁屏) --- 长安深蓝SL03电量
  * 项目地址: https://github.com/zkytech/iOS14-widgets-for-scriptable
@@ -7,9 +12,6 @@
  * - 组件依赖深蓝APP登录信息（refresh_token）
  * - 本组件仅用于学习交流
  * - 本组件为开源软件，不会进行收费！！！
- *
- *
- *
  *
  */
 const params = args.widgetParameter ? args.widgetParameter.split(",") : [];
