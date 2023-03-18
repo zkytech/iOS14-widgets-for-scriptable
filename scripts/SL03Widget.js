@@ -41,6 +41,11 @@ async function loadImage(url) {
   return await req.loadImage();
 }
 
+async function loadText(textUrl) {
+  const req = new Request(textUrl);
+  return await req.load();
+}
+
 async function getService(name, url, forceDownload) {
   const fm = FileManager.local();
   const scriptDir = module.filename.replace(fm.fileName(module.filename, true), '');
