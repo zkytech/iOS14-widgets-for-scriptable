@@ -1,4 +1,4 @@
-
+> PR请提交到[Github](https://github.com/zkytech/iOS14-widgets-for-scriptable)
 # iOS 14小组件
 <!-- vscode-markdown-toc -->
 - [iOS 14小组件](#ios-14小组件)
@@ -129,13 +129,15 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 
 ## <a name='4-深蓝sl03车辆状态'></a>4 深蓝SL03车辆状态
 ### <a name='4.1-效果预览'></a>4.1 效果预览
-
+桌面组件
 ![](./preview/SL03%E9%A2%84%E8%A7%88.jpg)
-
+锁屏电量
 ![](./preview/SL03%E9%94%81%E5%B1%8F%E9%A2%84%E8%A7%88.jpg)
 ### <a name='4.2-安装'></a>4.2 安装
 下载[桌面组件安装脚本](https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/master/build/SL03Widget.scriptable)/[锁屏组件安装脚本](https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/master/build/SL03LockScreenWidget.scriptable)后，用`scriptable`打开
 
+> 增程车型的油、电续航数据可能会变成-1、0，这种情况是深蓝APP的API问题，我无法解决，请知悉。
+> 车型颜色需要收集比对各种颜色车子的抓包数据来判断是哪个字段，目前没有足够的数据支撑，所以统一白色。
 ### <a name='4.2-参数'></a>4.2 参数
 
 本组件需要获取refresh_token，操作过程涉及抓包。抓包方法请自行百度。以桌面组件为例，使用方法如下：
