@@ -1,8 +1,8 @@
-const $ = new Env('深蓝');
+const env = new Env('深蓝');
 if($response && $response.statusCode == 200 && $response.body && $request.url == "https://app-api.deepal.com.cn/appapi/v1/member/ms/refreshCacToken" && $request.method == "POST"){
     const respbodyObj = JSON.parse($response.body)
     if(respbodyObj.success){
-        $.setdata("refresh_token",respbodyObj.data.refresh_token)
+        env.setdata("refresh_token",respbodyObj.data.refresh_token)
     }
 }
 // prettier-ignore
