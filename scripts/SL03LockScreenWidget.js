@@ -38,9 +38,9 @@ const { drawArc } = await getService(
   false
 );
 
-const token = getToken(param_refresh_token);
-const car_id = getCarId(token);
-const car_status = getCarStatus(token, car_id);
+const token = await getToken(param_refresh_token);
+const car_id = await getCarId(token);
+const car_status = await getCarStatus(token, car_id);
 // 剩余电量
 const remain_power = car_status.remainPower;
 
