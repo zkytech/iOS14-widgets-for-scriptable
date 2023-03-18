@@ -1,3 +1,5 @@
+> 如果本项目对你有帮助，欢迎在[Github](https://github.com/zkytech/iOS14-widgets-for-scriptable)点个star表示支持。
+> 
 > 联系邮箱：zhangkunyuan@hotmail.com ，PR请提交到[Github](https://github.com/zkytech/iOS14-widgets-for-scriptable)
 # iOS 14小组件
 <!-- vscode-markdown-toc -->
