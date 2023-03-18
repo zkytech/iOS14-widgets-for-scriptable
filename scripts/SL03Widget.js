@@ -12,10 +12,10 @@
  * - 组件依赖深蓝APP登录信息（refresh_token）
  * - 本组件仅用于学习交流
  * - 本组件为开源软件，不会进行收费！！！
+
  *
  *
- *
- *
+ * - 不要在脚本里填token，所有参数必须通过组件设置界面填写
  */
 // 开发时切换到dev分支
 const branch = "dev";
@@ -57,7 +57,7 @@ let project_id = "";
 let param_refresh_token = "";
 if (config.runsInWidget) {
   const params = args.widgetParameter ? args.widgetParameter.split(",") : [""];
-  param_refresh_token = params[0].trim();
+  param_refresh_token = param.length > 0 ? params[0].trim() : "";
 }
 presentSize = "medium";
 
@@ -80,7 +80,7 @@ Script.setWidget(LW);
 
 Script.complete();
 
-// 从URL加载图片
+// 加载图片
 async function loadImage(name,force_download) {
   const img_map = {
     "白色车":"https://i.328888.xyz/2023/03/17/LFK8Z.md.png",
@@ -161,19 +161,19 @@ async function renderCarStatus(param_refresh_token) {
     //power_img.cornerRadius=5
     //power_img.imageSize=new Size(300,18)
     /**
-              |    col0 |   col1_0|   col1_1 |
-            * |---------|---------|----------|
-            * |         | 总里程   | 续航里程  |
-            * | 车辆图片 |  xxxkm |   xxkm   |
-            * |         | t_space0| t_space1  |
-            * | ------- |----------|---------|
-            * | 车辆名称 |  温度     | 位置     |
-            * | ------- | xx摄氏度. | xxx省xxx市 |
-              |         | t_space2 | t_space3  |
-            * | 车牌号   |---------------------｜
-              ｜        ｜ 数据更新时间          |
-              | col0   |        col1           |
-            */
+        |    col0 |   col1_0|   col1_1 |
+        |---------|---------|----------|
+        |         | 总里程   | 续航里程  |
+        | 车辆图片 |  xxxkm |   xxkm   |
+        |         | t_space0| t_space1  |
+        | ------- |----------|---------|
+        | 车辆名称 |  温度     | 位置     |
+        | ------- | xx摄氏度. | xxx省xxx市 |
+        |         | t_space2 | t_space3  |
+        | 车牌号   |---------------------｜
+        |        | 数据更新时间          |
+        | col0   |        col1           |
+    */
     const container = LW.addStack();
     container.layoutHorizontally();
     container.spacing = 15;
@@ -311,6 +311,10 @@ async function renderCarStatus(param_refresh_token) {
       u.font = Font.mediumMonospacedSystemFont(14);
       u.textColor = Color.gray();
     });
+  }
+  if (token == "" || token == null || token == undefined){
+    console.error("请先配置refresh_token")
+    LW.addText("请先配置refresh_token").Font = Font.boldSystemFont(18);
   }
   console.log("渲染结束");
 }

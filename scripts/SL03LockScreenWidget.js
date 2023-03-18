@@ -17,6 +17,8 @@
  * - 本组件仅用于学习交流
  * - 本组件为开源软件，不会进行收费！！！
  *
+ * 
+ * - 不要在脚本里填token，所有参数必须通过组件设置界面填写
  */
 // 开发时切换到dev分支
 const branch = "dev"
@@ -50,8 +52,8 @@ if(branch == "master"){
 }
 
 const params = args.widgetParameter ? args.widgetParameter.split(",") : [""];
-param_refresh_token = params[0].trim();
-mode = "电";
+const param_refresh_token = param.length > 0 ? params[0].trim() : "";
+let mode = "电";
 if(params.length > 1) mode = params[1].trim() == "油"?"油":"电";
 const LW = new ListWidget(); // widget对象
 
@@ -59,17 +61,25 @@ const LW = new ListWidget(); // widget对象
 const token = await getToken(param_refresh_token);
 const car_id = await getCarId(token);
 const car_status = await getCarStatus(token, car_id);
-// 剩余电量
-const remain_power =car_status.remainPower ==undefined || car_status.remainPower < 0 ? 0 : car_status.remainPower;
-const remained_oil_mile = car_status.RemainedOilMile
-const remain_oil = (remained_oil_mile == undefined || remained_oil_mile < 0 ? 0:remained_oil_mile) / 846 * 100
+if(car_status && car_id){
+  // 剩余电量
+  const remain_power =car_status.remainPower ==undefined || car_status.remainPower < 0 ? 0 : car_status.remainPower;
+  const remained_oil_mile = car_status.RemainedOilMile
+  const remain_oil = (remained_oil_mile == undefined || remained_oil_mile < 0 ? 0:remained_oil_mile) / 846 * 100
 
 
-const circle = await drawArc(LW, mode == "电" ? remain_power : remain_oil);
-const car_symbol_name = mode == "电" ? "car.rear.fill" : "fuelpump.fill"
-const sf_car = circle.addImage(SFSymbol.named(car_symbol_name).image );
-sf_car.imageSize = new Size(26, 26);
-sf_car.tintColor = Color.white();
+  const circle = await drawArc(LW, mode == "电" ? remain_power : remain_oil);
+  const car_symbol_name = mode == "电" ? "car.rear.fill" : "fuelpump.fill"
+  const sf_car = circle.addImage(SFSymbol.named(car_symbol_name).image );
+  sf_car.imageSize = new Size(26, 26);
+  sf_car.tintColor = Color.white();
+}
+
+if (token == "" || token == null || token == undefined){
+  console.error("请先配置refresh_token");
+  LW.addText("请先配置refresh_token");
+}
+
 
 LW.presentAccessoryCircular();
 

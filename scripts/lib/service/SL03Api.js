@@ -37,7 +37,7 @@ async function getToken(param_refresh_token) {
   req.method = "POST";
   req.body = JSON.stringify({
     refreshToken:
-      local_refresh_token != "" ? local_refresh_token : param_refresh_token,
+      local_refresh_token ? local_refresh_token : param_refresh_token,
   });
   req.headers = {
     "Content-Type": "application/json",
