@@ -89,7 +89,12 @@ async function loadImage(name,force_download) {
   const img_url = img_map[name];
   const file_name = img_url.split("/")[img_url.split("/").length - 1]
 
-  const fm = FileManager.iCloud();
+  let fm 
+  try{
+    fm = FileManager.iCloud();
+  }catch{
+    fm = FileManager.local();
+  }
 
   const script_dir = module.filename.replace(
     fm.fileName(module.filename, true),
@@ -105,7 +110,11 @@ async function loadImage(name,force_download) {
 
   if (fm.fileExists(img_file) && !force_download) {
     console.log(`从本地缓存中加载图片:${name}`)
-    fm.downloadFileFromiCloud(img_file);
+    try{
+      fm.downloadFileFromiCloud(img_file);
+    }catch(e){
+      
+    }
   } else {
     // download once
     console.log(`开始下载图片:${name}`)
@@ -325,9 +334,13 @@ async function loadText(textUrl) {
   const req = new Request(textUrl);
   return await req.load();
 }
-
 async function getService(name, url, force_download) {
-  const fm = FileManager.iCloud();
+  let fm 
+  try{
+    fm = FileManager.iCloud();
+  }catch{
+    fm = FileManager.local();
+  }
   const script_dir = module.filename.replace(
     fm.fileName(module.filename, true),
     ""
@@ -341,7 +354,11 @@ async function getService(name, url, force_download) {
   let lib_file = fm.joinPath(script_dir, "lib/service/" + name + "/index.js");
 
   if (fm.fileExists(lib_file) && !force_download) {
-    fm.downloadFileFromiCloud(lib_file);
+    try{
+      fm.downloadFileFromiCloud(lib_file);
+    }catch(e){
+
+    }
   } else {
     // download once
     let indexjs = await loadText(url);
