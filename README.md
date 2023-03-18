@@ -51,7 +51,7 @@
 
 ### <a name='2.2-安装'></a>2.2 安装
 
-下载[安装脚本](https://cdn.jsdelivr.net/gh/zkytech/iOS14-widgets-for-scriptable@master/build/bilibili.scriptable)后，用`scriptable`打开
+下载[安装脚本](https://gitee.com/zkytech/iOS14-widgets-for-scriptable/releases/download/1.0.1/bilibili.scriptable)后，用`scriptable`打开
 
 ### <a name='2.3-参数'></a>2.3 参数
 
@@ -126,7 +126,7 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 
 ### <a name='3.2-安装'></a>3.2 安装
 
-下载[安装脚本](https://cdn.jsdelivr.net/gh/zkytech/iOS14-widgets-for-scriptable@master/build/lol.scriptable)后，用`scriptable`打开
+下载[安装脚本](https://gitee.com/zkytech/iOS14-widgets-for-scriptable/releases/download/1.0.1/lol.scriptable)后，用`scriptable`打开
 
 ## <a name='4-深蓝sl03车辆状态'></a>4 深蓝SL03车辆状态
 ### <a name='4.1-效果预览'></a>4.1 效果预览
@@ -139,7 +139,7 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 为了顺利打开下面的链接，**请在safari浏览器中打开本页面**。
 
 1. 安装[Scriptable APP](https://apps.apple.com/cn/app/scriptable/id1405459188)
-2. 下载[桌面组件安装脚本](https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/master/build/SL03Widget.scriptable)/[锁屏组件安装脚本](https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/master/build/SL03LockScreenWidget.scriptable)后，用`Scriptable`打开
+2. 下载[桌面组件安装脚本](https://gitee.com/zkytech/iOS14-widgets-for-scriptable/releases/download/1.0.1/SL03Widget.scriptable)/[锁屏组件安装脚本](https://gitee.com/zkytech/iOS14-widgets-for-scriptable/releases/download/1.0.1/SL03LockScreenWidget.scriptable)后，用`Scriptable`打开
 
 > 增程车型的油、电续航数据可能会变成-1、0，这种情况是深蓝APP的API问题，我无法解决，请知悉。
 > 车型颜色需要收集比对各种颜色车子的抓包数据来判断是哪个字段，目前没有足够的数据支撑，所以统一白色。
