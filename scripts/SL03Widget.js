@@ -34,43 +34,39 @@ const {
   getCarInfo,
   getCarLocation
 } = await getService("SL03Api","https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/master/scripts/lib/service/SL03Api.js",false)
+const {
+  update
+} = await getService("UpdateScript", "https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/master/scripts/lib/service/UpdateScript.js", false)
+
 await renderCarStatus(param_refresh_token);
+LW.backgroundColor = mainColor;
+
+if (!config.runsInWidget) {
+  if (presentSize == "large") {
+    await LW.presentLarge();
+  }
+  if (presentSize == "medium") {
+    await LW.presentMedium();
+  }
+  if (presentSize == "small") {
+    await LW.presentSmall();
+  }
+}
+
+Script.setWidget(LW);
+
+Script.complete();
+// 更新组件代码
+await update("https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/master/scripts/SL03Widget.js");
+
+
 // 从URL加载图片
 async function loadImage(url) {
   const req = new Request(url);
   return await req.loadImage();
 }
 
-async function loadText(textUrl) {
-  const req = new Request(textUrl);
-  return await req.load();
-}
-
-async function getService(name, url, forceDownload) {
-  const fm = FileManager.local();
-  const scriptDir = module.filename.replace(fm.fileName(module.filename, true), '');
-  let serviceDir = fm.joinPath(scriptDir, "lib/service/" + name);
-
-  if (!fm.fileExists(serviceDir)) {
-      fm.createDirectory(serviceDir, true);
-  }
-
-  let libFile = fm.joinPath(scriptDir, "lib/service/" + name + "/index.js");
-  
-  if (fm.fileExists(libFile) && !forceDownload) {
-      fm.downloadFileFromiCloud(libFile);
-  } else {
-      // download once
-      let indexjs = await loadText(url);
-      fm.write(libFile, indexjs);
-  }
-
-  let service = importModule("lib/service/" + name);
-
-  return service;
-}
-
-
+// 渲染组件
 async function renderCarStatus(param_refresh_token) {
   const token = await getToken(param_refresh_token);
   const car_id = await getCarId(token);
@@ -268,39 +264,38 @@ async function renderCarStatus(param_refresh_token) {
   console.log("渲染结束");
 }
 
-LW.backgroundColor = mainColor;
-// LW.backgroundGradient = gradient
 
-if (!config.runsInWidget) {
-  if (presentSize == "large") {
-    await LW.presentLarge();
-  }
-  if (presentSize == "medium") {
-    await LW.presentMedium();
-  }
-  if (presentSize == "small") {
-    await LW.presentSmall();
-  }
+
+async function loadText(textUrl) {
+  const req = new Request(textUrl);
+  return await req.load();
 }
 
-Script.setWidget(LW);
+async function getService(name, url, forceDownload) {
+  const fm = FileManager.local();
+  const scriptDir = module.filename.replace(fm.fileName(module.filename, true), '');
+  let serviceDir = fm.joinPath(scriptDir, "lib/service/" + name);
 
-Script.complete();
-
-/**
- * 自动更新
- */
-async function update() {
-  const fm = FileManager.iCloud();
-  const folder = fm.documentsDirectory();
-  const req = new Request(
-    "https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/master/scripts/SL03Widget.js"
-  );
-  let scriptTxt = await req.loadString();
-  const filename = `/${Script.name()}.js`;
-  if (req.response.statusCode == 200) {
-    fm.writeString(folder + filename, scriptTxt);
+  if (!fm.fileExists(serviceDir)) {
+      fm.createDirectory(serviceDir, true);
   }
+
+  let libFile = fm.joinPath(scriptDir, "lib/service/" + name + "/index.js");
+  
+  if (fm.fileExists(libFile) && !forceDownload) {
+      fm.downloadFileFromiCloud(libFile);
+  } else {
+      // download once
+      let indexjs = await loadText(url);
+      fm.write(libFile, indexjs);
+  }
+
+  let service = importModule("lib/service/" + name);
+
+  return service;
 }
 
-await update();
+
+
+
+
