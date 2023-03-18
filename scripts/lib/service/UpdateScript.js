@@ -8,9 +8,9 @@ async function update(file_url) {
     let scriptTxt = await req.loadString();
     const filename = `/${Script.name()}.js`;
     if (req.response.statusCode == 200) {
-      fm.writeString(folder + filename, scriptTxt);
+        fm.writeString(folder + filename, scriptTxt);
     }
-  }
+}
 
 module.exports = {
     update

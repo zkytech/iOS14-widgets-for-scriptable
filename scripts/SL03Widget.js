@@ -16,6 +16,24 @@
  *
  *
  */
+// 开发时切换到dev分支
+const branch = "master"
+const force_download = branch != "master"
+const {
+  getCarId,
+  getToken,
+  refreshCarData,
+  getCarStatus,
+  getCarInfo,
+  getCarLocation
+} = await getService("SL03Api",`https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/lib/service/SL03Api.js`,force_download)
+const {
+  update
+} = await getService("UpdateScript", `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/lib/service/UpdateScript.js`, force_download)
+
+
+// 更新组件代码
+await update(`https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/SL03Widget.js`);
 
 const LW = new ListWidget(); // widget对象
 
@@ -30,17 +48,6 @@ if (config.runsInWidget) {
   param_refresh_token = params[0];
 }
 presentSize = "medium";
-const {
-  getCarId,
-  getToken,
-  refreshCarData,
-  getCarStatus,
-  getCarInfo,
-  getCarLocation
-} = await getService("SL03Api","https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/master/scripts/lib/service/SL03Api.js",false)
-const {
-  update
-} = await getService("UpdateScript", "https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/master/scripts/lib/service/UpdateScript.js", false)
 
 await renderCarStatus(param_refresh_token);
 LW.backgroundColor = mainColor;
@@ -60,8 +67,6 @@ if (!config.runsInWidget) {
 Script.setWidget(LW);
 
 Script.complete();
-// 更新组件代码
-await update("https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/master/scripts/SL03Widget.js");
 
 
 // 从URL加载图片
@@ -276,7 +281,7 @@ async function loadText(textUrl) {
 }
 
 async function getService(name, url, forceDownload) {
-  const fm = FileManager.local();
+  const fm = FileManager.iCloud();
   const scriptDir = module.filename.replace(fm.fileName(module.filename, true), '');
   let serviceDir = fm.joinPath(scriptDir, "lib/service/" + name);
 

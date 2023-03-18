@@ -14,31 +14,38 @@
  * - 本组件为开源软件，不会进行收费！！！
  *
  */
+// 开发时切换到dev分支
+const branch = "master"
+const force_download = branch != "master"
+const {
+    getCarId,
+    getToken,
+    refreshCarData,
+    getCarStatus,
+    getCarInfo,
+    getCarLocation,
+  } = await getService(
+    "SL03Api",
+    `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${master}/scripts/lib/service/SL03Api.js`,
+    force_download
+  );
+  const { update } = await getService(
+    "UpdateScript",
+    `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${master}/scripts/lib/service/UpdateScript.js`,
+    force_download
+  );
+  const { drawArc } = await getService(
+    "DrawShape",
+    `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${master}/scripts/lib/service/DrawShape.js`,
+    force_download
+  );
+await update(`https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${master}/scripts/SL03LockScreenWidget.js`)
+
+
 const params = args.widgetParameter ? args.widgetParameter.split(",") : [];
 param_refresh_token = params[0];
 const LW = new ListWidget(); // widget对象
-const {
-  getCarId,
-  getToken,
-  refreshCarData,
-  getCarStatus,
-  getCarInfo,
-  getCarLocation,
-} = await getService(
-  "SL03Api",
-  "https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/master/scripts/lib/service/SL03Api.js",
-  false
-);
-const { update } = await getService(
-  "UpdateScript",
-  "https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/master/scripts/lib/service/UpdateScript.js",
-  false
-);
-const { drawArc } = await getService(
-  "DrawShape",
-  "https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/master/scripts/lib/service/DrawShape.js",
-  false
-);
+
 
 const token = await getToken(param_refresh_token);
 const car_id = await getCarId(token);
@@ -57,8 +64,6 @@ LW.presentAccessoryCircular();
 
 Script.setWidget(LW);
 Script.complete();
-// 更新脚本代码
-update("https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/master/scripts/SL03LockScreenWidget.js")
 
 async function loadText(textUrl) {
   const req = new Request(textUrl);
@@ -66,7 +71,7 @@ async function loadText(textUrl) {
 }
 
 async function getService(name, url, forceDownload) {
-  const fm = FileManager.local();
+  const fm = FileManager.iCloud();
   const scriptDir = module.filename.replace(
     fm.fileName(module.filename, true),
     ""
