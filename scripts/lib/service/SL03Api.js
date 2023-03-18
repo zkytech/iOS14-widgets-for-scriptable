@@ -24,9 +24,19 @@ async function getCarId(token) {
 // 获取token
 async function getToken(param_refresh_token) {
   console.log("开始获取token");
-  const fm = FileManager.iCloud();
+  let fm 
+  try{
+    fm = FileManager.iCloud();
+  }catch(e){
+    fm = FileManager.local();
+  }
+  
   const refresh_token_file_path = fm.documentsDirectory() + "/refresh_token";
-  fm.downloadFileFromiCloud(refresh_token_file_path);
+  try{
+    fm.downloadFileFromiCloud(refresh_token_file_path);
+  }catch(e){
+
+  }
   let local_refresh_token = "";
   if (fm.fileExists(refresh_token_file_path)) {
     local_refresh_token = fm.readString(refresh_token_file_path);
