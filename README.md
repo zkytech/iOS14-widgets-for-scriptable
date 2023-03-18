@@ -166,3 +166,5 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 8. 桌面创建Scriptable中号组件，脚本选择前面安装的`SL03Widget`,将前面复制的`refresh_token`值粘贴到小组件的`parameter`中
 
 锁屏组件使用方法与上面相同。
+
+![](./preview/refresh_token%E6%8A%93%E5%8F%96%E6%B5%81%E7%A8%8B.JPEG))
