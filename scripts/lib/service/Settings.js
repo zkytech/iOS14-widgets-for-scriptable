@@ -1,3 +1,13 @@
+function getFileManager(){
+    let fm;
+    try {
+      fm = FileManager.iCloud();
+    } catch {
+      fm = FileManager.local();
+    }
+    return fm
+  }
+
 function saveDataToSettings(project_name,key,value){
     let settings = loadSettings(project_name)
     if(settings == null){
@@ -58,4 +68,5 @@ function saveDataToSettings(project_name,key,value){
     getDataFromSettings,
     loadSettings,
     writeSettings,
+    getFileManager
   }

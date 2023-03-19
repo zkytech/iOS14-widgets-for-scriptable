@@ -40,8 +40,8 @@ const { update } = await getService(
   `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/lib/service/UpdateScript.js`,
   force_download
 );
-const {getDataFromSettings,saveDataToSettings}  = await getService(
-  "UpdateScript",
+const {getDataFromSettings,saveDataToSettings,getFileManager}  = await getService(
+  "Settings",
   `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/lib/service/Settings.js`,
   force_download
 ); 
@@ -56,7 +56,15 @@ let param_refresh_token = "";
 if (config.runsInWidget) {
   const params = args.widgetParameter ? args.widgetParameter.split(",") : [""];
   param_refresh_token = params.length > 0 ? params[0].trim() : "";
-  await renderCarStatus(LW,param_refresh_token);
+  if(config.widgetFamily == "medium"){
+    await renderMediumWidget(LW,param_refresh_token);
+  }else{
+    const LW = new ListWidget()
+    LW.addText("本组件只支持中等大小，请重新添加中等大小桌面组件")
+    LW.present()
+    Script.setWidget(LW)
+    Script.complete();
+  }
 }else{
   await askSettings()
 }
@@ -119,7 +127,7 @@ function getRefreshToken(){
 }
 
 // 渲染组件
-async function renderCarStatus() {
+async function renderMediumWidget() {
   const LW = new ListWidget(); // widget对象
   LW.backgroundColor = Color.black()
   let token
@@ -154,7 +162,7 @@ async function renderCarStatus() {
     // 车辆名称
     const car_name = car_info.carName;
     // 车辆配置名称，比如：515km
-    const conf_name = car_info.confName.split("，")[2];
+    const conf_name =car_info.confName ? car_info.confName.split("，")[2] : "";
     // 车牌号
     const plate_number = car_info.plateNumber;
     // 型号
@@ -336,17 +344,6 @@ async function renderCarStatus() {
   Script.complete();
 }
 
-
-
-function getFileManager(){
-  let fm;
-  try {
-    fm = FileManager.iCloud();
-  } catch {
-    fm = FileManager.local();
-  }
-  return fm
-}
 
 async function getService(name, url, force_download) {
   const fm = getFileManager()
