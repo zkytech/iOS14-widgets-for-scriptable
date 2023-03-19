@@ -23,7 +23,7 @@
 // 开发时切换到dev分支
 const branch = "dev"
 const force_download = branch != "master"
-// Boxjs自动获取token，需配合Quantumult X使用
+const project_name = "深蓝小组件_by_zkytech"
 
 const {
     getCarId,
@@ -47,6 +47,17 @@ const {
     `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/lib/service/DrawShape.js`,
     force_download
   );
+  let {getDataFromSettings,saveDataToSettings}  = await getService(
+    "Settings",
+    `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/lib/service/Settings.js`,
+    force_download
+  ); 
+  
+  function getSetting(key) {return getDataFromSettings(project_name,key)}
+  function saveSetting(key,value) {return saveDataToSettings(project_name,key,value)}
+  
+
+
 if(branch == "master"){
   await update(`https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/SL03LockScreenWidget.js`)
 }
@@ -56,9 +67,24 @@ const param_refresh_token = params.length > 0 ? params[0].trim() : "";
 let mode = "电";
 if(params.length > 1) mode = params[1].trim() == "油"?"油":"电";
 const LW = new ListWidget(); // widget对象
+if(param_refresh_token && !getRefreshToken()){
+  saveSetting("refresh_token",param_refresh_token)
+}
 
+let token
+let refresh_token = getRefreshToken()
+const token_result = await getToken(refresh_token);
+if(token_result == null){
+  token = null
+}else{
+  refresh_token = token_result.refresh_token
+  token = token_result.access_token
+  if(refresh_token != "" && refresh_token != undefined && refresh_token != null){
+    console.log("保存新的refresh_token")
+    saveSetting("refresh_token",refresh_token)
+  }
+}
 
-const token = await getToken(param_refresh_token);
 const car_id = await getCarId(token);
 const car_status = await getCarStatus(token, car_id);
 if(car_status && car_id){
@@ -92,12 +118,7 @@ async function loadText(textUrl) {
 }
 
 async function getService(name, url, force_download) {
-  let fm 
-  try{
-    fm = FileManager.iCloud();
-  }catch{
-    fm = FileManager.local();
-  }
+  const fm = getFileManager()
   const script_dir = module.filename.replace(
     fm.fileName(module.filename, true),
     ""
@@ -127,3 +148,28 @@ async function getService(name, url, force_download) {
   return service;
 }
 
+
+
+function getRefreshToken(){
+  const fm = getFileManager()
+  const script_dir = fm.documentsDirectory()
+  const old_refresh_token_path = fm.joinPath(script_dir, "refresh_token");
+  // 处理历史遗留问题，将老版本的refresh_token文件统一用新的settings.json替代
+  if(fm.fileExists(old_refresh_token_path)){
+    const old_refresh_token = fm.readString(old_refresh_token_path)
+    saveSetting("refresh_token",old_refresh_token)
+    fm.remove(old_refresh_token_path)
+  }
+  let refresh_token = getSetting("refresh_token")
+  return refresh_token
+}
+
+function getFileManager(){
+  let fm;
+  try {
+    fm = FileManager.iCloud();
+  } catch {
+    fm = FileManager.local();
+  }
+  return fm
+}

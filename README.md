@@ -19,6 +19,7 @@
     - [4.1 效果预览](#41-效果预览)
     - [4.2 安装](#42-安装)
     - [4.2 参数](#42-参数)
+    - [4.3 自定义车辆图片、LOGO、型号文本...](#43-自定义车辆图片logo型号文本)
 
 <!-- vscode-markdown-toc-config
 	numbering=false
@@ -171,3 +172,7 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 锁屏组件使用方法与上面相同。
 
 ![](./preview/refresh_token%E6%8A%93%E5%8F%96%E6%B5%81%E7%A8%8B.JPEG)
+
+### 4.3 自定义车辆图片、LOGO、型号文本...
+
+![](/preview/SL03%E7%BB%84%E4%BB%B6%E9%AB%98%E7%BA%A7%E5%8A%9F%E8%83%BD.JPEG)

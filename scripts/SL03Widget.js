@@ -1,7 +1,6 @@
 // Variables used by Scriptable.
 // These must be at the very top of the file. Do not edit.
 // icon-color: blue; icon-glyph: car;
-
 /**
  * iOS widget --- 长安深蓝SL03桌面小组件
  * 项目地址: https://github.com/zkytech/iOS14-widgets-for-scriptable
@@ -20,7 +19,7 @@
 // 开发时切换到dev分支
 const branch = "dev";
 const force_download = true;
-const project_name = "深蓝小组件_by_zkytech"
+const project_name = "深蓝小组件_by_zkytech";
 // const force_download = branch != "master";
 
 const {
@@ -40,11 +39,18 @@ const { update } = await getService(
   `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/lib/service/UpdateScript.js`,
   force_download
 );
-const {getDataFromSettings,saveDataToSettings,getFileManager}  = await getService(
+let { getDataFromSettings, saveDataToSettings } = await getService(
   "Settings",
   `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/lib/service/Settings.js`,
   force_download
-); 
+);
+
+function getSetting(key) {
+  return getDataFromSettings(project_name, key);
+}
+function saveSetting(key, value) {
+  return saveDataToSettings(project_name, key, value);
+}
 
 if (branch == "master") {
   // 更新组件代码
@@ -52,48 +58,67 @@ if (branch == "master") {
     `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/SL03Widget.js`
   );
 }
-let param_refresh_token = "";
 if (config.runsInWidget) {
+  // 在小组件中运行
   const params = args.widgetParameter ? args.widgetParameter.split(",") : [""];
   param_refresh_token = params.length > 0 ? params[0].trim() : "";
-  if(config.widgetFamily == "medium"){
-    await renderMediumWidget(LW,param_refresh_token);
-  }else{
-    const LW = new ListWidget()
-    LW.addText("本组件只支持中等大小，请重新添加中等大小桌面组件")
-    LW.present()
-    Script.setWidget(LW)
-    Script.complete();
+  if (param_refresh_token && !getRefreshToken()) {
+    saveSetting("refresh_token", param_refresh_token);
   }
-}else{
-  await askSettings()
+  if (config.widgetFamily == "medium") {
+    await renderMediumWidget();
+  } else {
+    renderWrongSizeAlert();
+  }
+} else {
+  // 在Scriptable中运行，弹出设置窗口
+  await askSettings();
 }
 
+function renderWrongSizeAlert() {
+  const LW = new ListWidget();
+  const alert_text = LW.addText(
+    "本组件只支持中等大小，请重新添加中等大小桌面组件"
+  );
+  alert_text.textColor = Color.red();
+  LW.present();
+  Script.setWidget(LW);
+  Script.complete();
+}
 
+function getImageDir() {
+  const fm = getFileManager();
+  const script_dir = fm.documentsDirectory();
+  let img_dir = fm.joinPath(script_dir, "imgs");
+  if (!fm.fileExists(img_dir)) {
+    fm.createDirectory(img_dir, true);
+  }
+  return img_dir;
+}
 
 // 加载图片
-async function loadImage(name, force_download) {
+async function loadImage(name) {
   const img_map = {
-    白色车: "https://i.328888.xyz/2023/03/17/LFK8Z.md.png",
+    车: "https://i.328888.xyz/2023/03/17/LFK8Z.md.png",
     LOGO: "https://deepal.com.cn/202303112321/share_logo.png",
   };
+  const user_defined_settings_name_map = {
+    车: "car_img_path",
+    LOGO: "logo_img_path",
+  };
+
   const img_url = img_map[name];
   const file_name = img_url.split("/")[img_url.split("/").length - 1];
-  const fm = getFileManager()
+  const fm = getFileManager();
 
-  const script_dir = module.filename.replace(
-    fm.fileName(module.filename, true),
-    ""
-  );
-  let img_dir = fm.joinPath(script_dir, "imgs");
+  let img_dir = getImageDir();
 
   if (!fm.fileExists(img_dir)) {
     fm.createDirectory(img_dir, true);
   }
+  let img_file = fm.joinPath(img_dir, file_name + ".png");
 
-  let img_file = fm.joinPath(script_dir, "imgs/" + file_name + ".png");
-
-  if (fm.fileExists(img_file) && !force_download) {
+  if (fm.fileExists(img_file)) {
     console.log(`从本地缓存中加载图片:${name}`);
     try {
       fm.downloadFileFromiCloud(img_file);
@@ -105,41 +130,49 @@ async function loadImage(name, force_download) {
     const img = await req.loadImage();
     fm.writeImage(img_file, img);
   }
-
-  return fm.readImage(img_file);
+  // 优先使用用户自定义的图片
+  const user_defined_settings_key = user_defined_settings_name_map[name];
+  const user_defined_img_path = getSetting(user_defined_settings_key);
+  if (user_defined_img_path && fm.fileExists(user_defined_img_path)) {
+    return fm.readImage(user_defined_img_path);
+  } else {
+    return fm.readImage(img_file);
+  }
 }
 
-function getRefreshToken(){
-  const fm = getFileManager()
-  const script_dir = module.filename.replace(
-    fm.fileName(module.filename, true),
-    ""
-  );
+function getRefreshToken() {
+  const fm = getFileManager();
+  const script_dir = fm.documentsDirectory();
   const old_refresh_token_path = fm.joinPath(script_dir, "refresh_token");
   // 处理历史遗留问题，将老版本的refresh_token文件统一用新的settings.json替代
-  if(fm.fileExists(old_refresh_token_path)){
-    const old_refresh_token = fm.readString(old_refresh_token_path)
-    saveDataToSettings(project_name,"refresh_token",old_refresh_token)
-    fm.remove(old_refresh_token_path)
+  if (fm.fileExists(old_refresh_token_path)) {
+    const old_refresh_token = fm.readString(old_refresh_token_path);
+    saveSetting("refresh_token", old_refresh_token);
+    fm.remove(old_refresh_token_path);
   }
-  let refresh_token = getDataFromSettings(project_name,"refresh_token")
-  return refresh_token
+  let refresh_token = getSetting("refresh_token");
+  return refresh_token;
 }
 
 // 渲染组件
 async function renderMediumWidget() {
   const LW = new ListWidget(); // widget对象
-  LW.backgroundColor = Color.black()
-  let token
-  let refresh_token = getRefreshToken()
+  LW.backgroundColor = Color.black();
+  let token;
+  let refresh_token = getRefreshToken();
   const token_result = await getToken(refresh_token);
-  if(token_result == null){
-    token = null
-  }else{
-    token = token_result.token
-    refresh_token = token_result.refresh_token
-    if(refresh_token != "" && refresh_token != undefined && refresh_token != null){
-      saveDataToSettings("深蓝小组件_by_zkytech","refresh_token",refresh_token)
+  if (token_result == null) {
+    token = null;
+  } else {
+    refresh_token = token_result.refresh_token;
+    token = token_result.access_token;
+    if (
+      refresh_token != "" &&
+      refresh_token != undefined &&
+      refresh_token != null
+    ) {
+      console.log("保存新的refresh_token");
+      saveSetting("refresh_token", refresh_token);
     }
   }
   const car_id = await getCarId(token);
@@ -162,7 +195,7 @@ async function renderMediumWidget() {
     // 车辆名称
     const car_name = car_info.carName;
     // 车辆配置名称，比如：515km
-    const conf_name =car_info.confName ? car_info.confName.split("，")[2] : "";
+    const conf_name = car_info.confName ? car_info.confName.split("，")[2] : "";
     // 车牌号
     const plate_number = car_info.plateNumber;
     // 型号
@@ -205,7 +238,7 @@ async function renderMediumWidget() {
     col0.spacing = 6;
     col0.size = new Size(110, 0);
     // 车辆图片
-    const car_img = await loadImage("白色车");
+    const car_img = await loadImage("车");
     const car_stack = col0.addStack();
 
     const img_container = car_stack.addImage(car_img);
@@ -239,8 +272,11 @@ async function renderMediumWidget() {
     const logo = car_seires_container.addImage(await loadImage("LOGO"));
     logo.imageSize = new Size(12, 12);
     // 车辆型号
+    const user_defined_series_name = getSetting("car_series_name");
     const car_series_text = car_seires_container.addText(
-      series_name + " " + conf_name
+      user_defined_series_name
+        ? user_defined_series_name
+        : series_name + " " + conf_name
     );
     car_series_text.font = Font.mediumSystemFont(11);
     car_series_text.textColor = new Color("#bdc3c7");
@@ -334,7 +370,9 @@ async function renderMediumWidget() {
   }
   if (token == "" || token == null || token == undefined) {
     console.error("请先配置refresh_token");
-    const t = LW.addText("请先在scriptable app中直接运行此脚本并配置refresh_token");
+    const t = LW.addText(
+      "请先在scriptable app中直接运行此脚本并配置refresh_token"
+    );
     t.font = Font.boldSystemFont(18);
     t.textColor = Color.red();
   }
@@ -343,14 +381,19 @@ async function renderMediumWidget() {
   Script.setWidget(LW);
   Script.complete();
 }
-
+function getFileManager() {
+  let fm;
+  try {
+    fm = FileManager.iCloud();
+  } catch {
+    fm = FileManager.local();
+  }
+  return fm;
+}
 
 async function getService(name, url, force_download) {
-  const fm = getFileManager()
-  const script_dir = module.filename.replace(
-    fm.fileName(module.filename, true),
-    ""
-  );
+  const fm = getFileManager();
+  const script_dir = fm.documentsDirectory();
   let service_dir = fm.joinPath(script_dir, "lib/service/" + name);
 
   if (!fm.fileExists(service_dir)) {
@@ -375,41 +418,104 @@ async function getService(name, url, force_download) {
   return service;
 }
 
-
-async function askSettings(){
-
-  const alert = new Alert()
-  alert.title = "设置"
+// 弹出操作选单，进行自定义设置
+async function askSettings() {
+  const alert = new Alert();
+  alert.title = "深蓝小组件设置";
+  alert.message = "created by @zkytech";
   const setting_actions = [
     {
-      "title":"设置refresh_token",
-      "action":async () => {
-          let my_alert = new Alert();
-          my_alert.title = "请输入refresh_token";
-          my_alert.addSecureTextField("请输入refresh_token",getDataFromSettings("refresh_token"));
-          my_alert.addCancelAction("取消");
-          my_alert.addAction("保存");
-          if (await my_alert.present() == 0)
-          {
-            const refresh_token = my_alert.textFieldValue(0);
-            saveDataToSettings("refresh_token",refresh_token)
-          }
-          else console.log("取消");
-    }}
-  ]
+      title: "设置refresh_token",
+      action: async () => {
+        let my_alert = new Alert();
+        let refresh_token = getSetting("refresh_token");
+        my_alert.title = "请输入refresh_token";
+        my_alert.addSecureTextField(
+          "请输入refresh_token",
+          refresh_token ? refresh_token : ""
+        );
+        my_alert.addCancelAction("取消");
+        my_alert.addAction("保存");
+        if ((await my_alert.present()) == 0) {
+          refresh_token = my_alert.textFieldValue(0);
+          saveSetting("refresh_token", refresh_token);
+          await renderMediumWidget();
+        } else console.log("取消");
+      },
+    },
+    {
+      title: "自定义车辆型号",
+      action: async () => {
+        let my_alert = new Alert();
+        let car_series_name = getSetting("car_series_name");
+        my_alert.title = "请输入车辆型号";
+        my_alert.addTextField(
+          "请输入车辆型号",
+          car_series_name ? car_series_name : ""
+        );
+        my_alert.addCancelAction("取消");
+        my_alert.addAction("保存");
+        if ((await my_alert.present()) == 0) {
+          car_series_name = my_alert.textFieldValue(0);
+          saveSetting("car_series_name", car_series_name);
+          await renderMediumWidget();
+        } else console.log("取消");
+      },
+    },
+    {
+      title: "自定义车辆图片",
+      action: async () => {
+        const image = await Photos.fromLibrary();
+        if (!image) return;
+        const fm = getFileManager();
+        const img_dir = getImageDir();
+        const img_file_path = fm.joinPath(img_dir, "car_img.jpg");
+        fm.writeImage(img_file_path, image);
+        saveSetting("car_img_path", img_file_path);
+        await renderMediumWidget();
+      },
+    },
+    {
+      title: "自定义LOGO图片",
+      action: async () => {
+        const image = await Photos.fromLibrary();
+        if (!image) return;
+        const fm = getFileManager();
+        const img_dir = getImageDir();
+        const img_file_path = fm.joinPath(img_dir, "logo.jpg");
+        fm.writeImage(img_file_path, image);
+        saveSetting("logo_img_path", img_file_path);
+        await renderMediumWidget();
+      },
+    },
+    {
+      title: "重置设定(仅保留refresh_token)",
+      action: async () => {
+        saveSetting("logo_img_path", "");
+        saveSetting("car_img_path", "");
+        saveSetting("car_series_name", "");
+        await renderMediumWidget();
+      },
+    },
+    {
+      title: "预览",
+      action: async () => {
+        await renderMediumWidget();
+      },
+    },
+  ];
   setting_actions.map((action) => {
-    alert.addAction(action.title)
-  })
-  await alert.presentAlert().then(
-    (action_index) => {
-      console.log("action_index:" + action_index)
-      return setting_actions[action_index].action()
-    }
-  )
+    alert.addAction(action.title);
+  });
+  alert.addCancelAction("取消");
+  await alert
+    .presentAlert()
+    .then((action_index) => {
+      if (action_index > 0) {
+        return setting_actions[action_index].action();
+      }
+    })
+    .catch((e) => {
+      console.error(e);
+    });
 }
-
-
-
-
-
-
