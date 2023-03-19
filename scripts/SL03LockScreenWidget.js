@@ -21,7 +21,7 @@
  * - 不要在脚本里填token，所有参数必须通过组件设置界面填写
  */
 // 开发时切换到dev分支
-const branch = "master"
+const branch = "dev"
 const force_download = branch != "master"
 // Boxjs自动获取token，需配合Quantumult X使用
 

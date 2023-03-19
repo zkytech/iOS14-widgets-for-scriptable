@@ -20,9 +20,8 @@
 // 开发时切换到dev分支
 const branch = "dev";
 const force_download = true;
-
+const project_name = "深蓝小组件_by_zkytech"
 // const force_download = branch != "master";
-
 
 const {
   getCarId,
@@ -41,62 +40,38 @@ const { update } = await getService(
   `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/lib/service/UpdateScript.js`,
   force_download
 );
+const {getDataFromSettings,saveDataToSettings}  = await getService(
+  "UpdateScript",
+  `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/lib/service/Settings.js`,
+  force_download
+); 
 
-if(branch == "master"){
+if (branch == "master") {
   // 更新组件代码
   await update(
     `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/SL03Widget.js`
   );
 }
-
-
-const LW = new ListWidget(); // widget对象
-
-let presentSize = "medium"; // 预览组件的大小
-// const mainColor = new Color("#30336b")
-const mainColor = new Color("#000000");
-let project_id = "";
 let param_refresh_token = "";
 if (config.runsInWidget) {
   const params = args.widgetParameter ? args.widgetParameter.split(",") : [""];
   param_refresh_token = params.length > 0 ? params[0].trim() : "";
-}
-presentSize = "medium";
-
-await renderCarStatus(param_refresh_token);
-LW.backgroundColor = mainColor;
-
-if (!config.runsInWidget) {
-  if (presentSize == "large") {
-    await LW.presentLarge();
-  }
-  if (presentSize == "medium") {
-    await LW.presentMedium();
-  }
-  if (presentSize == "small") {
-    await LW.presentSmall();
-  }
+  await renderCarStatus(LW,param_refresh_token);
+}else{
+  await askSettings()
 }
 
-Script.setWidget(LW);
 
-Script.complete();
 
 // 加载图片
-async function loadImage(name,force_download) {
+async function loadImage(name, force_download) {
   const img_map = {
-    "白色车":"https://i.328888.xyz/2023/03/17/LFK8Z.md.png",
-    "LOGO":"https://deepal.com.cn/202303112321/share_logo.png"
-  }
+    白色车: "https://i.328888.xyz/2023/03/17/LFK8Z.md.png",
+    LOGO: "https://deepal.com.cn/202303112321/share_logo.png",
+  };
   const img_url = img_map[name];
-  const file_name = img_url.split("/")[img_url.split("/").length - 1]
-
-  let fm 
-  try{
-    fm = FileManager.iCloud();
-  }catch{
-    fm = FileManager.local();
-  }
+  const file_name = img_url.split("/")[img_url.split("/").length - 1];
+  const fm = getFileManager()
 
   const script_dir = module.filename.replace(
     fm.fileName(module.filename, true),
@@ -111,26 +86,54 @@ async function loadImage(name,force_download) {
   let img_file = fm.joinPath(script_dir, "imgs/" + file_name + ".png");
 
   if (fm.fileExists(img_file) && !force_download) {
-    console.log(`从本地缓存中加载图片:${name}`)
-    try{
+    console.log(`从本地缓存中加载图片:${name}`);
+    try {
       fm.downloadFileFromiCloud(img_file);
-    }catch(e){
-
-    }
+    } catch (e) {}
   } else {
     // download once
-    console.log(`开始下载图片:${name}`)
-    const req = new Request(img_url)
-    const img = await req.loadImage()
-    fm.writeImage(img_file, img)
+    console.log(`开始下载图片:${name}`);
+    const req = new Request(img_url);
+    const img = await req.loadImage();
+    fm.writeImage(img_file, img);
   }
 
   return fm.readImage(img_file);
 }
 
+function getRefreshToken(){
+  const fm = getFileManager()
+  const script_dir = module.filename.replace(
+    fm.fileName(module.filename, true),
+    ""
+  );
+  const old_refresh_token_path = fm.joinPath(script_dir, "refresh_token");
+  // 处理历史遗留问题，将老版本的refresh_token文件统一用新的settings.json替代
+  if(fm.fileExists(old_refresh_token_path)){
+    const old_refresh_token = fm.readString(old_refresh_token_path)
+    saveDataToSettings(project_name,"refresh_token",old_refresh_token)
+    fm.remove(old_refresh_token_path)
+  }
+  let refresh_token = getDataFromSettings(project_name,"refresh_token")
+  return refresh_token
+}
+
 // 渲染组件
-async function renderCarStatus(param_refresh_token) {
-  const token = await getToken(param_refresh_token);
+async function renderCarStatus() {
+  const LW = new ListWidget(); // widget对象
+  LW.backgroundColor = Color.black()
+  let token
+  let refresh_token = getRefreshToken()
+  const token_result = await getToken(refresh_token);
+  if(token_result == null){
+    token = null
+  }else{
+    token = token_result.token
+    refresh_token = token_result.refresh_token
+    if(refresh_token != "" && refresh_token != undefined && refresh_token != null){
+      saveDataToSettings("深蓝小组件_by_zkytech","refresh_token",refresh_token)
+    }
+  }
   const car_id = await getCarId(token);
   // await refreshCarData()
   const car_status = await getCarStatus(token, car_id);
@@ -225,9 +228,7 @@ async function renderCarStatus(param_refresh_token) {
     lock_icon.imageSize = new Size(15, 15);
     const car_seires_container = col0.addStack();
     // 车辆logo
-    const logo = car_seires_container.addImage(
-      await loadImage("LOGO")
-    );
+    const logo = car_seires_container.addImage(await loadImage("LOGO"));
     logo.imageSize = new Size(12, 12);
     // 车辆型号
     const car_series_text = car_seires_container.addText(
@@ -323,26 +324,32 @@ async function renderCarStatus(param_refresh_token) {
       u.textColor = Color.gray();
     });
   }
-  if (token == "" || token == null || token == undefined){
-    console.error("请先配置refresh_token")
-    const t = LW.addText("请先配置refresh_token")
+  if (token == "" || token == null || token == undefined) {
+    console.error("请先配置refresh_token");
+    const t = LW.addText("请先在scriptable app中直接运行此脚本并配置refresh_token");
     t.font = Font.boldSystemFont(18);
-    t.textColor = Color.red()
+    t.textColor = Color.red();
   }
   console.log("渲染结束");
+  await LW.presentMedium();
+  Script.setWidget(LW);
+  Script.complete();
 }
 
-async function loadText(textUrl) {
-  const req = new Request(textUrl);
-  return await req.load();
-}
-async function getService(name, url, force_download) {
-  let fm 
-  try{
+
+
+function getFileManager(){
+  let fm;
+  try {
     fm = FileManager.iCloud();
-  }catch{
+  } catch {
     fm = FileManager.local();
   }
+  return fm
+}
+
+async function getService(name, url, force_download) {
+  const fm = getFileManager()
   const script_dir = module.filename.replace(
     fm.fileName(module.filename, true),
     ""
@@ -356,14 +363,13 @@ async function getService(name, url, force_download) {
   let lib_file = fm.joinPath(script_dir, "lib/service/" + name + "/index.js");
 
   if (fm.fileExists(lib_file) && !force_download) {
-    try{
+    try {
       fm.downloadFileFromiCloud(lib_file);
-    }catch(e){
-
-    }
+    } catch (e) {}
   } else {
     // download once
-    let indexjs = await loadText(url);
+    const req = new Request(url);
+    let indexjs = await req.load();
     fm.write(lib_file, indexjs);
   }
 
@@ -371,4 +377,42 @@ async function getService(name, url, force_download) {
 
   return service;
 }
+
+
+async function askSettings(){
+
+  const alert = new Alert()
+  alert.title = "设置"
+  const setting_actions = [
+    {
+      "title":"设置refresh_token",
+      "action":async () => {
+          let my_alert = new Alert();
+          my_alert.title = "请输入refresh_token";
+          my_alert.addSecureTextField("请输入refresh_token",getDataFromSettings("refresh_token"));
+          my_alert.addCancelAction("取消");
+          my_alert.addAction("保存");
+          if (await my_alert.present() == 0)
+          {
+            const refresh_token = my_alert.textFieldValue(0);
+            saveDataToSettings("refresh_token",refresh_token)
+          }
+          else console.log("取消");
+    }}
+  ]
+  setting_actions.map((action) => {
+    alert.addAction(action.title)
+  })
+  await alert.presentAlert().then(
+    (action_index) => {
+      console.log("action_index:" + action_index)
+      return setting_actions[action_index].action()
+    }
+  )
+}
+
+
+
+
+
 

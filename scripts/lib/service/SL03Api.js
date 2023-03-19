@@ -22,32 +22,14 @@ async function getCarId(token) {
 }
 
 // 获取token
-async function getToken(param_refresh_token) {
+async function getToken(refresh_token) {
   console.log("开始获取token");
-  let fm 
-  try{
-    fm = FileManager.iCloud();
-  }catch(e){
-    fm = FileManager.local();
-  }
-  
-  const refresh_token_file_path = fm.documentsDirectory() + "/refresh_token";
-  try{
-    fm.downloadFileFromiCloud(refresh_token_file_path);
-  }catch(e){
-
-  }
-  let local_refresh_token = "";
-  if (fm.fileExists(refresh_token_file_path)) {
-    local_refresh_token = fm.readString(refresh_token_file_path);
-  }
   const req = new Request(
     "https://app-api.deepal.com.cn/appapi/v1/member/ms/refreshCacToken"
   );
   req.method = "POST";
   req.body = JSON.stringify({
-    refreshToken:
-      local_refresh_token ? local_refresh_token : param_refresh_token,
+    refreshToken:refresh_token,
   });
   req.headers = {
     "Content-Type": "application/json",
@@ -56,23 +38,11 @@ async function getToken(param_refresh_token) {
   if (result["success"] && result["data"]["refresh_token"] != null) {
     const refresh_token = result["data"]["refresh_token"];
     const access_token = result["data"]["access_token"];
-    fm.writeString(refresh_token_file_path, refresh_token);
-    return access_token;
-  } else {
-    console.error("token刷新失败，请重新获取refresh_token");
-    if (
-      param_refresh_token &&
-      param_refresh_token != local_refresh_token &&
-      param_refresh_token != "" &&
-      result["success"] == false
-    ) {
-      fm.writeString(refresh_token_file_path, param_refresh_token);
-      return getToken();
-    }
-
+    return {access_token,refresh_token};
+  } 
     return null;
-  }
 }
+
 
 // 发出命令刷新车辆数据(异步)--无效
 async function refreshCarData(project_id) {

@@ -154,17 +154,19 @@ type,onlyFollowed,uid  //注意必须用英文逗号
   - `mode`为可选值，可以填写:`电`、`油`
   - 填写实例:`asdasidjoas123jkhbh,电`。注意使用英文逗号分隔两个参数，不要填写多余的空格
 
-本组件需要获取refresh_token，操作过程涉及抓包。抓包方法请自行百度。以桌面组件为例，使用方法如下：
+本组件需要获取refresh_token，操作过程涉及抓包。抓包方法我会讲，如果看不懂，请自行百度。以桌面组件为例，使用方法如下：
+> 为了节省你的时间，<font color="red">请认真阅读下面的操作步骤</font>，并依照文档进行操作，<font color="red">跳过任何一个字都只会成倍地浪费你的时间</font>。为了帮助小白理解，最下面有抓包操作流程图。
 
 1. 安装[Stream APP](https://apps.apple.com/cn/app/stream/id1312141691)，并开启<font color="red"><b>HTTPS抓包</b></font>功能，必须要显示“<font color="blue">设置成功：CA证书已经安装且信任</font>”。
 ![](./preview/HTTPS%E6%8A%93%E5%8C%85%E5%BC%80%E5%90%AF%E7%95%8C%E9%9D%A2.PNG)
-2. 点击`开始抓包`
-3. 打开`深蓝`APP，进入控车页面，下拉刷新车辆状态，为了确保请求能被抓到，建议多刷几次。
-4. 回到`Stream` APP，停止抓包
-5. 进入抓包历史，查看刚刚生成的抓包记录，搜索`refresh`(注意搜索框里不要输入空格)，可以看到URI为`/appapi/v1/member/ms/refreshCacToken`的请求
-6. 点击查看请求详情，查看`响应-响应主体-查看json`
-7. 将`refresh_token`的值复制下来
-8. 桌面创建Scriptable中号组件，脚本选择前面安装的`SL03Widget`,将前面复制的`refresh_token`值粘贴到小组件的`parameter`中
+1. 点击`开始抓包`
+2. 打开`深蓝`APP，进入控车页面，下拉刷新车辆状态，为了确保请求能被抓到，建议多刷几次。
+3. 回到`Stream` APP，停止抓包
+4. 进入抓包历史，查看刚刚生成的抓包记录，搜索`refresh`(注意搜索框里不要输入空格)，可以看到URI为`/appapi/v1/member/ms/refreshCacToken`的请求
+5. 点击查看请求详情，查看`响应-响应主体-查看json`
+6. 将`refresh_token`的<font color="red"><b>值</b></font>复制下来。比如你看到的是`"refresh_token":"ajj1f73b21DSUbias"`这里要复制保存的就是`ajj1f73b21DSUbias`，不要带引号。
+7. 回到桌面，新增桌面组件，创建Scriptable中等大小组件。
+8. **长按**上一步添加到桌面的组件进行**编辑**，脚本选择前面安装的`SL03Widget`，将前面复制的`refresh_token`值粘贴到小组件的`parameter`栏中。
 
 锁屏组件使用方法与上面相同。
 
