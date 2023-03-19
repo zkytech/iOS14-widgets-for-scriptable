@@ -43,6 +43,21 @@ async function getToken(refresh_token) {
     return null;
 }
 
+// 获取充电状态
+async function getChargeStatus(token, car_id) {
+  console.log("开始获取充电信息");
+  const req = new Request(
+    `https://m.iov.changan.com.cn/appserver/api/charge/info?carId=${car_id}&token=${token}`
+  );
+  req.method = "POST";
+  const result = await req.loadJSON();
+  if (result["success"]) {
+    return result["data"];
+  } else {
+    return null;
+  }
+}
+
 
 // 发出命令刷新车辆数据(异步)--无效
 async function refreshCarData(project_id) {
@@ -108,5 +123,6 @@ module.exports = {
     refreshCarData,
     getCarStatus,
     getCarInfo,
-    getCarLocation
+    getCarLocation,
+    getChargeStatus
 } 

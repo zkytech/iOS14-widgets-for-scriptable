@@ -17,6 +17,8 @@
     - [3.2 安装](#32-安装)
   - [4 深蓝SL03车辆状态](#4-深蓝sl03车辆状态)
     - [4.1 效果预览](#41-效果预览)
+      - [桌面组件](#桌面组件)
+      - [锁屏电量](#锁屏电量)
     - [4.2 安装](#42-安装)
     - [4.2 参数](#42-参数)
     - [4.3 自定义车辆图片、LOGO、型号文本...](#43-自定义车辆图片logo型号文本)
@@ -133,17 +135,22 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 下载[安装脚本](https://gitee.com/zkytech/iOS14-widgets-for-scriptable/releases/download/1.0.1/lol.scriptable)后，用`scriptable`打开
 
 ## <a name='4-深蓝sl03车辆状态'></a>4 深蓝SL03车辆状态
+
+<font color="red"><b>声明</b></font>：
+- 脚本所展示的信息不保证准确无误，锁车、充电、电量、油量等所有信息仅供参考，请勿将桌面组件展示的数据作为决策依据，由于脚本展示数据错误/误差造成的任何后果，本人概不负责。
+- 脚本需要使用深蓝APP的登录信息来获取数据，安装即代表您同意脚本使用您的登录信息。
+  - 所有数据只会存储在您的iCloud云盘或者手机本地，不会上传到任何第三方服务器。
 ### <a name='4.1-效果预览'></a>4.1 效果预览
-桌面组件
+#### 桌面组件
 ![](./preview/SL03%E9%A2%84%E8%A7%88.jpg)
-锁屏电量
+#### 锁屏电量
 ![](./preview/SL03%E9%94%81%E5%B1%8F%E9%A2%84%E8%A7%88.jpg)
 ### <a name='4.2-安装'></a>4.2 安装
 
 为了顺利打开下面的链接，**请在safari浏览器中打开本页面**。
 
 1. 安装[Scriptable APP](https://apps.apple.com/cn/app/scriptable/id1405459188)
-2. 下载[桌面组件安装脚本](https://gitee.com/zkytech/iOS14-widgets-for-scriptable/releases/download/1.0.1/SL03Widget.scriptable)/[锁屏组件安装脚本](https://gitee.com/zkytech/iOS14-widgets-for-scriptable/releases/download/1.0.1/SL03LockScreenWidget.scriptable)后，用`Scriptable`打开
+2. 下载[桌面组件安装脚本](https://gitee.com/zkytech/iOS14-widgets-for-scriptable/releases/download/1.0.1/SL03Widget.scriptable)后，用`Scriptable`打开
 3. 安装scriptable后会自动创建几个Demo脚本，其中有一个脚本是`Random Scriptable API`，先点击运行一次这个脚本。
 
 > 增程车型的油、电续航数据可能会变成-1、0，这种情况是深蓝APP的API问题，我无法解决，请知悉。
@@ -151,15 +158,15 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 ### <a name='4.2-参数'></a>4.2 参数
 
 - 桌面组件参数: `refresh_token`
-- 锁屏组件参数: `refresh_token`,`mode`
-  - `mode`为可选值，可以填写:`电`、`油`
-  - 填写实例:`asdasidjoas123jkhbh,电`。注意使用英文逗号分隔两个参数，不要填写多余的空格
+- 锁屏组件参数: `模式`
+  - 非必填，可以填写:`电`、`油`，默认显示电量
+  - 请先设置好桌面组件再使用锁屏组件，否则锁屏组件无法获取到`refresh_token`
 
 本组件需要获取refresh_token，操作过程涉及抓包。抓包方法我会讲，如果看不懂，请自行百度。以桌面组件为例，使用方法如下：
 > 为了节省你的时间，<font color="red">请认真阅读下面的操作步骤</font>，并依照文档进行操作，<font color="red">跳过任何一个字都只会成倍地浪费你的时间</font>。为了帮助小白理解，最下面有抓包操作流程图。
 
-0. 目前脚本运行依赖`iCloud`，为了确保脚本能够执行，请打开手机上的`iCloud`。
-1. 安装[Stream APP](https://apps.apple.com/cn/app/stream/id1312141691)，并开启<font color="red"><b>HTTPS抓包</b></font>功能，必须要显示“<font color="blue">设置成功：CA证书已经安装且信任</font>”。
+1. 目前脚本运行依赖`iCloud`，为了确保脚本能够执行，请打开手机上的`iCloud`。
+2. 安装[Stream APP](https://apps.apple.com/cn/app/stream/id1312141691)，并开启<font color="red"><b>HTTPS抓包</b></font>功能，必须要显示“<font color="blue">设置成功：CA证书已经安装且信任</font>”。
 ![](./preview/HTTPS%E6%8A%93%E5%8C%85%E5%BC%80%E5%90%AF%E7%95%8C%E9%9D%A2.PNG)
 1. 点击`开始抓包`
 2. 打开`深蓝`APP，进入控车页面，下拉刷新车辆状态，为了确保请求能被抓到，建议多刷几次。
@@ -170,7 +177,7 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 7. 回到桌面，新增桌面组件，创建Scriptable中等大小组件。
 8. **长按**上一步添加到桌面的组件进行**编辑**，脚本选择前面安装的`SL03Widget`，将前面复制的`refresh_token`值粘贴到小组件的`parameter`栏中。
 
-锁屏组件使用方法与上面相同。
+> 锁屏组件目前只支持小号电量/油量圆环，添加方法请参考[视频教程](https://www.bilibili.com/video/BV19d4y1q7vi/?spm_id_from=333.337.search-card.all.click&vd_source=5b7cf4daa7d98506767a0757e0b64d77)
 
 ![](./preview/refresh_token%E6%8A%93%E5%8F%96%E6%B5%81%E7%A8%8B.JPEG)
 
