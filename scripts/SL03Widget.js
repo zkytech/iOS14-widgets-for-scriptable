@@ -21,7 +21,7 @@ const branch = "master";
 const force_download = true;
 const project_name = "深蓝小组件_by_zkytech";
 // const force_download = branch != "master";
-
+const url_scheme = "qiyuancar://"
 const {
   getCarId,
   getToken,
@@ -86,6 +86,7 @@ async function renderAccessoryCircularWidget() {
   let mode = "电";
   if (params.length >= 1) mode = params[0].trim() == "油" ? "油" : "电";
   const LW = new ListWidget(); // widget对象
+  LW.url = url_scheme
   let token;
   let refresh_token = getRefreshToken();
   const token_result = await getToken(refresh_token);
@@ -165,6 +166,8 @@ async function renderMediumWidget() {
     saveSetting("refresh_token", param_refresh_token);
   }
   const LW = new ListWidget(); // widget对象
+  LW.url = url_scheme
+
   LW.backgroundColor = Color.black();
   let token;
   let refresh_token = getRefreshToken();
