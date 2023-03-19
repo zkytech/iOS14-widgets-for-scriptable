@@ -456,4 +456,4 @@ async function update(){
   fm.writeString(folder + filename, scriptTxt)
 }
 
-// await update()
+await update()
