@@ -158,6 +158,7 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 本组件需要获取refresh_token，操作过程涉及抓包。抓包方法我会讲，如果看不懂，请自行百度。以桌面组件为例，使用方法如下：
 > 为了节省你的时间，<font color="red">请认真阅读下面的操作步骤</font>，并依照文档进行操作，<font color="red">跳过任何一个字都只会成倍地浪费你的时间</font>。为了帮助小白理解，最下面有抓包操作流程图。
 
+0. 目前脚本运行依赖`iCloud`，为了确保脚本能够执行，请打开手机上的`iCloud`。
 1. 安装[Stream APP](https://apps.apple.com/cn/app/stream/id1312141691)，并开启<font color="red"><b>HTTPS抓包</b></font>功能，必须要显示“<font color="blue">设置成功：CA证书已经安装且信任</font>”。
 ![](./preview/HTTPS%E6%8A%93%E5%8C%85%E5%BC%80%E5%90%AF%E7%95%8C%E9%9D%A2.PNG)
 1. 点击`开始抓包`
