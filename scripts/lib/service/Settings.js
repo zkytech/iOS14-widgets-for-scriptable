@@ -2,6 +2,7 @@ function getFileManager() {
   let fm;
   try {
     fm = FileManager.iCloud();
+    fm.documentsDirectory()
   } catch {
     fm = FileManager.local();
   }

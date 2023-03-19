@@ -17,7 +17,7 @@
  * - 不要在脚本代码里修改任何参数，所有参数必须通过组件设置界面填写
  */
 // 开发时切换到dev分支
-const branch = "master";
+const branch = "dev";
 const force_download = true;
 const project_name = "深蓝小组件_by_zkytech";
 // const force_download = branch != "master";
@@ -62,8 +62,8 @@ if (branch == "master") {
 if (config.runsInWidget) {
   if (config.widgetFamily == "medium") {
     await renderMediumWidget();
-  } else if (config.widgetFamily == "accessaryCircular") {
-    await renderAccessaryCircularWidget();
+  } else if (config.widgetFamily == "accessoryCircular") {
+    await renderAccessoryCircularWidget();
   } else {
     renderWrongSizeAlert();
   }
@@ -76,7 +76,7 @@ if (config.runsInWidget) {
  * 小号锁屏组件
  * 接受参数 - 显示模式，油/电
  */
-async function renderAccessaryCircularWidget() {
+async function renderAccessoryCircularWidget() {
   const { drawArc } = await getService(
     "DrawShape",
     `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/lib/service/DrawShape.js`,
@@ -419,6 +419,7 @@ function getFileManager() {
   let fm;
   try {
     fm = FileManager.iCloud();
+    fm.documentsDirectory()
   } catch {
     fm = FileManager.local();
   }
@@ -537,7 +538,7 @@ async function previewWidget() {
   const preview_actions = [
     {
       title: "锁屏组件",
-      action: async () => await renderAccessaryCircularWidget(),
+      action: async () => await renderAccessoryCircularWidget(),
     },
     {
       title: "桌面组件",
