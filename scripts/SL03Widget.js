@@ -17,7 +17,7 @@
  * - 不要在脚本代码里修改任何参数，所有参数必须通过组件设置界面填写
  */
 // 开发环境切换到dev分支，生产环境用master分支
-const branch = "master";
+const branch = "dev";
 const force_download = true;
 const project_name = "深蓝小组件_by_zkytech";
 // const force_download = branch != "master";
