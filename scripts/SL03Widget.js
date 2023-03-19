@@ -2,7 +2,7 @@
 // These must be at the very top of the file. Do not edit.
 // icon-color: blue; icon-glyph: car;
 /**
- * iOS widget --- 长安深蓝SL03桌面小组件
+ * iOS widget --- 长安深蓝SL03桌面组件 & 锁屏组件
  * 项目地址: https://github.com/zkytech/iOS14-widgets-for-scriptable
  * 联系邮箱: zhangkunyuan@hotmail.com
  *
@@ -29,7 +29,7 @@ const {
   getCarStatus,
   getCarInfo,
   getCarLocation,
-  getChargeStatus
+  getChargeStatus,
 } = await getService(
   "SL03Api",
   `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/lib/service/SL03Api.js`,
@@ -72,7 +72,6 @@ if (config.runsInWidget) {
   await askSettings();
 }
 
-
 /**
  * 小号锁屏组件
  * 接受参数 - 显示模式，油/电
@@ -108,7 +107,7 @@ async function renderAccessaryCircularWidget() {
   const car_id = await getCarId(token);
   const car_status = await getCarStatus(token, car_id);
   const charge_status = await getChargeStatus(token, car_id);
-  const is_charging = charge_status.chrgStatus != "3"
+  const is_charging = charge_status.chrgStatus != "3";
   if (car_status && car_id) {
     // 剩余电量
     let remain_power =
@@ -133,7 +132,12 @@ async function renderAccessaryCircularWidget() {
     const remain_oil = (remained_oil_mile / 846) * 100;
     const circle = await drawArc(LW, mode == "电" ? remain_power : remain_oil);
 
-    const car_symbol_name = mode == "电" ? (is_charging ? "bolt.car.fill" :"car.rear.fill") : "fuelpump.fill";
+    const car_symbol_name =
+      mode == "电"
+        ? is_charging
+          ? "bolt.car.fill"
+          : "car.rear.fill"
+        : "fuelpump.fill";
     const sf_car = circle.addImage(SFSymbol.named(car_symbol_name).image);
     sf_car.imageSize = new Size(29, 29);
     sf_car.tintColor = Color.white();
@@ -185,7 +189,7 @@ async function renderMediumWidget() {
   const car_info = await getCarInfo(token, car_id);
   const car_location = await getCarLocation(token, car_id);
   const charge_status = await getChargeStatus(token, car_id);
-  if (car_status != null && car_info != null && car_location != null ) {
+  if (car_status != null && car_info != null && car_location != null) {
     // 数据更新时间
     const update_time = car_status.terminalTime;
     // 总里程
@@ -212,7 +216,7 @@ async function renderMediumWidget() {
     // 是否为增程车型
     const is_mix = car_status.remainedOilMile != undefined;
     // 是否在充电
-    const is_charging = charge_status.chrgStatus != "3"
+    const is_charging = charge_status.chrgStatus != "3";
     // 增城续航里程
     let remained_oil_mile = is_mix ? Math.round(car_status.remainedOilMile) : 0;
     // 增程车型存在API数据错乱的问题，这里为了受到API错误数据的影响自动取上一次获取到的合理数据
@@ -285,13 +289,16 @@ async function renderMediumWidget() {
         ? SFSymbol.named("lock.fill").image
         : SFSymbol.named("lock.open.fill").image
     );
-    const charge_icon = car_name_container.addImage(SFSymbol.named("bolt.fill")).image
+    const charge_icon = car_name_container.addImage(
+      SFSymbol.named("bolt.fill").image
+    );
     // = SFSymbol.named("lock.open.fill")
     lock_icon.tintColor = lock_status
       ? new Color("#27ae60")
       : new Color("#c0392b");
     charge_icon.tintColor = is_charging ? new Color("#27ae60") : Color.gray();
     lock_icon.imageSize = new Size(15, 15);
+    charge_icon.imageSize = new Size(15, 15);
     const car_seires_container = col0.addStack();
     // 车辆logo
     const logo = car_seires_container.addImage(await loadImage("LOGO"));
@@ -367,7 +374,9 @@ async function renderMediumWidget() {
       c.spacing = 5;
       c.bottomAlignContent();
     });
-    const content0 = content_container0.addText(is_mix ? remained_oil_mile :total_odometer + "");
+    const content0 = content_container0.addText(
+      is_mix ? remained_oil_mile : total_odometer + ""
+    );
     const unit0 = content_container0.addText("km");
     const content1 = content_container1.addText(remained_power_mile + "");
     const unit1 = content_container1.addText("km");
@@ -522,39 +531,29 @@ async function getService(name, url, force_download) {
   return service;
 }
 
-async function previewWidget(){
-  const alert = new Alert()
-  alert.title = "请选择预览内容"
+async function previewWidget() {
+  const alert = new Alert();
+  alert.title = "请选择预览内容";
   const preview_actions = [
     {
-      "title":"锁屏组件",
-      "action" : async () => await renderAccessaryCircularWidget()
+      title: "锁屏组件",
+      action: async () => await renderAccessaryCircularWidget(),
     },
     {
-      "title":"桌面组件",
-      "action" : async () => await renderMediumWidget()
-    }
-  ]
+      title: "桌面组件",
+      action: async () => await renderMediumWidget(),
+    },
+  ];
   preview_actions.map((action) => {
     alert.addAction(action.title);
   });
   alert.addCancelAction("取消");
-  await alert
-    .presentAlert()
-    .then((action_index) => {
-      if (action_index >= 0) {
-        return preview_actions[action_index].action();
-      }
-    })
-    .catch((e) => {
-      if(branch == "master"){
-        console.log(e);
-      }else{
-        console.error(e);
-      }
-    });
+  await alert.presentAlert().then((action_index) => {
+    if (action_index >= 0) {
+      return preview_actions[action_index].action();
+    }
+  });
 }
-
 
 // 弹出操作选单，进行自定义设置
 async function askSettings() {
@@ -586,7 +585,6 @@ async function askSettings() {
           refresh_token = my_alert.textFieldValue(0);
           saveSetting("refresh_token", refresh_token);
           await previewWidget();
-
         } else console.log("取消");
       },
     },
@@ -620,7 +618,6 @@ async function askSettings() {
         fm.writeImage(img_file_path, image);
         saveSetting("car_img_path", img_file_path);
         await previewWidget();
-
       },
     },
     {
@@ -634,7 +631,6 @@ async function askSettings() {
         fm.writeImage(img_file_path, image);
         saveSetting("logo_img_path", img_file_path);
         await previewWidget();
-
       },
     },
     {
@@ -644,7 +640,6 @@ async function askSettings() {
         saveSetting("car_img_path", "");
         saveSetting("car_series_name", "");
         await previewWidget();
-
       },
     },
     {
@@ -658,18 +653,9 @@ async function askSettings() {
     alert.addAction(action.title);
   });
   alert.addCancelAction("取消");
-  await alert
-    .presentAlert()
-    .then((action_index) => {
-      if (action_index >= 0) {
-        return setting_actions[action_index].action();
-      }
-    })
-    .catch((e) => {
-      if(branch == "master"){
-        console.log(e);
-      }else{
-        console.error(e);
-      }
-    });
+  await alert.presentAlert().then((action_index) => {
+    if (action_index >= 0) {
+      return setting_actions[action_index].action();
+    }
+  });
 }
