@@ -21,7 +21,37 @@ const branch = "dev";
 const force_download = true;
 const project_name = "深蓝小组件_by_zkytech";
 // const force_download = branch != "master";
-const url_scheme = "qiyuancar://"
+const url_scheme = "qiyuancar://";
+
+class WidgetTheme {
+  constructor(name, backgroundColor, primaryTextColor, secondaryTextColor) {
+    this.name = name;
+    this.backgroundColor = backgroundColor;
+    this.primaryTextColor = primaryTextColor;
+    this.secondaryTextColor = secondaryTextColor;
+  }
+}
+const themes = [
+  new WidgetTheme(
+    "白色主题",
+    Color.white(),
+    Color.black(),
+    new Color("#4b4b4b")
+  ),
+  new WidgetTheme(
+    "黑色主题",
+    Color.black(),
+    Color.white(),
+    new Color("#bfbfbf")
+  ),
+  new WidgetTheme(
+    "EVA初号机主题",
+    new Color("#6c5ce7"),
+    new Color("#00b894"),
+    new Color("#00b894")
+  )
+];
+
 const {
   getCarId,
   getToken,
@@ -45,7 +75,6 @@ let { getDataFromSettings, saveDataToSettings } = await getService(
   `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/lib/service/Settings.js`,
   force_download
 );
-
 function getSetting(key) {
   return getDataFromSettings(project_name, key);
 }
@@ -59,13 +88,22 @@ if (branch == "master") {
     `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/SL03Widget.js`
   );
 }
+
 if (config.runsInWidget) {
-  if (config.widgetFamily == "medium") {
-    await renderMediumWidget();
-  } else if (config.widgetFamily == "accessoryCircular") {
-    await renderAccessoryCircularWidget();
-  } else {
-    renderWrongSizeAlert();
+  try {
+    switch (config.widgetFamily) {
+      case "medium":
+        await renderMediumWidget();
+        break;
+      case "accessoryCircular":
+        await renderAccessoryCircularWidget();
+        break;
+      default:
+        await renderWrongSizeAlert();
+        break;
+    }
+  } catch (e) {
+    console.log(e);
   }
 } else {
   // 在Scriptable中运行，弹出设置窗口
@@ -86,7 +124,7 @@ async function renderAccessoryCircularWidget() {
   let mode = "电";
   if (params.length >= 1) mode = params[0].trim() == "油" ? "油" : "电";
   const LW = new ListWidget(); // widget对象
-  LW.url = url_scheme
+  LW.url = url_scheme;
   let token;
   let refresh_token = getRefreshToken();
   const token_result = await getToken(refresh_token);
@@ -161,14 +199,14 @@ async function renderAccessoryCircularWidget() {
  */
 async function renderMediumWidget() {
   const params = args.widgetParameter ? args.widgetParameter.split(",") : [""];
+  const theme = getTheme();
   param_refresh_token = params.length > 0 ? params[0].trim() : "";
   if (param_refresh_token && !getRefreshToken()) {
     saveSetting("refresh_token", param_refresh_token);
   }
   const LW = new ListWidget(); // widget对象
-  LW.url = url_scheme
-
-  LW.backgroundColor = Color.black();
+  LW.url = url_scheme;
+  LW.backgroundColor = theme.backgroundColor;
   let token;
   let refresh_token = getRefreshToken();
   const token_result = await getToken(refresh_token);
@@ -284,7 +322,7 @@ async function renderMediumWidget() {
     // 车辆名称
     const car_name_text = car_name_container.addText(car_name);
     car_name_text.font = Font.boldSystemFont(15);
-    car_name_text.textColor = Color.white();
+    car_name_text.textColor = theme.primaryTextColor;
 
     //car_name_text.minimumScaleFactor = 1
     const lock_icon = car_name_container.addImage(
@@ -314,13 +352,13 @@ async function renderMediumWidget() {
         : series_name + " " + conf_name
     );
     car_series_text.font = Font.mediumSystemFont(11);
-    car_series_text.textColor = new Color("#bdc3c7");
+    car_series_text.textColor = theme.secondaryTextColor;
     //car_series_text.minimumScaleFactor = 0.5
 
     // 车牌号
     const plate_number_text = col0.addText(plate_number);
     plate_number_text.font = Font.thinMonospacedSystemFont(10);
-    plate_number_text.textColor = new Color("#bdc3c7");
+    plate_number_text.textColor = theme.secondaryTextColor;
     //car_series_text.minimumScaleFactor = 0.5
 
     // 第2列
@@ -336,10 +374,10 @@ async function renderMediumWidget() {
     const refresh_icon = col1_row1.addImage(
       SFSymbol.named("arrow.clockwise").image
     );
-    refresh_icon.tintColor = Color.gray();
+    refresh_icon.tintColor = theme.secondaryTextColor;
     refresh_icon.imageSize = new Size(13, 13);
     const refresh_time_text = col1_row1.addText(update_time);
-    refresh_time_text.textColor = Color.gray();
+    refresh_time_text.textColor = theme.secondaryTextColor;
     refresh_time_text.font = Font.thinMonospacedSystemFont(13);
 
     col1_row0.layoutHorizontally();
@@ -393,17 +431,20 @@ async function renderMediumWidget() {
     const unit_list = [unit0, unit1, unit2];
     header_list.map((h) => {
       h.font = Font.thinMonospacedSystemFont(12);
-      h.textColor = Color.gray();
+      h.textColor = theme.secondaryTextColor;
     });
     content_list.map((c) => {
       c.font = Font.boldSystemFont(18);
-      c.textColor = Color.white();
+      c.textColor = theme.primaryTextColor;
       c.minimumScaleFactor = 0.3;
     });
     unit_list.map((u) => {
       u.font = Font.mediumMonospacedSystemFont(14);
-      u.textColor = Color.gray();
+      u.textColor = theme.secondaryTextColor;
     });
+
+    const background_image = await loadImage("背景图");
+    background_image ? (LW.backgroundImage = background_image) : null;
   }
   if (token == "" || token == null || token == undefined) {
     console.error("请先配置refresh_token");
@@ -422,14 +463,14 @@ function getFileManager() {
   let fm;
   try {
     fm = FileManager.iCloud();
-    fm.documentsDirectory()
+    fm.documentsDirectory();
   } catch {
     fm = FileManager.local();
   }
   return fm;
 }
 
-function renderWrongSizeAlert() {
+async function renderWrongSizeAlert() {
   const LW = new ListWidget();
   const alert_text = LW.addText(
     "本组件只支持中等大小，请重新添加中等大小桌面组件"
@@ -459,11 +500,20 @@ async function loadImage(name) {
   const user_defined_settings_name_map = {
     车: "car_img_path",
     LOGO: "logo_img_path",
+    背景图: "widget_background_path",
   };
+  const fm = getFileManager();
+  const user_defined_img_path = getSetting(user_defined_settings_name_map[name])
+  // 优先使用用户自定义的图片
 
+  if(user_defined_img_path && fm.fileExists(user_defined_img_path)){
+    return fm.readImage(user_defined_img_path)
+  }
+  if(!img_map[name] && ! user_defined_img_path){
+    return null
+  }
   const img_url = img_map[name];
   const file_name = img_url.split("/")[img_url.split("/").length - 1];
-  const fm = getFileManager();
 
   let img_dir = getImageDir();
 
@@ -484,14 +534,13 @@ async function loadImage(name) {
     const img = await req.loadImage();
     fm.writeImage(img_file, img);
   }
-  // 优先使用用户自定义的图片
-  const user_defined_settings_key = user_defined_settings_name_map[name];
-  const user_defined_img_path = getSetting(user_defined_settings_key);
-  if (user_defined_img_path && fm.fileExists(user_defined_img_path)) {
-    return fm.readImage(user_defined_img_path);
-  } else {
-    return fm.readImage(img_file);
-  }
+  // const user_defined_settings_key = user_defined_settings_name_map[name];
+  // const user_defined_img_path = getSetting(user_defined_settings_key);
+  // if (user_defined_img_path && fm.fileExists(user_defined_img_path)) {
+  //   return fm.readImage(user_defined_img_path);
+  // } else {
+  return fm.readImage(img_file);
+  // }
 }
 
 function getRefreshToken() {
@@ -559,6 +608,30 @@ async function previewWidget() {
   });
 }
 
+async function selectTheme() {
+  const alert = new Alert();
+  alert.title = "请选择主题";
+  let curr_theme = getSetting("theme_name");
+  curr_theme = curr_theme ? curr_theme : "黑色主题";
+  themes.map((theme) => {
+    alert.addAction(
+      theme.name == curr_theme ? theme.name + "(当前)" : theme.name
+    );
+  });
+  alert.addCancelAction("取消");
+  const selection = await alert.presentAlert();
+  if (selection >= 0) {
+    saveSetting("theme_name", themes[selection].name);
+  }
+  return selection;
+}
+
+function getTheme() {
+  let theme_name = getSetting("theme_name");
+  if (!theme_name) theme_name = "黑色主题";
+  return themes.find((theme) => theme.name == theme_name);
+}
+
 // 弹出操作选单，进行自定义设置
 async function askSettings() {
   const alert = new Alert();
@@ -590,6 +663,28 @@ async function askSettings() {
           saveSetting("refresh_token", refresh_token);
           await previewWidget();
         } else console.log("取消");
+      },
+    },
+    {
+      title: "选择主题",
+      action: async () => {
+        const selection = await selectTheme();
+        if (selection >= 0) {
+          await previewWidget();
+        }
+      },
+    },
+    {
+      title: "自定义背景图片",
+      action: async () => {
+        const image = await Photos.fromLibrary();
+        if (!image) return;
+        const fm = getFileManager();
+        const img_dir = getImageDir();
+        const img_file_path = fm.joinPath(img_dir, "widget_background.jpg");
+        fm.writeImage(img_file_path, image);
+        saveSetting("widget_background_path", img_file_path);
+        await previewWidget();
       },
     },
     {
@@ -643,6 +738,8 @@ async function askSettings() {
         saveSetting("logo_img_path", "");
         saveSetting("car_img_path", "");
         saveSetting("car_series_name", "");
+        saveSetting("widget_background_path","")
+        saveSetting("theme_name","")
         await previewWidget();
       },
     },
