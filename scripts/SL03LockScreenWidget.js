@@ -109,6 +109,7 @@ if(car_status && car_id){
 
 
   const circle = await drawArc(LW, mode == "电" ? remain_power : remain_oil);
+  
   const car_symbol_name = mode == "电" ? "car.rear.fill" : "fuelpump.fill"
   const sf_car = circle.addImage(SFSymbol.named(car_symbol_name).image );
   sf_car.imageSize = new Size(26, 26);
