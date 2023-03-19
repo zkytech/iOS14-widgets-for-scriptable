@@ -189,7 +189,7 @@ async function renderMediumWidget() {
     // 车内温度
     const vehicle_temperature = Math.round(car_status.vehicleTemperature);
     // 剩余里程
-    const remained_power_mile = Math.round(car_status.remainedPowerMile);
+    let remained_power_mile = Math.round(car_status.remainedPowerMile);
     // 剩余电量
     const remain_power = Math.round(car_status.remainPower);
     // 车辆名称
@@ -208,9 +208,31 @@ async function renderMediumWidget() {
     // 是否为增程车型
     const is_mix = car_status.remainedOilMile != undefined;
     // 增城续航里程
-    const remained_oil_mile = is_mix
+    let remained_oil_mile = is_mix
       ? Math.round(car_status.remainedOilMile)
-      : "";
+      : 0;
+    // 增程车型存在API数据错乱的问题，这里为了受到API错误数据的影响自动取上一次获取到的合理数据
+    if(remain_power && remain_power > 0){
+      saveSetting("remain_power", remain_power)
+    }else{
+      remain_power = getSetting("remain_power")
+      remain_power = remain_power ? remain_power : 0
+    }
+    if(remained_power_mile && remained_power_mile > 0){
+      saveSetting("remained_power_mile", remained_power_mile)
+    }else{
+      remained_power_mile = getSetting("remained_power_mile")
+      remained_power_mile = remained_power_mile ? remained_power_mile : 0
+    }
+    if(remained_oil_mile && remained_oil_mile > 0){
+      saveSetting("remained_oil_mile", remained_oil_mile)
+    }else{
+      remained_oil_mile = getSetting("remained_oil_mile")
+      remained_oil_mile = remained_oil_mile ? remained_oil_mile : 0
+    }
+
+    
+    
 
     //const power_img = LW.addImage(drawPowerImage(remain_power,remained_power_mile))
     //power_img.cornerRadius=5

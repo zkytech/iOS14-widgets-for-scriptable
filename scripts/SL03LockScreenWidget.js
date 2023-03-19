@@ -89,9 +89,23 @@ const car_id = await getCarId(token);
 const car_status = await getCarStatus(token, car_id);
 if(car_status && car_id){
   // 剩余电量
-  const remain_power =car_status.remainPower ==undefined || car_status.remainPower < 0 ? 0 : car_status.remainPower;
-  const remained_oil_mile = car_status.RemainedOilMile
-  const remain_oil = (remained_oil_mile == undefined || remained_oil_mile < 0 ? 0:remained_oil_mile) / 846 * 100
+  let remain_power =car_status.remainPower ==undefined || car_status.remainPower < 0 ? 0 : car_status.remainPower;
+  let remained_oil_mile = car_status.RemainedOilMile
+  // 增程车型存在API数据错乱的问题，为了避免受到API错误数据的影响自动取上一次获取到的合理数据
+  if(remain_power && remain_power > 0){
+    saveSetting("remain_power", remain_power)
+  }else{
+    remain_power = getSetting("remain_power")
+    remain_power = remain_power ? remain_power : 0
+  }
+  if(remained_oil_mile && remained_oil_mile > 0){
+    saveSetting("remained_oil_mile", remained_oil_mile)
+  }else{
+    remained_oil_mile = getSetting("remained_oil_mile")
+    remained_oil_mile = remained_oil_mile ? remained_oil_mile : 0
+  }
+
+  const remain_oil = remained_oil_mile / 846 * 100
 
 
   const circle = await drawArc(LW, mode == "电" ? remain_power : remain_oil);
