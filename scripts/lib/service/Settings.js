@@ -33,7 +33,7 @@ function getDataFromSettings(project_name, key) {
   if (settings == null) {
     return null;
   }
-  return settings[key];
+  return Object.keys(settings).includes(key)?settings[key]:null ;
 }
 
 function writeSettings(project_name, settings) {
