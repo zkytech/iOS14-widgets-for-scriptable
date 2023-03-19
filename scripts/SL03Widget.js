@@ -425,6 +425,13 @@ async function askSettings() {
   alert.message = "created by @zkytech";
   const setting_actions = [
     {
+      title:"查看说明文档",
+      action: async () => {
+        await Safari.open("https://gitee.com/zkytech/iOS14-widgets-for-scriptable")
+      }
+
+    },
+    {
       title: "设置refresh_token",
       action: async () => {
         let my_alert = new Alert();
@@ -511,7 +518,7 @@ async function askSettings() {
   await alert
     .presentAlert()
     .then((action_index) => {
-      if (action_index > 0) {
+      if (action_index >= 0) {
         return setting_actions[action_index].action();
       }
     })
