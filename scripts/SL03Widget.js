@@ -375,7 +375,7 @@ async function renderMediumWidget() {
       c.bottomAlignContent();
     });
     const content0 = content_container0.addText(
-      is_mix ? remained_oil_mile : total_odometer + ""
+      is_mix ? remained_oil_mile + "" : total_odometer + ""
     );
     const unit0 = content_container0.addText("km");
     const content1 = content_container1.addText(remained_power_mile + "");
