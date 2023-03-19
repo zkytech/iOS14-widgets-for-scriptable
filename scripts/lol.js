@@ -445,7 +445,7 @@ Script.complete()
 async function update(){
   const fm = FileManager.iCloud()
   const folder = fm.documentsDirectory()
-  const req = new Request("https://public.zkytech.top/iOS14-widgets-for-scriptable/lol.js")
+  const req = new Request("https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/master/scripts/lol.js")
   let scriptTxt =await req.loadString()
   
   if(!scriptTxt.includes('setWidget')){
