@@ -6,6 +6,8 @@ async function update(file_url) {
     let fm 
     try{
       fm = FileManager.iCloud();
+      fm.documentsDirectory();
+
     }catch(e){
       fm = FileManager.local();
     }
