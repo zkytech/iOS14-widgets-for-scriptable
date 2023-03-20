@@ -618,7 +618,7 @@ async function selectTheme() {
   const alert = new Alert();
   alert.title = "请选择主题";
   let curr_theme = getSetting("theme_name");
-  curr_theme = curr_theme ? curr_theme : "黑色主题";
+  curr_theme = curr_theme ? curr_theme : "跟随系统";
   themes.map((theme) => {
     alert.addAction(
       theme.name == curr_theme ? theme.name + "(当前)" : theme.name
@@ -634,7 +634,7 @@ async function selectTheme() {
 
 function getTheme() {
   let theme_name = getSetting("theme_name");
-  if (!theme_name) theme_name = "黑色主题";
+  if (!theme_name) theme_name = "跟随系统";
   return themes.find((theme) => theme.name == theme_name);
 }
 
