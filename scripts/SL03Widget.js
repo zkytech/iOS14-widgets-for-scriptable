@@ -500,7 +500,7 @@ function getImageDir() {
 // 加载图片
 async function loadImage(name) {
   const img_map = {
-    车: "https://i.328888.xyz/2023/03/17/LFK8Z.md.png",
+    车: "https://i.328888.xyz/2023/03/20/PMpHE.png",
     LOGO: "https://deepal.com.cn/202303112321/share_logo.png",
   };
   const user_defined_settings_name_map = {
@@ -590,16 +590,63 @@ async function getService(name, url, force_download) {
   return service;
 }
 
+async function selectCarColor(){
+  const colors = [
+    {
+      name: "星云青",
+      img_url:"https://i.328888.xyz/2023/03/20/PM3NF.png"
+    },
+    {
+      name: "月岩灰",
+      img_url:"https://i.328888.xyz/2023/03/20/PMrAZ.png"
+    },
+    {
+      name: "天河蓝",
+      img_url:"https://i.328888.xyz/2023/03/20/PMRhH.png"
+    },
+    {
+      name: "星矿黑",
+      img_url:"https://i.328888.xyz/2023/03/20/PMcuQ.png"
+    },
+    {
+      name: "彗星白",
+      img_url:"https://i.328888.xyz/2023/03/20/PMpHE.png"
+    }
+  ]
+  const alert = new Alert();
+  alert.title = "请选择车辆颜色"
+  colors.map((color)=>{
+    alert.addAction(color.name)
+  })
+  alert.addCancelAction("取消")
+  const action_index = await alert.presentAlert()
+  if(action_index >= 0){
+    const req = new Request(colors[action_index].img_url);
+    const image = await req.loadImage();
+    if(!image){
+      console.error("图片素材加载失败")
+      return 
+    }
+    const fm = getFileManager();
+    const img_dir = getImageDir();
+    const img_file_path = fm.joinPath(img_dir, "car_img.jpg");
+    fm.writeImage(img_file_path, image);
+    saveSetting("car_img_path", img_file_path);
+  }
+  
+}
+
+
 async function previewWidget() {
   const alert = new Alert();
   alert.title = "请选择预览内容";
   const preview_actions = [
     {
-      title: "锁屏组件",
+      title: "🌤️锁屏组件",
       action: async () => await renderAccessoryCircularWidget(),
     },
     {
-      title: "桌面组件",
+      title: "📱桌面组件",
       action: async () => await renderMediumWidget(),
     },
   ];
@@ -645,7 +692,7 @@ async function askSettings() {
   alert.message = "created by @zkytech";
   const setting_actions = [
     {
-      title: "查看说明文档",
+      title: "📖查看说明文档",
       action: async () => {
         await Safari.open(
           "https://gitee.com/zkytech/iOS14-widgets-for-scriptable"
@@ -653,7 +700,7 @@ async function askSettings() {
       },
     },
     {
-      title: "设置refresh_token",
+      title: "🛠️设置refresh_token",
       action: async () => {
         let my_alert = new Alert();
         let refresh_token = getSetting("refresh_token");
@@ -672,7 +719,7 @@ async function askSettings() {
       },
     },
     {
-      title: "选择主题",
+      title: "💈选择主题",
       action: async () => {
         const selection = await selectTheme();
         if (selection >= 0) {
@@ -681,7 +728,14 @@ async function askSettings() {
       },
     },
     {
-      title: "自定义背景图片",
+      title: "🌈选择车辆颜色",
+      action: async () => {
+        await selectCarColor()
+        await previewWidget()
+      }
+    },
+    {
+      title: "🖼️自定义背景图片",
       action: async () => {
         const image = await Photos.fromLibrary();
         if (!image) return;
@@ -694,7 +748,7 @@ async function askSettings() {
       },
     },
     {
-      title: "自定义车辆型号",
+      title: "💬自定义车辆型号",
       action: async () => {
         let my_alert = new Alert();
         let car_series_name = getSetting("car_series_name");
@@ -713,7 +767,7 @@ async function askSettings() {
       },
     },
     {
-      title: "自定义车辆图片",
+      title: "🚙自定义车辆图片",
       action: async () => {
         const image = await Photos.fromLibrary();
         if (!image) return;
@@ -726,7 +780,7 @@ async function askSettings() {
       },
     },
     {
-      title: "自定义LOGO图片",
+      title: "🎉自定义LOGO图片",
       action: async () => {
         const image = await Photos.fromLibrary();
         if (!image) return;
@@ -739,7 +793,7 @@ async function askSettings() {
       },
     },
     {
-      title: "重置设定(仅保留refresh_token)",
+      title: "♻️重置设定(保留token)",
       action: async () => {
         saveSetting("logo_img_path", "");
         saveSetting("car_img_path", "");
@@ -750,7 +804,7 @@ async function askSettings() {
       },
     },
     {
-      title: "预览",
+      title: "👀预览",
       action: async () => {
         await previewWidget();
       },
@@ -759,7 +813,7 @@ async function askSettings() {
   setting_actions.map((action) => {
     alert.addAction(action.title);
   });
-  alert.addCancelAction("取消");
+  alert.addCancelAction("❎取消");
   await alert.presentAlert().then((action_index) => {
     if (action_index >= 0) {
       return setting_actions[action_index].action();
