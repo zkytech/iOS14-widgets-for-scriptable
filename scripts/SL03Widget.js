@@ -33,6 +33,12 @@ class WidgetTheme {
 }
 const themes = [
   new WidgetTheme(
+    "跟随系统",
+    Color.dynamic(Color.white(), Color.black()),
+    Color.dynamic(Color.black(), Color.white()),
+    Color.dynamic(new Color("#4b4b4b"), new Color("#bfbfbf"))
+  ),
+  new WidgetTheme(
     "白色主题",
     Color.white(),
     Color.black(),
