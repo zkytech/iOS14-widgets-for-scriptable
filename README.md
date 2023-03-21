@@ -169,23 +169,24 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 
 为了顺利打开下面的链接，**请在safari浏览器中打开本页面**。
 
-1. 安装[:link:Scriptable APP](https://apps.apple.com/cn/app/scriptable/id1405459188)
-2. 下载[:link:桌面组件安装脚本](https://gitee.com/zkytech/iOS14-widgets-for-scriptable/releases/download/1.0.1/SL03Widget.scriptable)后，用`Scriptable`打开
-3. 安装scriptable后会自动创建几个Demo脚本，其中有一个脚本是`Random Scriptable API`，先点击运行一次这个脚本。(如果没有看到`Random Scriptable API`脚本就在`Gallery标签页 -> Great WIdgets`里面添加)。
-4. 按照下面章节讲的方法获取refresh_token并设置到脚本中。
+1. 确保iCloud是开启状态，
+2. 安装[:link:Scriptable APP](https://apps.apple.com/cn/app/scriptable/id1405459188)
+3. 下载[:link:桌面组件安装脚本](https://gitee.com/zkytech/iOS14-widgets-for-scriptable/releases/download/1.0.1/SL03Widget.scriptable)后，用`Scriptable`打开
+4. 安装scriptable后会自动创建几个Demo脚本，其中有一个脚本是`Random Scriptable API`，先点击运行一次这个脚本。(如果没有看到`Random Scriptable API`脚本就在`Gallery标签页 -> Great WIdgets`里面添加)。
+5. 按照下面章节讲的方法获取refresh_token并设置到脚本中。
 
 ### 参数
 
 - 桌面组件参数: `refresh_token`
 - 锁屏组件参数: `模式`
   - 非必填，可以填写:`电`、`油`，默认显示电量
-  - 请先设置好桌面组件再使用锁屏组件，否则锁屏组件无法获取到`refresh_token`
+  - 请先设置好桌面组件再使用锁屏组件
 
 #### `refresh_token`获取方法
 
 ##### 速通版本
 
-确保iCloud是开启状态，对深蓝APP进行抓包，获取API`/appapi/v1/member/ms/refreshCacToken`响应里面的refresh_token，然后把token填入组件参数里就行了，组件高级功能在Scriptable APP里直接运行脚本就能看到。（如果你能看懂就不用看下面的了）
+对深蓝APP进行抓包，获取API`/appapi/v1/member/ms/refreshCacToken`响应里面的refresh_token，然后把token填入组件参数里就行了，组件高级功能在Scriptable APP里直接运行脚本就能看到。（如果你能看懂就不用看下面的了）
 
 ##### 详细版本
 
@@ -193,8 +194,8 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 
 **为了你的数据安全请不要在公开场合发送抓包截图，拿到token相当于拿到了你的账号，通过token可以随时拿到你车子的定位和车门闭锁等数据，甚至可能直接操控车辆**
 
-1. <font color="red">请开启手机上的<b>iCloud</b>云盘</font>。
-2. 安装[:link:Stream APP](https://apps.apple.com/cn/app/stream/id1312141691)，并开启<font color="red"><b>HTTPS抓包</b></font>功能，必须要显示“<font color="blue">设置成功：CA证书已经安装且信任</font>”。
+
+1. 安装[:link:Stream APP](https://apps.apple.com/cn/app/stream/id1312141691)，并开启<font color="red"><b>HTTPS抓包</b></font>功能，必须要显示“<font color="blue">设置成功：CA证书已经安装且信任</font>”。
 ![](./preview/HTTPS%E6%8A%93%E5%8C%85%E5%BC%80%E5%90%AF%E7%95%8C%E9%9D%A2.PNG)
 1. 点击`开始抓包`
 2. 打开`深蓝`APP，进入控车页面，下拉刷新车辆状态，为了确保请求能被抓到，建议多刷几次。
