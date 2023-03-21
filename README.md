@@ -19,6 +19,9 @@
     - [效果预览](#效果预览-2)
     - [安装](#安装-2)
     - [参数](#参数-1)
+      - [`refresh_token`获取方法](#refresh_token获取方法)
+        - [速通版本](#速通版本)
+        - [详细版本](#详细版本)
     - [主题设置、自定义车辆图片、LOGO、型号文本...](#主题设置自定义车辆图片logo型号文本)
 
 <!-- vscode-markdown-toc-config
@@ -154,15 +157,15 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 
 为了节省你的时间，<font color="red"><b>请认真阅读下面的操作步骤</b></font>，并依照文档进行操作，<font color="red"><b>跳过任何一个字都只会成倍地浪费你的时间</b></font>。为了帮助小白理解，最下面有抓包操作流程图。
 
-操作过程对小白来说有一定的难度，但是文档写这么长就是为了让更多的人能顺利装上，只要跟着文档一步步操作就能成功。新手大概需要5～10分钟。
+安装组件和获取参数的操作过程对小白来说有一定的难度，但是文档写这么长就是为了让更多的人能顺利装上，只要跟着文档一步步操作就能成功。新手大概需要5～10分钟。
 
-<font color="red"><b>
-认真阅读文档！不要跳过任何一步！
 
-认真阅读文档！不要跳过任何一步！
+**认真阅读文档！不要跳过任何一步！**
 
-认真阅读文档！不要跳过任何一步！
-</b></font>
+**认真阅读文档！不要跳过任何一步！**
+
+**认真阅读文档！不要跳过任何一步！**
+
 
 为了顺利打开下面的链接，**请在safari浏览器中打开本页面**。
 
@@ -170,6 +173,7 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 2. 下载[:link:桌面组件安装脚本](https://gitee.com/zkytech/iOS14-widgets-for-scriptable/releases/download/1.0.1/SL03Widget.scriptable)后，用`Scriptable`打开
 3. 安装scriptable后会自动创建几个Demo脚本，其中有一个脚本是`Random Scriptable API`，先点击运行一次这个脚本。(如果没有看到`Random Scriptable API`脚本就在`Gallery标签页 -> Great WIdgets`里面添加)。
 4. 按照下面章节讲的方法获取refresh_token并设置到脚本中。
+
 ### 参数
 
 - 桌面组件参数: `refresh_token`
@@ -177,24 +181,33 @@ type,onlyFollowed,uid  //注意必须用英文逗号
   - 非必填，可以填写:`电`、`油`，默认显示电量
   - 请先设置好桌面组件再使用锁屏组件，否则锁屏组件无法获取到`refresh_token`
 
-本组件需要获取`refresh_token`，操作过程涉及抓包，幸运的是，<font color="green">IOS是抓包操作最简单的平台</font>，抓包方法我会讲，如果看不懂，请自行百度。以桌面组件为例，`refresh_token`获取及使用方法如下（`为了你的数据安全请不要在公开场合发送抓包截图，拿到token相当于拿到了你的账号，理论上是能通过token进行控车的`）：
+#### `refresh_token`获取方法
 
+##### 速通版本
+
+确保iCloud是开启状态，对深蓝APP进行抓包，获取API`/appapi/v1/member/ms/refreshCacToken`响应里面的refresh_token，然后把token填入组件参数里就行了，组件高级功能在Scriptable APP里直接运行脚本就能看到。（如果你能看懂就不用看下面的了）
+
+##### 详细版本
+
+本组件需要获取`refresh_token`，操作过程涉及抓包，幸运的是，<font color="green">IOS是抓包操作最简单的平台</font>，抓包方法我会讲。以桌面组件为例，`refresh_token`获取及使用方法如下：
+
+**为了你的数据安全请不要在公开场合发送抓包截图，拿到token相当于拿到了你的账号，通过token可以随时拿到你车子的定位和车门闭锁等数据，甚至可能直接操控车辆**
 
 1. <font color="red">请开启手机上的<b>iCloud</b>云盘</font>。
 2. 安装[:link:Stream APP](https://apps.apple.com/cn/app/stream/id1312141691)，并开启<font color="red"><b>HTTPS抓包</b></font>功能，必须要显示“<font color="blue">设置成功：CA证书已经安装且信任</font>”。
 ![](./preview/HTTPS%E6%8A%93%E5%8C%85%E5%BC%80%E5%90%AF%E7%95%8C%E9%9D%A2.PNG)
-3. 点击`开始抓包`
-4. 打开`深蓝`APP，进入控车页面，下拉刷新车辆状态，为了确保请求能被抓到，建议多刷几次。
-5. 回到`Stream` APP，停止抓包
-6. 进入抓包历史，查看刚刚生成的抓包记录，搜索`refresh`(注意搜索框里不要输入空格)，可以看到URI为`/appapi/v1/member/ms/refreshCacToken`的请求
-7. 点击查看请求详情，查看`响应-响应主体-查看json`
-8. 将`refresh_token`的<font color="red"><b>值</b></font>复制下来。比如你看到的是`"refresh_token":"ajj1f73b21DSUbias"`这里要复制保存的就是`ajj1f73b21DSUbias`，不要带引号。
-9. 回到桌面，新增桌面组件，创建Scriptable**中等大小**组件。
-10. 在桌面**长按**上一步添加的小组件，在弹出菜单中选择**编辑小组件**，此时会出现小组件的设置界面，修改下面两项设置：
+1. 点击`开始抓包`
+2. 打开`深蓝`APP，进入控车页面，下拉刷新车辆状态，为了确保请求能被抓到，建议多刷几次。
+3. 回到`Stream` APP，停止抓包
+4. 进入抓包历史，查看刚刚生成的抓包记录，搜索`refresh`(注意搜索框里不要输入空格)，可以看到URI为`/appapi/v1/member/ms/refreshCacToken`的请求
+5. 点击查看请求详情，查看`响应-响应主体-查看json`
+6. 将`refresh_token`的<font color="red"><b>值</b></font>复制下来。比如你看到的是`"refresh_token":"ajj1f73b21DSUbias"`这里要复制保存的就是`ajj1f73b21DSUbias`，不要带引号。
+7. 回到桌面，新增桌面组件，创建Scriptable**中等大小**组件。
+8.  在桌面**长按**上一步添加的小组件，在弹出菜单中选择**编辑小组件**，此时会出现小组件的设置界面，修改下面两项设置：
    -  `Script`：点击选择前面安装的脚本`SL03Widget`，
    - `Parameter`：将前面复制的`refresh_token`值粘贴到这里面
-11. 点击空白处回到桌面，等待小组件完成加载。
-12. 打开`Scriptable APP`，点击组件列表中的`SL03Widget`查看高级功能，在这里你可以修改主题、车辆颜色、车辆图片、车辆型号、LOGO等。
+9.  点击空白处回到桌面，等待小组件完成加载。
+10. 打开`Scriptable APP`，点击组件列表中的`SL03Widget`查看高级功能，在这里你可以修改主题、车辆颜色、车辆图片、车辆型号、LOGO等。
 
 
 > 锁屏组件目前只支持小号电量/油量圆环，锁屏组件的添加方法请参考[:link:视频教程](https://www.bilibili.com/video/BV19d4y1q7vi/?spm_id_from=333.337.search-card.all.click&vd_source=5b7cf4daa7d98506767a0757e0b64d77)进行操作。
