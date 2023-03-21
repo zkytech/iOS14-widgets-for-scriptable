@@ -508,11 +508,19 @@ async function loadImage(name) {
     背景图: "widget_background_path",
   };
   const fm = getFileManager();
-  const user_defined_img_path = getSetting(user_defined_settings_name_map[name])
+  let user_defined_img_path = getSetting(user_defined_settings_name_map[name])
   // 优先使用用户自定义的图片
-
+  console.log("加载图片:"+name + " " + user_defined_img_path)
   if(user_defined_img_path && fm.fileExists(user_defined_img_path)){
+    try{
+      fm.downloadFileFromiCloud(user_defined_img_path);
+    }catch(e){}
     return fm.readImage(user_defined_img_path)
+  }
+  if(user_defined_img_path && !fm.fileExists(user_defined_img_path)){
+    console.log(`用户自定义图片不存在:${name}`)
+    saveSetting(user_defined_settings_name_map[name], "")
+    user_defined_img_path = null
   }
   if(!img_map[name] && !user_defined_img_path){
     return null
@@ -812,7 +820,7 @@ async function askSettings() {
   setting_actions.map((action) => {
     alert.addAction(action.title);
   });
-  alert.addCancelAction("❎取消");
+  alert.addCancelAction("取消");
   await alert.presentAlert().then((action_index) => {
     if (action_index >= 0) {
       return setting_actions[action_index].action();
