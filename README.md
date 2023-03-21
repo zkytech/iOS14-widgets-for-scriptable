@@ -147,6 +147,8 @@ type,onlyFollowed,uid  //注意必须用英文逗号
  - 锁屏组件展示车辆数据: 电量、油量
  - 点击桌面/锁屏组件跳转到深蓝APP控车界面
 
+> 车型颜色需要收集比对各种颜色车子的抓包数据来判断是哪个字段，目前没有足够的数据支撑，所以统一白色，当然，小组件提供了部分[自定义选项](#43-主题设置自定义车辆图片logo型号文本)，你可以自己选择车辆颜色、替换车辆图片。
+
 ![](https://i.328888.xyz/2023/03/20/PjJkN.jpeg)
 ### 安装
 
@@ -154,19 +156,20 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 
 操作过程对小白来说有一定的难度，但是文档写这么长就是为了让更多的人能顺利装上，只要跟着文档一步步操作就能成功。新手大概需要5～10分钟。
 
-<font color="red"><b>认真阅读文档！不要跳过任何一步！
+<font color="red"><b>
 认真阅读文档！不要跳过任何一步！
-认真阅读文档！不要跳过任何一步！</b></font>
+
+认真阅读文档！不要跳过任何一步！
+
+认真阅读文档！不要跳过任何一步！
+</b></font>
 
 为了顺利打开下面的链接，**请在safari浏览器中打开本页面**。
 
 1. 安装[:link:Scriptable APP](https://apps.apple.com/cn/app/scriptable/id1405459188)
 2. 下载[:link:桌面组件安装脚本](https://gitee.com/zkytech/iOS14-widgets-for-scriptable/releases/download/1.0.1/SL03Widget.scriptable)后，用`Scriptable`打开
-3. 安装scriptable后会自动创建几个Demo脚本，其中有一个脚本是`Random Scriptable API`，先点击运行一次这个脚本。
-
-> 增程车型的油、电续航数据可能会变成-1、0，这种情况是深蓝APP的API问题，我无法解决，请知悉。
-> 车型颜色需要收集比对各种颜色车子的抓包数据来判断是哪个字段，目前没有足够的数据支撑，所以统一白色，当然，小组件提供了部分[自定义选项](#43-主题设置自定义车辆图片logo型号文本)，你可以自己替换车辆图片。
-
+3. 安装scriptable后会自动创建几个Demo脚本，其中有一个脚本是`Random Scriptable API`，先点击运行一次这个脚本。(如果没有看到`Random Scriptable API`脚本就在`Gallery标签页 -> Great WIdgets`里面添加)。
+4. 按照下面章节讲的方法获取refresh_token并设置到脚本中。
 ### 参数
 
 - 桌面组件参数: `refresh_token`
@@ -174,7 +177,7 @@ type,onlyFollowed,uid  //注意必须用英文逗号
   - 非必填，可以填写:`电`、`油`，默认显示电量
   - 请先设置好桌面组件再使用锁屏组件，否则锁屏组件无法获取到`refresh_token`
 
-本组件需要获取`refresh_token`，操作过程涉及抓包，幸运的是，<font color="green">IOS是抓包操作最简单的平台</font>，抓包方法我会讲，如果看不懂，请自行百度。以桌面组件为例，`refresh_token`获取及使用方法如下：
+本组件需要获取`refresh_token`，操作过程涉及抓包，幸运的是，<font color="green">IOS是抓包操作最简单的平台</font>，抓包方法我会讲，如果看不懂，请自行百度。以桌面组件为例，`refresh_token`获取及使用方法如下（`为了你的数据安全请不要在公开场合发送抓包截图，拿到token相当于拿到了你的账号，理论上是能通过token进行控车的`）：
 
 
 1. <font color="red">请开启手机上的<b>iCloud</b>云盘</font>。

@@ -11,7 +11,6 @@
  * - 组件依赖深蓝APP登录信息（refresh_token）
  * - 本组件仅用于学习交流
  * - 本组件为开源软件，不会进行收费！！！
-
  *
  *
  * - 不要在脚本代码里修改任何参数，所有参数必须通过组件设置界面填写
@@ -515,7 +514,7 @@ async function loadImage(name) {
   if(user_defined_img_path && fm.fileExists(user_defined_img_path)){
     return fm.readImage(user_defined_img_path)
   }
-  if(!img_map[name] && ! user_defined_img_path){
+  if(!img_map[name] && !user_defined_img_path){
     return null
   }
   const img_url = img_map[name];
