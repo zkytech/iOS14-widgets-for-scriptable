@@ -208,8 +208,7 @@ type,onlyFollowed,uid  //注意必须用英文逗号
    -  `Script`：点击选择前面安装的脚本`SL03Widget`，
    - `Parameter`：将前面复制的`refresh_token`值粘贴到这里面
 9.  点击空白处回到桌面，等待小组件完成加载。
-10. 打开`Scriptable APP`，点击组件列表中的`SL03Widget`查看高级功能，在这里你可以修改主题、车辆颜色、车辆图片、车辆型号、LOGO等。
-
+10. 打开`Scriptable APP`，点击组件列表中的`SL03Widget`查看高级功能，在这里你可以修改主题、车辆颜色、车辆图片、车辆型号、LOGO等。(刚下载好的脚本可能不是最新版，首次执行后自动更新到最新版，所以请执行两遍以获取最新功能)
 
 > 锁屏组件目前只支持小号电量/油量圆环，锁屏组件的添加方法请参考[:link:视频教程](https://www.bilibili.com/video/BV19d4y1q7vi/?spm_id_from=333.337.search-card.all.click&vd_source=5b7cf4daa7d98506767a0757e0b64d77)进行操作。
 
