@@ -263,6 +263,11 @@ async function renderMediumWidget() {
     const is_mix = car_status.remainedOilMile != undefined;
     // 是否在充电
     const is_charging = charge_status.chrgStatus != "3";
+    // 经度
+    const lng = car_location.lng
+    // 纬度
+    const lat = car_location.lat
+
     // 增城续航里程
     let remained_oil_mile = is_mix ? Math.round(car_status.remainedOilMile) : 0;
     // 增程车型存在API数据错乱的问题，这里为了受到API错误数据的影响自动取上一次获取到的合理数据
@@ -397,6 +402,8 @@ async function renderMediumWidget() {
     const t_space2 = col1_row0_row0.addStack();
     const t_space1 = col1_row0_row1.addStack();
     const t_space3 = col1_row0_row1.addStack();
+    // 点击地址跳转到高德地图
+    t_space3.url = `iosamap://path?sourceApplication=SL03Widget&dlat=${lat}&dlon=${lng}`
     t_space0.layoutVertically();
     t_space1.layoutVertically();
     t_space2.layoutVertically();
