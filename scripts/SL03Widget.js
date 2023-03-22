@@ -739,6 +739,28 @@ try {
           my_alert.addAction("保存");
           if ((await my_alert.present()) == 0) {
             refresh_token = my_alert.textFieldValue(0);
+            // 兼容一些神奇的输入形式 ------- begin
+            if(refresh_token.indexOf("{") != -1 && refresh_token.indexOf("}") != -1){
+              try{
+                refresh_token = JSON.parse(/\{.*\}/.exec(refresh_token)[0])["refreshToken"]
+              }catch(e){
+                console.error(e)
+              }
+            }
+            if(refresh_token.indexOf("=") != -1){
+              refresh_token = refresh_token.split("=")[1];
+            }
+            if(refresh_token.indexOf(":") != -1){
+              refresh_token = refresh_token.split(":")[1].replace("\"", "").replace(",","").trim();
+            }
+
+            if(refresh_token.indexOf("-") != -1){
+              refresh_token = refresh_token.split("-")[0].trim()
+            }
+            if(refresh_token != my_alert.textFieldValue(0)){
+              console.error("输入Token的格式不对，程序会尝试从中提取Token，如果仍然执行失败请仔细地阅读文档。")
+            }
+            // 兼容一些神奇的输入形式 -------- end
             saveSetting("refresh_token", refresh_token);
             await previewWidget();
           } else console.log("取消");
