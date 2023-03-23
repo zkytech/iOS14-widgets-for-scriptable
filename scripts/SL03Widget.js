@@ -154,7 +154,10 @@ try {
     const car_id = await getCarId(token);
     const car_status = await getCarStatus(token, car_id);
     const charge_status = await getChargeStatus(token, car_id);
-    const is_charging = charge_status.chrgStatus != "3";
+    // 可以确定 状态码3 = “未充电”
+    // 状态码1 = “充电中”
+    // 状态码2 目前未知
+    const is_charging = charge_status.chrgStatus == "1";
     if (car_status && car_id) {
       // 剩余电量
       let remain_power =
