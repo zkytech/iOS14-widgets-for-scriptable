@@ -24,35 +24,64 @@ try {
   const url_scheme = "qiyuancar://";
 
   class WidgetTheme {
-    constructor(name, backgroundColor, primaryTextColor, secondaryTextColor) {
+    constructor(name, backgroundGradient, primaryTextColor, secondaryTextColor) {
       this.name = name;
-      this.backgroundColor = backgroundColor;
+      this.backgroundGradient = backgroundGradient;
       this.primaryTextColor = primaryTextColor;
       this.secondaryTextColor = secondaryTextColor;
     }
   }
+
+  function getGradient(colors,locations){
+    const gradient = new LinearGradient()
+    gradient.colors = colors
+    gradient.locations = locations
+    return gradient
+  }
+
   const themes = [
     new WidgetTheme(
       "跟随系统",
-      Color.dynamic(Color.white(), Color.black()),
+      getGradient([Color.dynamic(Color.white(), Color.black())],[1]),
       Color.dynamic(Color.black(), Color.white()),
       Color.dynamic(new Color("#4b4b4b"), new Color("#bfbfbf"))
     ),
     new WidgetTheme(
       "白色主题",
-      Color.white(),
+      getGradient([Color.white()],[1]),
       Color.black(),
       new Color("#4b4b4b")
     ),
     new WidgetTheme(
       "黑色主题",
+      getGradient([Color.black()],[1]),
+      Color.white(),
+      new Color("#bfbfbf")
+    ),
+    new WidgetTheme(
+      "跟随系统(渐变)",
+      getGradient(
+        [Color.dynamic(Color.white(), Color.black()), Color.dynamic(new Color("#ced6e0"),new Color("#2f3542"))],
+        [0,1]
+      ),
+      Color.dynamic(Color.black(), Color.white()),
+      Color.dynamic(new Color("#4b4b4b"), new Color("#bfbfbf"))
+    ),
+    new WidgetTheme(
+      "白色主题(渐变)",
+      getGradient([Color.white(),new Color("#ced6e0")],[0,1]),
       Color.black(),
+      new Color("#4b4b4b")
+    ),
+    new WidgetTheme(
+      "黑色主题(渐变)",
+      getGradient([Color.black(),new Color("#2f3542")],[0,1]),
       Color.white(),
       new Color("#bfbfbf")
     ),
     new WidgetTheme(
       "EVA初号机主题",
-      new Color("#6c5ce7"),
+      getGradient([new Color("#6c5ce7")],[1]),
       new Color("#00b894"),
       new Color("#00b894")
     ),
@@ -222,7 +251,7 @@ try {
     }
     const LW = new ListWidget(); // widget对象
     LW.url = url_scheme;
-    LW.backgroundColor = theme.backgroundColor;
+    LW.backgroundGradient = theme.backgroundGradient;
     let token;
     let refresh_token = getRefreshToken();
     const token_result = await getToken(refresh_token);
@@ -348,6 +377,10 @@ try {
       const car_name_text = car_name_container.addText(car_name);
       car_name_text.font = Font.boldSystemFont(15);
       car_name_text.textColor = theme.primaryTextColor;
+      car_name_text.shadowColor = theme.secondaryTextColor;
+      car_name_text.shadowRadius = 1
+      car_name_text.shadowOffset = new Point(1,1)
+      
 
       //car_name_text.minimumScaleFactor = 1
       const lock_icon = car_name_container.addImage(
@@ -710,7 +743,7 @@ try {
 
   function getTheme() {
     let theme_name = getSetting("theme_name");
-    if (!theme_name) theme_name = "跟随系统";
+    if (!theme_name) theme_name = "跟随系统(渐变)";
     return themes.find((theme) => theme.name == theme_name);
   }
 
