@@ -794,7 +794,7 @@ try {
               refresh_token = refresh_token.split("-")[0].trim()
             }
             if(refresh_token != my_alert.textFieldValue(0)){
-              console.error("输入Token的格式不对，程序会尝试从中提取Token，如果仍然执行失败请仔细地阅读文档。")
+              console.warn("输入Token的格式不对，程序会尝试从中提取Token，如果仍然执行失败请仔细地阅读文档。")
             }
             // 兼容一些神奇的输入形式 -------- end
             saveSetting("refresh_token", refresh_token);
