@@ -115,6 +115,21 @@ async function getCarLocation(token, car_id) {
   }
 }
 
+// 获取流量信息
+async function getBalanceInfo(token, car_id) {
+  console.log("开始获取流量信息")
+  const req = new Request(
+    `https://m.iov.changan.com.cn/appserver/api/huservice/balanceInfo?carId=${car_id}&token=${token}`
+  )
+  req.method = "GET"
+  const car_balance_info = await req.loadJSON()
+  if (car_balance_info["success"]){
+    return car_balance_info["data"]
+  }else{
+    return null;
+  }
+
+}
 
 
 module.exports = {
@@ -124,5 +139,6 @@ module.exports = {
     getCarStatus,
     getCarInfo,
     getCarLocation,
-    getChargeStatus
+    getChargeStatus,
+    getBalanceInfo
 } 
