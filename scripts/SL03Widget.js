@@ -24,7 +24,12 @@ try {
   const url_scheme = "qiyuancar://";
 
   class WidgetTheme {
-    constructor(name, backgroundGradient, primaryTextColor, secondaryTextColor) {
+    constructor(
+      name,
+      backgroundGradient,
+      primaryTextColor,
+      secondaryTextColor
+    ) {
       this.name = name;
       this.backgroundGradient = backgroundGradient;
       this.primaryTextColor = primaryTextColor;
@@ -32,56 +37,59 @@ try {
     }
   }
 
-  function getGradient(colors,locations){
-    const gradient = new LinearGradient()
-    gradient.colors = colors
-    gradient.locations = locations
-    return gradient
+  function getGradient(colors, locations) {
+    const gradient = new LinearGradient();
+    gradient.colors = colors;
+    gradient.locations = locations;
+    return gradient;
   }
 
   const themes = [
     new WidgetTheme(
       "跟随系统",
-      getGradient([Color.dynamic(Color.white(), Color.black())],[1]),
+      getGradient([Color.dynamic(Color.white(), Color.black())], [1]),
       Color.dynamic(Color.black(), Color.white()),
       Color.dynamic(new Color("#4b4b4b"), new Color("#bfbfbf"))
     ),
     new WidgetTheme(
       "白色主题",
-      getGradient([Color.white()],[1]),
+      getGradient([Color.white()], [1]),
       Color.black(),
       new Color("#4b4b4b")
     ),
     new WidgetTheme(
       "黑色主题",
-      getGradient([Color.black()],[1]),
+      getGradient([Color.black()], [1]),
       Color.white(),
       new Color("#bfbfbf")
     ),
     new WidgetTheme(
       "跟随系统(渐变)",
       getGradient(
-        [Color.dynamic(Color.white(), Color.black()), Color.dynamic(new Color("#ced6e0"),new Color("#2f3542"))],
-        [0,1]
+        [
+          Color.dynamic(Color.white(), Color.black()),
+          Color.dynamic(new Color("#ced6e0"), new Color("#2f3542")),
+        ],
+        [0, 1]
       ),
       Color.dynamic(Color.black(), Color.white()),
       Color.dynamic(new Color("#4b4b4b"), new Color("#bfbfbf"))
     ),
     new WidgetTheme(
       "白色主题(渐变)",
-      getGradient([Color.white(),new Color("#ced6e0")],[0,1]),
+      getGradient([Color.white(), new Color("#ced6e0")], [0, 1]),
       Color.black(),
       new Color("#4b4b4b")
     ),
     new WidgetTheme(
       "黑色主题(渐变)",
-      getGradient([Color.black(),new Color("#2f3542")],[0,1]),
+      getGradient([Color.black(), new Color("#2f3542")], [0, 1]),
       Color.white(),
       new Color("#bfbfbf")
     ),
     new WidgetTheme(
       "EVA初号机主题",
-      getGradient([new Color("#6c5ce7")],[1]),
+      getGradient([new Color("#6c5ce7")], [1]),
       new Color("#00b894"),
       new Color("#00b894")
     ),
@@ -91,6 +99,7 @@ try {
     getCarId,
     getToken,
     refreshCarData,
+    getBalanceInfo,
     getCarStatus,
     getCarInfo,
     getCarLocation,
@@ -275,6 +284,7 @@ try {
     const car_info = await getCarInfo(token, car_id);
     const car_location = await getCarLocation(token, car_id);
     const charge_status = await getChargeStatus(token, car_id);
+    const balance_info = await getBalanceInfo(token, car_id);
     if (car_status != null && car_info != null && car_location != null) {
       // 数据更新时间
       const update_time = car_status.terminalTime;
@@ -285,7 +295,7 @@ try {
       // 剩余里程
       let remained_power_mile = Math.round(car_status.remainedPowerMile);
       // 剩余电量
-      const remain_power = Math.round(car_status.remainPower);
+      let remain_power = Math.round(car_status.remainPower);
       // 车辆名称
       const car_name = car_info.carName;
       // 车辆配置名称，比如：515km
@@ -309,8 +319,7 @@ try {
       const lng = car_location.lng;
       // 纬度
       const lat = car_location.lat;
-
-      // 增城续航里程
+      // 增程油箱续航里程
       let remained_oil_mile = is_mix
         ? Math.round(car_status.remainedOilMile)
         : 0;
@@ -333,6 +342,54 @@ try {
         remained_oil_mile = getSetting("remained_oil_mile");
         remained_oil_mile = remained_oil_mile ? remained_oil_mile : 0;
       }
+      // 剩余油量
+      const remain_oil = (remained_oil_mile / 846) * 100;
+      // 综合续航(增程)
+      const total_mixed_mile = remained_power_mile + remained_oil_mile;
+      // 剩余流量
+      const remained_packet_size = Math.round(balance_info[0].left);
+      // 剩余流量单位
+      const remained_packet_size_unit = balance_info[0].totalUnit;
+
+      const widget_data_map = {
+        电池续航: {
+          value: remained_power_mile,
+          unit: "km",
+        },
+        油箱续航: {
+          value: remained_oil_mile,
+          unit: "km",
+        },
+        剩余电量: {
+          value: remain_power,
+          unit: "%"
+        },
+        剩余油量: {
+          value: remain_oil,
+          unit: "%"
+        },
+        总里程: {
+          value: total_odometer,
+          unit: "km",
+        },
+        综合续航: {
+          value: total_mixed_mile,
+          unit: "km",
+        },
+        温度: {
+          value: vehicle_temperature,
+          unit: "°C",
+        },
+        位置: {
+          value: location_str,
+          unit: "",
+          url: `iosamap://path?sourceApplication=SL03Widget&dlat=${lat}&dlon=${lng}`,
+        },
+        剩余流量: {
+          value: remained_packet_size,
+          unit: remained_packet_size_unit,
+        },
+      };
 
       //const power_img = LW.addImage(drawPowerImage(remain_power,remained_power_mile))
       //power_img.cornerRadius=5
@@ -378,9 +435,8 @@ try {
       car_name_text.font = Font.boldSystemFont(15);
       car_name_text.textColor = theme.primaryTextColor;
       car_name_text.shadowColor = theme.secondaryTextColor;
-      car_name_text.shadowRadius = 1
-      car_name_text.shadowOffset = new Point(1,1)
-      
+      car_name_text.shadowRadius = 1;
+      car_name_text.shadowOffset = new Point(1, 1);
 
       //car_name_text.minimumScaleFactor = 1
       const lock_icon = car_name_container.addImage(
@@ -450,57 +506,44 @@ try {
       const t_space2 = col1_row0_row0.addStack();
       const t_space1 = col1_row0_row1.addStack();
       const t_space3 = col1_row0_row1.addStack();
-      // 点击地址跳转到高德地图
-      t_space3.url = `iosamap://path?sourceApplication=SL03Widget&dlat=${lat}&dlon=${lng}`;
-      t_space0.layoutVertically();
-      t_space1.layoutVertically();
-      t_space2.layoutVertically();
-      t_space3.layoutVertically();
+      const space_list = [t_space0, t_space1, t_space2, t_space3];
+      space_list.map((space, i) => {
+        space.layoutVertically();
+        const data_key = getWiegetDataSpaceName(i, is_mix);
+        console.log(`渲染第${i}个数据区块:${data_key}`);
+        console.log(widget_data_map[data_key]);
 
-      const header0 = t_space0.addText(is_mix ? "油箱续航" : "总里程");
-      const header1 = t_space1.addText("电池续航");
-      const header2 = t_space2.addText(is_mix ? "总里程" : "车内温度");
-      const header3 = t_space3.addText("位置");
-      const content_container0 = t_space0.addStack();
-      const content_container1 = t_space1.addStack();
-      const content_container2 = t_space2.addStack();
-      const content_container3 = t_space3.addStack();
-
-      [
-        content_container0,
-        content_container1,
-        content_container2,
-        content_container3,
-      ].map((c) => {
-        c.spacing = 5;
-        c.bottomAlignContent();
-      });
-      const content0 = content_container0.addText(
-        is_mix ? remained_oil_mile + "" : total_odometer + ""
-      );
-      const unit0 = content_container0.addText("km");
-      const content1 = content_container1.addText(remained_power_mile + "");
-      const unit1 = content_container1.addText("km");
-      const content2 = content_container2.addText(
-        is_mix ? total_odometer + "" : vehicle_temperature + ""
-      );
-      const unit2 = content_container2.addText(is_mix ? "km" : "°C");
-      const content3 = content_container3.addText(location_str);
-      const header_list = [header0, header1, header2, header3];
-      const content_list = [content0, content1, content2, content3];
-      const unit_list = [unit0, unit1, unit2];
-      header_list.map((h) => {
-        h.font = Font.thinMonospacedSystemFont(12);
-        h.textColor = theme.secondaryTextColor;
-      });
-      content_list.map((c) => {
-        c.font = Font.boldSystemFont(18);
-        c.textColor = theme.primaryTextColor;
-        c.minimumScaleFactor = 0.3;
-      });
-      unit_list.map((u) => {
-        u.font = Font.mediumMonospacedSystemFont(14);
-        u.textColor = theme.secondaryTextColor;
+        // 标题
+        console.log("header");
+        const header_stack = space.addText(data_key);
+        // 数据容器
+        console.log("value_container");
+        const content_container = space.addStack();
+        content_container.spacing = 5;
+        content_container.bottomAlignContent();
+        // 数据-值
+        console.log("value");
+        const content_stack = content_container.addText(
+          widget_data_map[data_key].value + ""
+        );
+        // 数据-单位
+        console.log("unit");
+        const unit_stack = content_container.addText(
+          widget_data_map[data_key].unit + ""
+        );
+        // 跳转地址
+        console.log("url");
+        if (widget_data_map[data_key].url) {
+          space.url = widget_data_map[data_key].url;
+        }
+        console.log("style");
+        header_stack.font = Font.thinMonospacedSystemFont(12);
+        header_stack.textColor = theme.secondaryTextColor;
+        content_stack.font = Font.boldSystemFont(18);
+        content_stack.textColor = theme.primaryTextColor;
+        content_stack.minimumScaleFactor = 0.3;
+        unit_stack.font = Font.mediumMonospacedSystemFont(14);
+        unit_stack.textColor = theme.secondaryTextColor;
       });
 
       const background_image = await loadImage("背景图");
@@ -747,6 +790,82 @@ try {
     return themes.find((theme) => theme.name == theme_name);
   }
 
+  // 获取第i个组件数据块的名称
+  function getWiegetDataSpaceName(i, is_mix) {
+    const key = "widget_data_block_info";
+    if (getSetting(key) && getSetting(key)[i]) {
+      return getSetting(key)[i];
+    } else {
+      // 为不同车型创建不同的默认设置：增程/纯电
+      let default_datas = [];
+      if (is_mix) {
+        default_datas = ["电池续航", "油箱续航", "总里程", "位置"];
+      } else {
+        default_datas = ["总里程", "电池续航", "温度", "位置"];
+      }
+      saveSetting(key, default_datas);
+      return default_datas[i];
+    }
+  }
+
+  function setWidgetDataSpaceName(i, value) {
+    const key = "widget_data_block_info";
+    if (getSetting(key) && getSetting(key)[i]) {
+      const tmp = getSetting(key);
+      tmp[i] = value;
+      saveSetting(key, tmp);
+    }
+  }
+
+  async function selectDataForBlock(i) {
+    const data_name_list = [
+      "电池续航",
+      "油箱续航",
+      "剩余电量",
+      "剩余油量",
+      "总里程",
+      "综合续航",
+      "温度",
+      "位置",
+      "剩余流量",
+    ];
+    const curr_selection = getWiegetDataSpaceName(i);
+    const alert = new Alert();
+    alert.title = "请选择第" + (i + 1) + "个数据块的数据";
+    data_name_list.map((data_name) => {
+      alert.addAction(data_name == curr_selection ? data_name + "(当前)" : data_name);
+    });
+    alert.addCancelAction("取消");
+    const selection = await alert.presentAlert();
+    if (selection >= 0) {
+      await setWidgetDataSpaceName(i, data_name_list[selection]);
+    }
+  }
+
+  async function listDataBlocks() {
+    const alert = new Alert();
+    alert.title = "请选择数据块";
+    alert.message = "分别代表小组件右侧的四个数据块"
+    const data_block_list = [1, 2, 3, 4];
+    data_block_list.map((data_block) => {
+      alert.addAction("第" + data_block + "个数据块");
+    });
+    alert.addCancelAction("取消");
+    const selection = await alert.presentAlert();
+    if (selection >= 0) {
+      if (
+        getSetting("widget_data_block_info") &&
+        getSetting("widget_data_block_info")[1]
+      ) {
+        await selectDataForBlock(selection);
+      } else {
+        const err_alert = new Alert();
+        err_alert.title = "请先执行一遍预览程序";
+        err_alert.message = "请先执行一遍预览程序，然后再修改数据块设置";
+      }
+    }
+  }
+
   // 弹出操作选单，进行自定义设置
   async function askSettings() {
     const alert = new Alert();
@@ -776,25 +895,37 @@ try {
           if ((await my_alert.present()) == 0) {
             refresh_token = my_alert.textFieldValue(0);
             // 兼容一些神奇的输入形式 ------- begin
-            if(refresh_token.indexOf("{") != -1 && refresh_token.indexOf("}") != -1){
-              try{
-                refresh_token = JSON.parse(/\{.*\}/.exec(refresh_token)[0])["refreshToken"]
-              }catch(e){
-                console.error(e)
+            if (
+              refresh_token.indexOf("{") != -1 &&
+              refresh_token.indexOf("}") != -1
+            ) {
+              try {
+                refresh_token = JSON.parse(/\{.*\}/.exec(refresh_token)[0])[
+                  "refreshToken"
+                ];
+              } catch (e) {
+                console.error(e);
+                console.error(e.stack);
               }
             }
-            if(refresh_token.indexOf("=") != -1){
+            if (refresh_token.indexOf("=") != -1) {
               refresh_token = refresh_token.split("=")[1];
             }
-            if(refresh_token.indexOf(":") != -1){
-              refresh_token = refresh_token.split(":")[1].replace("\"", "").replace(",","").trim();
+            if (refresh_token.indexOf(":") != -1) {
+              refresh_token = refresh_token
+                .split(":")[1]
+                .replace('"', "")
+                .replace(",", "")
+                .trim();
             }
 
-            if(refresh_token.indexOf("-") != -1){
-              refresh_token = refresh_token.split("-")[0].trim()
+            if (refresh_token.indexOf("-") != -1) {
+              refresh_token = refresh_token.split("-")[0].trim();
             }
-            if(refresh_token != my_alert.textFieldValue(0)){
-              console.warn("输入Token的格式不对，程序会尝试从中提取Token，如果仍然执行失败请仔细地阅读文档。")
+            if (refresh_token != my_alert.textFieldValue(0)) {
+              console.warn(
+                "输入Token的格式不对，程序会尝试从中提取Token，如果仍然执行失败请仔细地阅读文档。"
+              );
             }
             // 兼容一些神奇的输入形式 -------- end
             saveSetting("refresh_token", refresh_token);
@@ -877,13 +1008,17 @@ try {
         },
       },
       {
+        title: "⌗自定义数据块",
+        action: async () => {
+          await listDataBlocks();
+          await previewWidget();
+        },
+      },
+
+      {
         title: "♻️重置设定(保留token)",
         action: async () => {
-          saveSetting("logo_img_path", "");
-          saveSetting("car_img_path", "");
-          saveSetting("car_series_name", "");
-          saveSetting("widget_background_path", "");
-          saveSetting("theme_name", "");
+          initSettings();
           await previewWidget();
         },
       },
@@ -904,6 +1039,16 @@ try {
       }
     });
   }
+
+  function resetSettings() {
+    saveSetting("logo_img_path", "");
+    saveSetting("car_img_path", "");
+    saveSetting("car_series_name", "");
+    saveSetting("widget_background_path", "");
+    saveSetting("theme_name", "跟随系统(渐变)");
+    saveSetting("widget_data_block_info", null);
+  }
 } catch (e) {
   console.error(e);
+  console.error(e.stack);
 }
