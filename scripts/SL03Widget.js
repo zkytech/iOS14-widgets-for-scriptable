@@ -510,33 +510,25 @@ try {
       space_list.map((space, i) => {
         space.layoutVertically();
         const data_key = getWiegetDataSpaceName(i, is_mix);
-        console.log(`渲染第${i}个数据区块:${data_key}`);
-        console.log(widget_data_map[data_key]);
 
         // 标题
-        console.log("header");
         const header_stack = space.addText(data_key);
         // 数据容器
-        console.log("value_container");
         const content_container = space.addStack();
         content_container.spacing = 5;
         content_container.bottomAlignContent();
         // 数据-值
-        console.log("value");
         const content_stack = content_container.addText(
           widget_data_map[data_key].value + ""
         );
         // 数据-单位
-        console.log("unit");
         const unit_stack = content_container.addText(
           widget_data_map[data_key].unit + ""
         );
         // 跳转地址
-        console.log("url");
         if (widget_data_map[data_key].url) {
           space.url = widget_data_map[data_key].url;
         }
-        console.log("style");
         header_stack.font = Font.thinMonospacedSystemFont(12);
         header_stack.textColor = theme.secondaryTextColor;
         content_stack.font = Font.boldSystemFont(18);
