@@ -229,7 +229,9 @@ try {
             ? "bolt.car.fill"
             : "car.rear.fill"
           : "fuelpump.fill";
-      const sf_car = circle.addImage(SFSymbol.named(car_symbol_name).image);
+      // const sf_car = circle.addImage(SFSymbol.named(car_symbol_name).image);
+      const sf_car = circle.addImage(await loadImage("锁屏车"));
+
       sf_car.imageSize = new Size(29, 29);
       sf_car.tintColor = Color.white();
     }
@@ -591,6 +593,7 @@ try {
     const img_map = {
       车: "https://i.328888.xyz/2023/03/20/PMpHE.png",
       LOGO: "https://deepal.com.cn/202303112321/share_logo.png",
+      锁屏车: "https://i.328888.xyz/2023/03/27/inBH5a.png"
     };
     const user_defined_settings_name_map = {
       车: "car_img_path",
