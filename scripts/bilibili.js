@@ -382,11 +382,13 @@ try {
     const fm = FileManager.iCloud();
     const folder = fm.documentsDirectory();
     const req = new Request(
-      "https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/master/scripts/bilibili.js"
+      "https://public.zkytech.top/iOS14-widgets-for-scriptable/bilibili.js"
     );
     let scriptTxt = await req.loadString();
     const filename = `/${Script.name()}.js`;
-    fm.writeString(folder + filename, scriptTxt);
+    if(req.response.statusCode == 200){
+      fm.writeString(folder + filename, scriptTxt);
+    }
   }
   await update();
 } catch (e) {
