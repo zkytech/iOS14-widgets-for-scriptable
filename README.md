@@ -1,6 +1,8 @@
 > 如果本项目对你有帮助，欢迎在[:link:Github](https://github.com/zkytech/iOS14-widgets-for-scriptable)点个star表示支持。
 > 
 > 联系邮箱：zhangkunyuan@hotmail.com ，PR请提交到[:link:Github](https://github.com/zkytech/iOS14-widgets-for-scriptable) 
+
+## 紧急通知：2023年3月28日下午，因为静态文件访问量过大，gitee阻断了仓库内静态文件下载，请手动下载新版脚本并重新安装[https://public.zkytech.top/iOS14-widgets-for-scriptable/bilibili.scriptable](https://public.zkytech.top/iOS14-widgets-for-scriptable/bilibili.scriptable)
 # iOS 14小组件
 <!-- vscode-markdown-toc -->
 - [iOS 14小组件](#ios-14小组件)
