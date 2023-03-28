@@ -7,7 +7,7 @@
  * 联系邮箱: zhangkunyuan@hotmail.com
  *
  *
- * 参数获取和填写方法见文档: https://gitee.com/zkytech/iOS14-widgets-for-scriptable#4-%E6%B7%B1%E8%93%9Dsl03%E8%BD%A6%E8%BE%86%E7%8A%B6%E6%80%81
+ * 参数获取和填写方法见文档: https://public.zkytech.top/iOS14-widgets-for-scriptable#4-%E6%B7%B1%E8%93%9Dsl03%E8%BD%A6%E8%BE%86%E7%8A%B6%E6%80%81
  * - 组件依赖深蓝APP登录信息（refresh_token）
  * - 本组件仅用于学习交流
  * - 本组件为开源软件，不会进行收费！！！
@@ -22,7 +22,7 @@ try {
   const force_download = branch != "master";
   const url_scheme = "qiyuancar://";
 
-  
+
   class WidgetTheme {
     constructor(
       name,
@@ -106,17 +106,17 @@ try {
     getChargeStatus,
   } = await getService(
     "SL03Api",
-    `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/lib/service/SL03Api.js`,
+    `https://public.zkytech.top/iOS14-widgets-for-scriptable/lib/service/SL03Api.js`,
     force_download
   );
   const { update } = await getService(
     "UpdateScript",
-    `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/lib/service/UpdateScript.js`,
+    `https://public.zkytech.top/iOS14-widgets-for-scriptable/lib/service/UpdateScript.js`,
     force_download
   );
   let { getDataFromSettings, saveDataToSettings } = await getService(
     "Settings",
-    `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/lib/service/Settings.js`,
+    `https://public.zkytech.top/iOS14-widgets-for-scriptable/lib/service/Settings.js`,
     force_download
   );
   function getSetting(key) {
@@ -129,7 +129,7 @@ try {
   if (branch == "master") {
     // 更新组件代码
     await update(
-      `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/SL03Widget.js`
+      `https://public.zkytech.top/iOS14-widgets-for-scriptable/SL03Widget.js`
     );
   }
 
@@ -161,7 +161,7 @@ try {
   async function renderAccessoryCircularWidget() {
     const { drawArc } = await getService(
       "DrawShape",
-      `https://gitee.com/zkytech/iOS14-widgets-for-scriptable/raw/${branch}/scripts/lib/service/DrawShape.js`,
+      `https://public.zkytech.top/iOS14-widgets-for-scriptable/lib/service/DrawShape.js`,
       force_download
     );
     const params = args.widgetParameter
