@@ -473,7 +473,7 @@ try {
     const fm = FileManager.iCloud();
     const folder = fm.documentsDirectory();
     const req = new Request(
-      "https://public.zkytech.top/iOS14-widgets-for-scriptable/lol.js"
+      `https://public.zkytech.top/iOS14-widgets-for-scriptable/master/lol.js
     );
     let scriptTxt = await req.loadString();
 
