@@ -685,7 +685,10 @@ try {
       // download once
       const req = new Request(url);
       let indexjs = await req.load();
-      fm.write(lib_file, indexjs);
+      if(req.response.statusCode == 200){
+        // 只有响应正常时才写入文件，避免写入错误的内容
+        fm.write(lib_file, indexjs);
+      }
     }
 
     let service = importModule("lib/service/" + name);

@@ -58,7 +58,7 @@
 
 ### <a name='2.2-安装'></a>安装
 
-下载[:link:安装脚本](https://gitee.com/zkytech/iOS14-widgets-for-scriptable/releases/download/1.0.1/bilibili.scriptable)后，用`scriptable`打开
+下载[:link:安装脚本](https://public.zkytech.top/iOS14-widgets-for-scriptable/bilibili.scriptable)后，用`scriptable`打开
 
 ### <a name='2.3-参数'></a>参数
 
@@ -133,7 +133,7 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 
 ### 安装
 
-下载[:link:安装脚本](https://gitee.com/zkytech/iOS14-widgets-for-scriptable/releases/download/1.0.1/lol.scriptable)后，用`scriptable`打开
+下载[:link:安装脚本](https://public.zkytech.top/iOS14-widgets-for-scriptable/lol.scriptable)后，用`scriptable`打开
 
 ## 小组件：深蓝SL03车辆状态
 
@@ -179,7 +179,7 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 
 1. 确保iCloud是开启状态，
 2. 安装[:link:Scriptable APP](https://apps.apple.com/cn/app/scriptable/id1405459188)
-3. 下载[:link:桌面组件安装脚本](https://gitee.com/zkytech/iOS14-widgets-for-scriptable/releases/download/1.0.1/SL03Widget.scriptable)后，用`Scriptable`打开
+3. 下载[:link:桌面组件安装脚本](https://public.zkytech.top/iOS14-widgets-for-scriptable/SL03Widget.scriptable)后，用`Scriptable`打开
 4. 安装scriptable后会自动创建几个Demo脚本，其中有一个脚本是`Random Scriptable API`，先点击运行一次这个脚本。(如果没有看到`Random Scriptable API`脚本就在`Gallery标签页 -> Great WIdgets`里面添加)。
 5. 按照下面章节讲的方法获取refresh_token并设置到脚本中。
 
