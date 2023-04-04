@@ -30,12 +30,12 @@ async function getToken(authorization) {
   req.method = "GET";
 
   req.headers = {
-    "authorization":authorization
+    "Authorization":authorization
   };
   const result = await req.loadJSON();
-  if (result["success"] && result["data"]["refresh_token"] != null) {
-    const refresh_token = result["data"]["refresh_token"];
-    const access_token = result["data"]["access_token"];
+  if (result["success"]) {
+    const refresh_token = result["data"]["refreshToken"];
+    const access_token = result["data"]["cacToken"];
     return {access_token,refresh_token};
   } 
     return null;
