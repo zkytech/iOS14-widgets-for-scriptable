@@ -40,7 +40,7 @@ jobs:
           echo "当前分支:${branch}"
           mkdir iOS14-widgets-for-scriptable
           mv scripts iOS14-widgets-for-scriptable/${branch}
-          scp -r iOS14-widgets-for-scriptable/${branch} root@zkytech.top:/var/www/public/iOS14-widgets-for-scriptable/${branch}
+          scp -r iOS14-widgets-for-scriptable/${branch} root@zkytech.top:/var/www/public/iOS14-widgets-for-scriptable
         env:
           GH_ACTION_TOKEN: ${{ secrets.GH_ACTION_TOKEN }}
           RSA_TOKEN: ${{ secrets.RSA_TOKEN }} 
