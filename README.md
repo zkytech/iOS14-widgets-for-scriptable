@@ -2,7 +2,7 @@
 > 
 > 联系邮箱：zhangkunyuan@hotmail.com ，PR请提交到[:link:Github](https://github.com/zkytech/iOS14-widgets-for-scriptable) 
 
-## 紧急通知：2023年3月28日下午，因为静态文件访问量过大，gitee阻断了仓库内静态文件下载，请手动下载新版脚本并重新安装[https://public.zkytech.top/iOS14-widgets-for-scriptable/bilibili.scriptable](https://public.zkytech.top/iOS14-widgets-for-scriptable/bilibili.scriptable)
+## 紧急通知：2023年4月4日，官方调整了API接口认证方式，导致旧版脚本无法正常使用，脚本已经完成更新适配，需要获取新的`Authorization`参数，具体方法请看下面文档。
 # iOS 14小组件
 <!-- vscode-markdown-toc -->
 - [iOS 14小组件](#ios-14小组件)
