@@ -27,12 +27,10 @@ async function getToken(authorization) {
   const req = new Request(
     "https://app-api.deepal.com.cn/appapi/v1/member/ms/cacToken"
   );
-  req.method = "POST";
-  req.body = JSON.stringify({
-    refreshToken:refresh_token,
-  });
+  req.method = "GET";
+
   req.headers = {
-    "Content-Type": "application/json",
+    "authorization":authorization
   };
   const result = await req.loadJSON();
   if (result["success"] && result["data"]["refresh_token"] != null) {
