@@ -17,7 +17,7 @@
  */
 try {
   // 开发环境切换到dev分支，生产环境用master分支
-  const branch = "dev";
+  const branch = "master";
   const project_name = "深蓝小组件_by_zkytech";
   // const force_download = branch != "master";
   force_download = true
