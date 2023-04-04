@@ -302,7 +302,7 @@ try {
       // 是否为增程车型
       const is_mix = car_status.remainedOilMile != undefined;
       // 是否在充电
-      const is_charging = charge_status.chrgStatus != "3";
+      const is_charging = charge_status.chrgStatus == "1";
       // 经度
       const lng = car_location.lng;
       // 纬度
@@ -335,9 +335,17 @@ try {
       // 综合续航(增程)
       const total_mixed_mile = remained_power_mile + remained_oil_mile;
       // 剩余流量
-      const remained_packet_size = Math.round(balance_info[0].left);
+      let remained_packet_size = Math.round(balance_info[0].left);
       // 剩余流量单位
-      const remained_packet_size_unit = balance_info[0].totalUnit;
+      let remained_packet_size_unit = balance_info[0].totalUnit;
+      if(remained_packet_size){
+        saveSetting("remained_packet_size",remained_packet_size)
+        saveSetting("remained_packet_size_unit",remained_packet_size_unit)
+      }else{
+        remained_packet_size = getSetting("remained_packet_size");
+        remained_packet_size_unit = getSetting("remained_packet_size_unit");
+      }
+
 
       const widget_data_map = {
         电池续航: {
