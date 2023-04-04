@@ -21,7 +21,7 @@
     - [效果预览](#效果预览-2)
     - [安装](#安装-2)
     - [参数](#参数-1)
-      - [`refresh_token`获取方法](#refresh_token获取方法)
+      - [`Authorization`获取方法](#Authorization获取方法)
         - [速通版本](#速通版本)
         - [详细版本](#详细版本)
     - [主题设置、自定义车辆图片、LOGO、型号文本...](#主题设置自定义车辆图片logo型号文本)
@@ -183,24 +183,24 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 2. 安装[:link:Scriptable APP](https://apps.apple.com/cn/app/scriptable/id1405459188)
 3. 下载[:link:桌面组件安装脚本](https://public.zkytech.top/iOS14-widgets-for-scriptable/SL03Widget.scriptable)后，用`Scriptable`打开
 4. 安装scriptable后会自动创建几个Demo脚本，其中有一个脚本是`Random Scriptable API`，先点击运行一次这个脚本。(如果没有看到`Random Scriptable API`脚本就在`Gallery标签页 -> Great WIdgets`里面添加)。
-5. 按照下面章节讲的方法获取refresh_token并设置到脚本中。
+5. 按照下面章节讲的方法获取`Authorization`并设置到脚本中。
 
 ### 参数
 
-- 桌面组件参数: `refresh_token`
+- 桌面组件参数: `Authorization`
 - 锁屏组件参数: `模式`
   - 非必填，可以填写:`电`、`油`，默认显示电量
   - 请先设置好桌面组件再使用锁屏组件
 
-#### `refresh_token`获取方法
+#### `Authorization`获取方法
 
 ##### 速通版本
 
-对深蓝APP进行抓包，获取API`/appapi/v1/member/ms/refreshCacToken`响应里面的refresh_token，然后把token填入组件参数里就行了，组件高级功能在Scriptable APP里直接运行脚本就能看到。（如果你能看懂就不用看下面的了）
+对深蓝APP进行抓包，获取API`/appapi/v1/member/ms/cacToken`响应里面的`Authorization`，然后把token填入组件参数里就行了，组件高级功能在Scriptable APP里直接运行脚本就能看到。（如果你能看懂就不用看下面的了）
 
 ##### 详细版本
 
-本组件需要获取`refresh_token`，操作过程涉及抓包，幸运的是，<font color="green">IOS是抓包操作最简单的平台</font>，抓包方法我会讲。以桌面组件为例，`refresh_token`获取及使用方法如下：
+本组件需要获取`Authorization`，操作过程涉及抓包，幸运的是，<font color="green">IOS是抓包操作最简单的平台</font>，抓包方法我会讲。以桌面组件为例，`Authorization`获取及使用方法如下：
 
 **为了你的数据安全请不要在公开场合发送抓包截图，拿到token相当于拿到了你的账号，通过token可以随时拿到你车子的定位和车门闭锁等数据，甚至可能直接操控车辆**
 
@@ -210,19 +210,19 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 1. 点击`开始抓包`
 2. 打开`深蓝`APP，进入控车页面，下拉刷新车辆状态，为了确保请求能被抓到，建议多刷几次。
 3. 回到`Stream` APP，停止抓包
-4. 进入抓包历史，查看刚刚生成的抓包记录，搜索`refresh`(注意搜索框里不要输入空格)，可以看到URI为`/appapi/v1/member/ms/refreshCacToken`的请求
-5. 点击查看请求详情，查看`响应-响应主体-查看json`
-6. 将`refresh_token`的<font color="red"><b>值</b></font>复制下来。比如你看到的是`"refresh_token":"ajj1f73b21DSUbias"`这里要复制保存的就是`ajj1f73b21DSUbias`，不要带引号。
+4. 进入抓包历史，查看刚刚生成的抓包记录，搜索`cacToken`(注意搜索框里不要输入空格)，可以看到URI为`/appapi/v1/member/ms/cacToken`的请求
+5. 点击查看请求详情，查看`请求-请求头部`
+6. 将`Authorization`的<font color="red"><b>值</b></font>复制下来（比如你看到的是`Authorization : asd_iIAASHUDjmsdxxxxx`,这里要复制的就是`asd_iIAASHUDjmsdxxxxx`，千万不要复制多余的东西）
 7. 回到桌面，新增桌面组件，创建Scriptable**中等大小**组件。
 8.  在桌面**长按**上一步添加的小组件，在弹出菜单中选择**编辑小组件**，此时会出现小组件的设置界面，修改下面两项设置：
    -  `Script`：点击选择前面安装的脚本`SL03Widget`，
-   - `Parameter`：将前面复制的`refresh_token`值粘贴到这里面
+   - `Parameter`：将前面复制的`Authorization`值粘贴到这里面
 9.  点击空白处回到桌面，等待小组件完成加载。
 10. 打开`Scriptable APP`，点击组件列表中的`SL03Widget`查看高级功能，在这里你可以修改主题、车辆颜色、车辆图片、车辆型号、LOGO等。(刚下载好的脚本可能不是最新版，首次执行后自动更新到最新版，所以请执行两遍以获取最新功能)
 
 > 锁屏组件目前只支持小号电量/油量圆环，锁屏组件的添加方法请参考[:link:视频教程](https://www.bilibili.com/video/BV19d4y1q7vi/?spm_id_from=333.337.search-card.all.click&vd_source=5b7cf4daa7d98506767a0757e0b64d77)进行操作。
 
-![](https://i.328888.xyz/2023/03/20/PjjEk.jpeg)
+<!-- ![](https://i.328888.xyz/2023/03/20/PjjEk.jpeg) -->
 
 ### 主题设置、自定义车辆图片、LOGO、型号文本...
 
@@ -259,7 +259,7 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 
 4. 能否控车？
 
-目前做不到，控车的校验逻辑不像refresh_token和access_token是完全暴露的，所以常规方法无法实现。如果有大佬能提供思路，我会非常感谢。
+可能有办法实现，但是鉴于法律责任风险，当前我不会去做更不会去公开此类方法。
 
 5. 点击桌面组件跳转非要先打开一下Scriptable吗？
 

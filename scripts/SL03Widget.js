@@ -19,7 +19,8 @@ try {
   // 开发环境切换到dev分支，生产环境用master分支
   const branch = "dev";
   const project_name = "深蓝小组件_by_zkytech";
-  const force_download = branch != "master";
+  // const force_download = branch != "master";
+  force_download = true
   const url_scheme = "qiyuancar://";
 
 
@@ -173,17 +174,18 @@ try {
     LW.url = url_scheme;
     let token;
     let authorization = getAuthorization();
+
+
     const token_result = await getToken(authorization);
     if (token_result == null) {
       token = null
     } else {
       token = token_result.access_token;
     }
-    console.log("token: " + token);
 
-    const car_id = await getCarId(token);
-    const car_status = await getCarStatus(token, car_id);
-    const charge_status = await getChargeStatus(token, car_id);
+    const car_id = await getCarId(token,authorization);
+    const car_status = await getCarStatus(token, car_id,authorization);
+    const charge_status = await getChargeStatus(token, car_id,authorization);
     // 可以确定 状态码3 = “未充电”
     // 状态码1 = “充电中”
     // 状态码2 目前未知
@@ -263,20 +265,14 @@ try {
     } else {
       token = token_result.access_token;
     }
-    console.log("token: " + token);
 
-    const car_id = await getCarId(token);
+    const car_id = await getCarId(token, authorization);
     // await refreshCarData()
-    const car_status = await getCarStatus(token, car_id);
-    const car_info = await getCarInfo(token, car_id);
-    const car_location = await getCarLocation(token, car_id);
-    const charge_status = await getChargeStatus(token, car_id);
-    const balance_info = await getBalanceInfo(token, car_id);
-    console.log("car_status: " + JSON.stringify(car_status));
-    console.log("car_info: " + JSON.stringify(car_info));
-    console.log("car_location: " + JSON.stringify(car_location));
-    console.log("charge_status: " + JSON.stringify(charge_status));
-    console.log("balance_info: " + JSON.stringify(balance_info));
+    const car_status = await getCarStatus(token, car_id, authorization);
+    const car_info = await getCarInfo(token, car_id, authorization);
+    const car_location = await getCarLocation(token, car_id, authorization);
+    const charge_status = await getChargeStatus(token, car_id, authorization);
+    const balance_info = await getBalanceInfo(token, car_id, authorization);
     if (car_status != null && car_info != null && car_location != null) {
       // 数据更新时间
       const update_time = car_status.terminalTime;
