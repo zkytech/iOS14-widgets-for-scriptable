@@ -959,7 +959,7 @@ try {
       {
         title: "♻️重置设定(保留token)",
         action: async () => {
-          initSettings();
+          resetSettings();
           await previewWidget();
         },
       },
