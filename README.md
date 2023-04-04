@@ -213,12 +213,11 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 4. 进入抓包历史，查看刚刚生成的抓包记录，搜索`cacToken`(注意搜索框里不要输入空格)，可以看到URI为`/appapi/v1/member/ms/cacToken`的请求
 5. 点击查看请求详情，查看`请求-请求头部`
 6. 将`Authorization`的<font color="red"><b>值</b></font>复制下来（比如你看到的是`Authorization : asd_iIAASHUDjmsdxxxxx`,这里要复制的就是`asd_iIAASHUDjmsdxxxxx`，千万不要复制多余的东西）
-7. 回到桌面，新增桌面组件，创建Scriptable**中等大小**组件。
-8.  在桌面**长按**上一步添加的小组件，在弹出菜单中选择**编辑小组件**，此时会出现小组件的设置界面，修改下面两项设置：
+7. 打开`Scriptable`，运行脚本`SL03Widget`，选择`设置authorization`，粘贴刚刚复制的内容并保存
+8. 回到桌面，新增桌面组件，创建Scriptable**中等大小**组件。
+9.  在桌面**长按**上一步添加的小组件，在弹出菜单中选择**编辑小组件**，此时会出现小组件的设置界面，修改下面1项设置：
    -  `Script`：点击选择前面安装的脚本`SL03Widget`，
-   - `Parameter`：将前面复制的`Authorization`值粘贴到这里面
-9.  点击空白处回到桌面，等待小组件完成加载。
-10. 打开`Scriptable APP`，点击组件列表中的`SL03Widget`查看高级功能，在这里你可以修改主题、车辆颜色、车辆图片、车辆型号、LOGO等。(刚下载好的脚本可能不是最新版，首次执行后自动更新到最新版，所以请执行两遍以获取最新功能)
+10.  点击空白处回到桌面，等待小组件完成加载。
 
 > 锁屏组件目前只支持小号电量/油量圆环，锁屏组件的添加方法请参考[:link:视频教程](https://www.bilibili.com/video/BV19d4y1q7vi/?spm_id_from=333.337.search-card.all.click&vd_source=5b7cf4daa7d98506767a0757e0b64d77)进行操作。
 
