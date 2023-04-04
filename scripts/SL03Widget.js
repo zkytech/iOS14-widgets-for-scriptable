@@ -8,7 +8,7 @@
  *
  *
  * 参数获取和填写方法见文档: https://public.zkytech.top/iOS14-widgets-for-scriptable/${branch}#4-%E6%B7%B1%E8%93%9Dsl03%E8%BD%A6%E8%BE%86%E7%8A%B6%E6%80%81
- * - 组件依赖深蓝APP登录信息（refresh_token）
+ * - 组件依赖深蓝APP登录信息（authorization）
  * - 本组件仅用于学习交流
  * - 本组件为开源软件，不会进行收费！！！
  *
@@ -19,8 +19,7 @@ try {
   // 开发环境切换到dev分支，生产环境用master分支
   const branch = "dev";
   const project_name = "深蓝小组件_by_zkytech";
-  // const force_download = branch != "master";
-  const force_download = true;
+  const force_download = branch != "master";
   const url_scheme = "qiyuancar://";
 
 
@@ -173,22 +172,14 @@ try {
     const LW = new ListWidget(); // widget对象
     LW.url = url_scheme;
     let token;
-    let refresh_token = getRefreshToken();
-    const token_result = await getToken(refresh_token);
+    let authorization = getAuthorization();
+    const token_result = await getToken(authorization);
     if (token_result == null) {
-      token = null;
+      token = null
     } else {
-      refresh_token = token_result.refresh_token;
       token = token_result.access_token;
-      if (
-        refresh_token != "" &&
-        refresh_token != undefined &&
-        refresh_token != null
-      ) {
-        console.log("保存新的refresh_token");
-        saveSetting("refresh_token", refresh_token);
-      }
     }
+    console.log("token: " + token);
 
     const car_id = await getCarId(token);
     const car_status = await getCarStatus(token, car_id);
@@ -238,8 +229,8 @@ try {
     }
 
     if (token == "" || token == null || token == undefined) {
-      console.error("请先配置refresh_token");
-      LW.addText("请先配置refresh_token");
+      console.warn("请先配置authorization");
+      LW.addText("请先配置authorization");
     }
 
     LW.presentAccessoryCircular();
@@ -250,37 +241,30 @@ try {
 
   /**
    * 中等桌面组件
-   * 接受参数 - refresh_token
+   * 接受参数 - authorization
    */
   async function renderMediumWidget() {
     const params = args.widgetParameter
       ? args.widgetParameter.split(",")
       : [""];
     const theme = getTheme();
-    param_refresh_token = params.length > 0 ? params[0].trim() : "";
-    if (param_refresh_token && !getRefreshToken()) {
-      saveSetting("refresh_token", param_refresh_token);
+    param_authorization = params.length > 0 ? params[0].trim() : "";
+    if (param_authorization && !getAuthorization()) {
+      saveSetting("authorization", param_authorization);
     }
     const LW = new ListWidget(); // widget对象
     LW.url = url_scheme;
     LW.backgroundGradient = theme.backgroundGradient;
     let token;
-    let refresh_token = getRefreshToken();
-    const token_result = await getToken(refresh_token);
+    let authorization = getAuthorization();
+    const token_result = await getToken(authorization);
     if (token_result == null) {
-      token = null;
+      token = null
     } else {
-      refresh_token = token_result.refresh_token;
       token = token_result.access_token;
-      if (
-        refresh_token != "" &&
-        refresh_token != undefined &&
-        refresh_token != null
-      ) {
-        console.log("保存新的refresh_token");
-        saveSetting("refresh_token", refresh_token);
-      }
     }
+    console.log("token: " + token);
+
     const car_id = await getCarId(token);
     // await refreshCarData()
     const car_status = await getCarStatus(token, car_id);
@@ -288,6 +272,11 @@ try {
     const car_location = await getCarLocation(token, car_id);
     const charge_status = await getChargeStatus(token, car_id);
     const balance_info = await getBalanceInfo(token, car_id);
+    console.log("car_status: " + JSON.stringify(car_status));
+    console.log("car_info: " + JSON.stringify(car_info));
+    console.log("car_location: " + JSON.stringify(car_location));
+    console.log("charge_status: " + JSON.stringify(charge_status));
+    console.log("balance_info: " + JSON.stringify(balance_info));
     if (car_status != null && car_info != null && car_location != null) {
       // 数据更新时间
       const update_time = car_status.terminalTime;
@@ -545,9 +534,9 @@ try {
       background_image ? (LW.backgroundImage = background_image) : null;
     }
     if (token == "" || token == null || token == undefined) {
-      console.error("请先配置refresh_token");
+      console.error("请先配置authorization");
       const t = LW.addText(
-        "请先在scriptable app中直接运行此脚本并配置refresh_token"
+        "请先在scriptable app中直接运行此脚本并配置authorization"
       );
       t.font = Font.boldSystemFont(18);
       t.textColor = Color.red();
@@ -652,18 +641,9 @@ try {
     // }
   }
 
-  function getRefreshToken() {
-    const fm = getFileManager();
-    const script_dir = fm.documentsDirectory();
-    const old_refresh_token_path = fm.joinPath(script_dir, "refresh_token");
-    // 处理历史遗留问题，将老版本的refresh_token文件统一用新的settings.json替代
-    if (fm.fileExists(old_refresh_token_path)) {
-      const old_refresh_token = fm.readString(old_refresh_token_path);
-      saveSetting("refresh_token", old_refresh_token);
-      fm.remove(old_refresh_token_path);
-    }
-    let refresh_token = getSetting("refresh_token");
-    return refresh_token;
+  function getAuthorization() {
+    let authorization = getSetting("authorization");
+    return authorization;
   }
 
   async function getService(name, url, force_download) {
@@ -880,54 +860,20 @@ try {
         },
       },
       {
-        title: "🛠️设置refresh_token",
+        title: "🛠️设置authorization",
         action: async () => {
           let my_alert = new Alert();
-          let refresh_token = getSetting("refresh_token");
-          my_alert.title = "请输入refresh_token";
+          let authorization = getSetting("authorization");
+          my_alert.title = "请输入authorization";
           my_alert.addSecureTextField(
-            "请输入refresh_token",
-            refresh_token ? refresh_token : ""
+            "请输入authorization",
+            authorization ? authorization : ""
           );
           my_alert.addCancelAction("取消");
           my_alert.addAction("保存");
           if ((await my_alert.present()) == 0) {
-            refresh_token = my_alert.textFieldValue(0);
-            // 兼容一些神奇的输入形式 ------- begin
-            if (
-              refresh_token.indexOf("{") != -1 &&
-              refresh_token.indexOf("}") != -1
-            ) {
-              try {
-                refresh_token = JSON.parse(/\{.*\}/.exec(refresh_token)[0])[
-                  "refreshToken"
-                ];
-              } catch (e) {
-                console.error(e);
-                console.error(e.stack);
-              }
-            }
-            if (refresh_token.indexOf("=") != -1) {
-              refresh_token = refresh_token.split("=")[1];
-            }
-            if (refresh_token.indexOf(":") != -1) {
-              refresh_token = refresh_token
-                .split(":")[1]
-                .replace('"', "")
-                .replace(",", "")
-                .trim();
-            }
-
-            if (refresh_token.indexOf("-") != -1) {
-              refresh_token = refresh_token.split("-")[0].trim();
-            }
-            if (refresh_token != my_alert.textFieldValue(0)) {
-              console.warn(
-                "输入Token的格式不对，程序会尝试从中提取Token，如果仍然执行失败请仔细地阅读文档。"
-              );
-            }
-            // 兼容一些神奇的输入形式 -------- end
-            saveSetting("refresh_token", refresh_token);
+            authorization = my_alert.textFieldValue(0).trim();
+            saveSetting("authorization", authorization);
             await previewWidget();
           } else console.log("取消");
         },

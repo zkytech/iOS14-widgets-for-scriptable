@@ -22,10 +22,10 @@ async function getCarId(token) {
 }
 
 // 获取token
-async function getToken(refresh_token) {
+async function getToken(authorization) {
   console.log("开始获取token");
   const req = new Request(
-    "https://app-api.deepal.com.cn/appapi/v1/member/ms/refreshCacToken"
+    "https://app-api.deepal.com.cn/appapi/v1/member/ms/cacToken"
   );
   req.method = "POST";
   req.body = JSON.stringify({
