@@ -231,8 +231,8 @@ try {
     }
 
     if (token == "" || token == null || token == undefined) {
-      console.warn("请先配置authorization");
-      LW.addText("请先配置authorization");
+      console.warn("请参照文档配置authorization");
+      LW.addText("请参照文档配置authorization");
     }
 
     LW.presentAccessoryCircular();
@@ -530,9 +530,9 @@ try {
       background_image ? (LW.backgroundImage = background_image) : null;
     }
     if (token == "" || token == null || token == undefined) {
-      console.error("请先配置authorization");
+      console.error("请参照文档配置authorization");
       const t = LW.addText(
-        "请先在scriptable app中直接运行此脚本并配置authorization"
+        "请参照文档配置authorization"
       );
       t.font = Font.boldSystemFont(18);
       t.textColor = Color.red();
@@ -863,7 +863,7 @@ try {
           my_alert.title = "请输入authorization";
           my_alert.addSecureTextField(
             "请输入authorization",
-            authorization ? authorization : ""
+            authorization == null ? authorization : ""
           );
           my_alert.addCancelAction("取消");
           my_alert.addAction("保存");
