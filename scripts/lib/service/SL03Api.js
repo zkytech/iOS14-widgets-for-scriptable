@@ -1,5 +1,5 @@
 // 获取carId
-async function getCarId(token) {
+async function getCarId(token,authorization) {
   console.log("开始获取carId");
   const req = new Request(
     "https://app-api.deepal.com.cn/appapi/v1/message/msg/cars"
@@ -12,6 +12,7 @@ async function getCarId(token) {
   });
   req.headers = {
     "Content-Type": "application/json",
+    "Authorization":authorization
   };
   const result = await req.loadJSON();
   if (result["success"]) {
@@ -42,11 +43,14 @@ async function getToken(authorization) {
 }
 
 // 获取充电状态
-async function getChargeStatus(token, car_id) {
+async function getChargeStatus(token, car_id, authorization) {
   console.log("开始获取充电信息");
   const req = new Request(
     `https://m.iov.changan.com.cn/appserver/api/charge/info?carId=${car_id}&token=${token}`
   );
+  req.headers = {
+    "Authorization":authorization
+  };
   req.method = "POST";
   const result = await req.loadJSON();
   if (result["success"]) {
@@ -69,11 +73,14 @@ async function refreshCarData(project_id) {
 }
 
 // 获取车辆状态数据
-async function getCarStatus(token, car_id) {
+async function getCarStatus(token, car_id, authorization) {
   console.log("开始获取车辆状态数据");
   const req2 = new Request(
     `https://m.iov.changan.com.cn/app2/api/car/data?keys=*&carId=${car_id}&token=${token}`
   );
+  req2.headers = {
+    "Authorization":authorization
+  };
   req2.method = "POST";
   const car_status = await req2.loadJSON();
   if (car_status["success"]) {
@@ -84,11 +91,14 @@ async function getCarStatus(token, car_id) {
 }
 
 // 获取车辆基本信息
-async function getCarInfo(token, car_id) {
+async function getCarInfo(token, car_id, authorization) {
   console.log("开始获取车辆基本信息数据");
   const req = new Request(
     `https://m.iov.changan.com.cn/app2/api/v2/car/detail?carId=${car_id}&token=${token}`
   );
+  req.headers = {
+    "Authorization":authorization
+  };
   req.method = "GET";
   const car_info = await req.loadJSON();
   if (car_info["success"]) {
@@ -99,11 +109,14 @@ async function getCarInfo(token, car_id) {
 }
 
 // 获取车辆位置信息
-async function getCarLocation(token, car_id) {
+async function getCarLocation(token, car_id,authorization) {
   console.log("开始获取车辆位置信息");
   const req = new Request(
     `https://m.iov.changan.com.cn/appserver/api/cardata/getCarLocation?carId=${car_id}&mapType=GCJ02&token=${token}`
   );
+  req.headers = {
+    "Authorization":authorization
+  };
   req.method = "POST";
   const car_location = await req.loadJSON();
   if (car_location["success"]) {
@@ -114,11 +127,14 @@ async function getCarLocation(token, car_id) {
 }
 
 // 获取流量信息
-async function getBalanceInfo(token, car_id) {
+async function getBalanceInfo(token, car_id, authorization) {
   console.log("开始获取流量信息")
   const req = new Request(
     `https://m.iov.changan.com.cn/appserver/api/huservice/balanceInfo?carId=${car_id}&token=${token}`
   )
+  req.headers = {
+    "Authorization":authorization
+  };
   req.method = "GET"
   const car_balance_info = await req.loadJSON()
   if (car_balance_info["success"]){
