@@ -1,6 +1,3 @@
-// Variables used by Scriptable.
-// These must be at the very top of the file. Do not edit.
-// icon-color: blue; icon-glyph: car;
 /**
  * iOS widget --- 长安深蓝SL03桌面组件 & 锁屏组件
  * 项目地址: https://github.com/zkytech/iOS14-widgets-for-scriptable
@@ -20,21 +17,61 @@ try {
   const branch = "master";
   const project_name = "深蓝小组件_by_zkytech";
   // const force_download = branch != "master";
-  force_download = true
+  force_download = false;
   const url_scheme = "qiyuancar://";
-
-
+  const screenSize = Device.screenResolution();
+  const scale = Device.screenScale();
+  const DEVICE_SIZE = {
+    '428x926': {
+        small: {width: 176, height: 176},
+        medium: {width: 374, height: 176},
+        large: {width: 374, height: 391}
+    },
+    '390x844': {
+        small: {width: 161, height: 161},
+        medium: {width: 342, height: 161},
+        large: {width: 342, height: 359}
+    },
+    '414x896': {
+        small: {width: 169, height: 169},
+        medium: {width: 360, height: 169},
+        large: {width: 360, height: 376}
+    },
+    '375x812': {
+        small: {width: 155, height: 155},
+        medium: {width: 329, height: 155},
+        large: {width: 329, height: 345}
+    },
+    '414x736': {
+        small: {width: 159, height: 159},
+        medium: {width: 348, height: 159},
+        large: {width: 348, height: 357}
+    },
+    '375x667': {
+        small: {width: 148, height: 148},
+        medium: {width: 322, height: 148},
+        large: {width: 322, height: 324}
+    },
+    '320x568': {
+        small: {width: 141, height: 141},
+        medium: {width: 291, height: 141},
+        large: {width: 291, height: 299}
+    }
+  }
+  const device_size = DEVICE_SIZE[`${screenSize.width / scale}x${screenSize.height / scale}`] || DEVICE_SIZE['375x812'];;
   class WidgetTheme {
     constructor(
       name,
       backgroundGradient,
       primaryTextColor,
-      secondaryTextColor
+      secondaryTextColor,
+      focousBackgroundColor,
     ) {
       this.name = name;
       this.backgroundGradient = backgroundGradient;
       this.primaryTextColor = primaryTextColor;
       this.secondaryTextColor = secondaryTextColor;
+      this.focousBackgroundColor = focousBackgroundColor
     }
   }
 
@@ -50,50 +87,57 @@ try {
       "跟随系统",
       getGradient([Color.dynamic(Color.white(), Color.black())], [1]),
       Color.dynamic(Color.black(), Color.white()),
-      Color.dynamic(new Color("#4b4b4b"), new Color("#bfbfbf"))
+      Color.dynamic(new Color("#4b4b4b"), new Color("#bfbfbf")),
+      Color.dynamic(new Color('#f5f5f8', 0.45), new Color('#fff', 0.2))
     ),
     new WidgetTheme(
       "白色主题",
       getGradient([Color.white()], [1]),
       Color.black(),
-      new Color("#4b4b4b")
+      new Color("#4b4b4b"),
+      new Color('#f5f5f8', 0.45)
     ),
     new WidgetTheme(
       "黑色主题",
       getGradient([Color.black()], [1]),
       Color.white(),
-      new Color("#bfbfbf")
+      new Color("#bfbfbf"),
+      new Color('#fff', 0.2)
     ),
     new WidgetTheme(
       "跟随系统(渐变)",
       getGradient(
         [
-          Color.dynamic(Color.white(), Color.black()),
-          Color.dynamic(new Color("#ced6e0"), new Color("#2f3542")),
+          Color.dynamic(new Color("#c7c7c7"), new Color("#2d2f40")),
+          Color.dynamic(new Color("#fff"), new Color("#666878")),
         ],
         [0, 1]
       ),
       Color.dynamic(Color.black(), Color.white()),
-      Color.dynamic(new Color("#4b4b4b"), new Color("#bfbfbf"))
+      Color.dynamic(new Color("#4b4b4b"), new Color("#bfbfbf")),
+      Color.dynamic(new Color('#f5f5f8', 0.45), new Color('#fff', 0.2))
     ),
     new WidgetTheme(
       "白色主题(渐变)",
-      getGradient([Color.white(), new Color("#ced6e0")], [0, 1]),
+      getGradient([new Color("#c7c7c7"), new Color("#fff")], [0, 1]),
       Color.black(),
-      new Color("#4b4b4b")
+      new Color("#4b4b4b"),
+      new Color('#f5f5f8', 0.45)
     ),
     new WidgetTheme(
       "黑色主题(渐变)",
-      getGradient([Color.black(), new Color("#2f3542")], [0, 1]),
+      getGradient([new Color("#2d2f40"), new Color("#666878")], [0, 1]),
       Color.white(),
-      new Color("#bfbfbf")
+      new Color("#bfbfbf"),
+      new Color('#fff', 0.2)
     ),
     new WidgetTheme(
-      "EVA初号机主题",
-      getGradient([new Color("#6c5ce7")], [1]),
-      new Color("#00b894"),
-      new Color("#00b894")
-    ),
+      "蓝色主题(渐变)",
+      getGradient([new Color("#6887d1"), new Color("#fff")], [0, 1]),
+      Color.black(),
+      new Color("#4b4b4b"),
+      new Color('#f5f5f8', 0.45)
+    )
   ];
 
   const {
@@ -140,6 +184,9 @@ try {
         case "medium":
           await renderMediumWidget();
           break;
+        case "small":
+          await renderSmallWidget();
+          break;
         case "accessoryCircular":
           await renderAccessoryCircularWidget();
           break;
@@ -175,17 +222,16 @@ try {
     let token;
     let authorization = getAuthorization();
 
-
     const token_result = await getToken(authorization);
     if (token_result == null) {
-      token = null
+      token = null;
     } else {
       token = token_result.access_token;
     }
 
-    const car_id = await getCarId(token,authorization);
-    const car_status = await getCarStatus(token, car_id,authorization);
-    const charge_status = await getChargeStatus(token, car_id,authorization);
+    const car_id = await getCarId(token, authorization);
+    const car_status = await getCarStatus(token, car_id, authorization);
+    const charge_status = await getChargeStatus(token, car_id, authorization);
     // 可以确定 状态码3 = “未充电”
     // 状态码1 = “充电中”
     // 状态码2 目前未知
@@ -241,27 +287,18 @@ try {
     Script.complete();
   }
 
-  /**
-   * 中等桌面组件
-   * 接受参数 - authorization
-   */
-  async function renderMediumWidget() {
-    const params = args.widgetParameter
-      ? args.widgetParameter.split(",")
-      : [""];
-    const theme = getTheme();
-    param_authorization = params.length > 0 ? params[0].trim() : "";
-    if (param_authorization && !getAuthorization()) {
-      saveSetting("authorization", param_authorization);
-    }
+  async function renderSmallWidget() {
+    const height = device_size.small.height
+    const width = device_size.small.width
     const LW = new ListWidget(); // widget对象
+    const theme = getTheme()
     LW.url = url_scheme;
     LW.backgroundGradient = theme.backgroundGradient;
     let token;
     let authorization = getAuthorization();
     const token_result = await getToken(authorization);
     if (token_result == null) {
-      token = null
+      token = null;
     } else {
       token = token_result.access_token;
     }
@@ -275,13 +312,15 @@ try {
     const balance_info = await getBalanceInfo(token, car_id, authorization);
     if (car_status != null && car_info != null && car_location != null) {
       // 数据更新时间
-      const update_time = car_status.terminalTime;
+      const update_time = car_status.terminalTime.slice(11,16);
+      
+
       // 总里程
       const total_odometer = Math.round(car_status.totalOdometer);
       // 车内温度
       const vehicle_temperature = Math.round(car_status.vehicleTemperature);
       // 剩余里程
-      let remained_power_mile = Math.round(car_status.remainedPowerMile);
+      let remain_power_mile = Math.round(car_status.remainedPowerMile);
       // 剩余电量
       let remain_power = Math.round(car_status.remainPower);
       // 车辆名称
@@ -318,11 +357,11 @@ try {
         remain_power = getSetting("remain_power");
         remain_power = remain_power ? remain_power : 0;
       }
-      if (remained_power_mile && remained_power_mile > 0) {
-        saveSetting("remained_power_mile", remained_power_mile);
+      if (remain_power_mile && remain_power_mile > 0) {
+        saveSetting("remain_power_mile", remain_power_mile);
       } else {
-        remained_power_mile = getSetting("remained_power_mile");
-        remained_power_mile = remained_power_mile ? remained_power_mile : 0;
+        remain_power_mile = getSetting("remain_power_mile");
+        remain_power_mile = remain_power_mile ? remain_power_mile : 0;
       }
       if (remained_oil_mile && remained_oil_mile > 0) {
         saveSetting("remained_oil_mile", remained_oil_mile);
@@ -333,23 +372,244 @@ try {
       // 剩余油量
       const remain_oil = (remained_oil_mile / 846) * 100;
       // 综合续航(增程)
-      const total_mixed_mile = remained_power_mile + remained_oil_mile;
+      const total_mixed_mile = remain_power_mile + remained_oil_mile;
       // 剩余流量
       let remained_packet_size = Math.round(balance_info[0].left);
       // 剩余流量单位
       let remained_packet_size_unit = balance_info[0].totalUnit;
-      if(remained_packet_size){
-        saveSetting("remained_packet_size",remained_packet_size)
-        saveSetting("remained_packet_size_unit",remained_packet_size_unit)
-      }else{
+      if (remained_packet_size) {
+        saveSetting("remained_packet_size", remained_packet_size);
+        saveSetting("remained_packet_size_unit", remained_packet_size_unit);
+      } else {
+        remained_packet_size = getSetting("remained_packet_size");
+        remained_packet_size_unit = getSetting("remained_packet_size_unit");
+      }
+      LW.setPadding(0,0,0,0)
+
+      const top_box = LW.addStack();
+      top_box.layoutHorizontally();
+      top_box.setPadding(0, 0, 0, 0);
+      const padding_left = Math.round(width * 0.07);
+
+      // ---顶部左边部件---
+      const top_left_container = top_box.addStack();
+
+      const car_name_container = top_left_container.addStack();
+      car_name_container.setPadding(padding_left, padding_left, 0, 0);
+      const car_name_text = car_name_container.addText(car_name);
+      car_name_text_size = Math.round(width * 0.12);
+      car_name_text.textColor = theme.primaryTextColor;
+      if (car_name.length >= 10) {
+        car_name_text_size = car_name_text_size - Math.round(car_name.length / 4);
+      }
+      car_name_text.font = Font.boldSystemFont(car_name_text_size);
+      top_box.addSpacer();
+      const top_right_box = top_box.addStack()
+      top_right_box.setPadding(padding_left,0,0,padding_left)
+      const logo_image = await loadImage("LOGO")
+      const logo_image_container = top_right_box.addImage(logo_image)
+      logo_container_width = Math.round(width * 0.1);
+      const logo_image_size = getImageSize(
+        logo_image.size.width,
+        logo_image.size.height,
+        Math.round(logo_container_width * 2.5),
+        logo_container_width,
+        0.99
+      );
+      logo_image_container.imageSize = new Size(logo_image_size.width,logo_image_size.height)
+      // ---中间部件---
+      const car_info_container = LW.addStack();
+      car_info_container.layoutVertically();
+      car_info_container.setPadding(8, padding_left, 0, 0);
+
+      const km_container = car_info_container.addStack();
+      km_container.layoutHorizontally();
+      km_container.bottomAlignContent();
+
+      const km_text = km_container.addText(`${remain_power_mile + ' ' + "km"}`);
+      km_text.font = Font.systemFont(17);
+      km_text.textColor = theme.secondaryTextColor;
+
+      const level_container = km_container.addStack();
+      const separator = level_container.addText(' / ');
+      separator.font = Font.systemFont(12);
+      separator.textColor = theme.secondaryTextColor;
+      separator.textOpacity = 0.6;
+
+      const level_text = level_container.addText(`${remain_power}${"%"}`);
+      level_text.font = Font.systemFont(14);
+      level_text.textColor = theme.secondaryTextColor;
+      level_text.textOpacity = 0.6;
+      
+      const car_status_container = car_info_container.addStack();
+      car_status_container.setPadding(2, 0, 0, 0);
+
+      const car_status_box = car_status_container.addStack();
+      car_status_box.setPadding(3, 3, 3, 3);
+      car_status_box.layoutHorizontally();
+      car_status_box.centerAlignContent();
+      car_status_box.cornerRadius = 4;
+      car_status_box.backgroundColor = Color.dynamic(new Color('#f5f5f8', 0.45), new Color('#fff', 0.2));
+
+      const car_status_txt = car_status_box.addText(`${lock_status ? "已上锁":"已解锁"}`);
+
+      let display_font = Font.systemFont(10);
+      let display_font_color = theme.primaryTextColor;
+      if (!lock_status) {
+          display_font_color = Color.red();
+          display_font = Font.systemFontBold(10);
+      }
+    
+      car_status_txt.font = display_font
+      car_status_txt.textColor = display_font_color;
+      car_status_txt.textOpacity = 0.7;
+      car_status_box.addSpacer(5);
+
+      const update_txt = car_status_box.addText(update_time);
+      update_txt.font = Font.systemFont(10);
+      update_txt.textColor = theme.secondaryTextColor;
+      update_txt.textOpacity = 0.5;
+        // ---中间部件完---
+
+        LW.addSpacer();
+
+        // ---底部部件---
+
+        const car_image_container = LW.addStack();
+        let canvas_width = Math.round(width * 0.85);
+        let canvas_height = Math.round(width * 0.4);
+
+        car_image_container.setPadding(0, padding_left, 6, 0);
+        // if (!this.userConfigData.show_control_checks) {
+            car_image_container.layoutHorizontally();
+            car_image_container.addSpacer();
+            car_image_container.setPadding(6, padding_left, 6, padding_left);
+        // }
+        let image = await loadImage("车")
+        // let image = await this.getCarCanvasImage(data, canvasWidth, canvasHeight, 0.95);
+
+        let car_image = car_image_container.addImage(image);
+        const car_image_size = getImageSize(
+          image.size.width,
+          image.size.height,
+          canvas_width,
+          canvas_height,
+          0.95
+        );
+        car_image.size = new Size(car_image_size.width, car_image_size.height)
+        car_image.resizable = true
+        // ---底部部件完---
+        console.log("渲染结束");
+        await LW.presentSmall();
+        Script.setWidget(LW);
+        Script.complete();
+
+    }
+  }
+
+  /**
+   * 中等桌面组件
+   * 接受参数 - authorization
+   */
+  async function renderMediumWidget() {
+    const height = device_size.small.height
+    const width = device_size.small.width
+    const LW = new ListWidget(); // widget对象
+    LW.url = url_scheme;
+    const theme = getTheme()
+    LW.backgroundGradient = theme.backgroundGradient;
+    let token;
+    let authorization = getAuthorization();
+    const token_result = await getToken(authorization);
+    if (token_result == null) {
+      token = null;
+    } else {
+      token = token_result.access_token;
+    }
+
+    const car_id = await getCarId(token, authorization);
+    // await refreshCarData()
+    const car_status = await getCarStatus(token, car_id, authorization);
+    const car_info = await getCarInfo(token, car_id, authorization);
+    const car_location = await getCarLocation(token, car_id, authorization);
+    const charge_status = await getChargeStatus(token, car_id, authorization);
+    const balance_info = await getBalanceInfo(token, car_id, authorization);
+    if (car_status != null && car_info != null && car_location != null) {
+      // 数据更新时间
+      const update_time = car_status.terminalTime;
+      // 总里程
+      const total_odometer = Math.round(car_status.totalOdometer);
+      // 车内温度
+      const vehicle_temperature = Math.round(car_status.vehicleTemperature);
+      // 剩余里程
+      let remain_power_mile = Math.round(car_status.remainedPowerMile);
+      // 剩余电量
+      let remain_power = Math.round(car_status.remainPower);
+      // 车辆名称
+      const car_name = car_info.carName;
+      // 车辆配置名称，比如：515km
+      const conf_name = car_info.confName
+        ? car_info.confName.split("，")[2]
+        : "";
+      // 车牌号
+      const plate_number = car_info.plateNumber;
+      // 型号
+      const series_name = car_info.seriesName;
+      // 车辆位置
+      const location_str = car_location.addrDesc;
+      // 车门状态
+      const lock_status =
+        car_status.driverDoorLock == 0 && car_status.passengerDoorLock == 0;
+      // 是否为增程车型
+      const is_mix = car_status.remainedOilMile != undefined;
+      // 是否在充电
+      const is_charging = charge_status.chrgStatus == "1";
+      // 经度
+      const lng = car_location.lng;
+      // 纬度
+      const lat = car_location.lat;
+      // 增程油箱续航里程
+      let remained_oil_mile = is_mix
+        ? Math.round(car_status.remainedOilMile)
+        : 0;
+      // 增程车型存在API数据错乱的问题，这里为了受到API错误数据的影响自动取上一次获取到的合理数据
+      if (remain_power && remain_power > 0) {
+        saveSetting("remain_power", remain_power);
+      } else {
+        remain_power = getSetting("remain_power");
+        remain_power = remain_power ? remain_power : 0;
+      }
+      if (remain_power_mile && remain_power_mile > 0) {
+        saveSetting("remain_power_mile", remain_power_mile);
+      } else {
+        remain_power_mile = getSetting("remain_power_mile");
+        remain_power_mile = remain_power_mile ? remain_power_mile : 0;
+      }
+      if (remained_oil_mile && remained_oil_mile > 0) {
+        saveSetting("remained_oil_mile", remained_oil_mile);
+      } else {
+        remained_oil_mile = getSetting("remained_oil_mile");
+        remained_oil_mile = remained_oil_mile ? remained_oil_mile : 0;
+      }
+      // 剩余油量
+      const remain_oil = (remained_oil_mile / 846) * 100;
+      // 综合续航(增程)
+      const total_mixed_mile = remain_power_mile + remained_oil_mile;
+      // 剩余流量
+      let remained_packet_size = Math.round(balance_info[0].left);
+      // 剩余流量单位
+      let remained_packet_size_unit = balance_info[0].totalUnit;
+      if (remained_packet_size) {
+        saveSetting("remained_packet_size", remained_packet_size);
+        saveSetting("remained_packet_size_unit", remained_packet_size_unit);
+      } else {
         remained_packet_size = getSetting("remained_packet_size");
         remained_packet_size_unit = getSetting("remained_packet_size_unit");
       }
 
-
       const widget_data_map = {
         电池续航: {
-          value: remained_power_mile,
+          value: remain_power_mile,
           unit: "km",
         },
         油箱续航: {
@@ -358,11 +618,11 @@ try {
         },
         剩余电量: {
           value: remain_power,
-          unit: "%"
+          unit: "%",
         },
         剩余油量: {
           value: remain_oil,
-          unit: "%"
+          unit: "%",
         },
         总里程: {
           value: total_odometer,
@@ -387,7 +647,7 @@ try {
         },
       };
 
-      //const power_img = LW.addImage(drawPowerImage(remain_power,remained_power_mile))
+      //const power_img = LW.addImage(drawPowerImage(remain_power,remain_power_mile))
       //power_img.cornerRadius=5
       //power_img.imageSize=new Size(300,18)
       /**
@@ -430,9 +690,6 @@ try {
       const car_name_text = car_name_container.addText(car_name);
       car_name_text.font = Font.boldSystemFont(15);
       car_name_text.textColor = theme.primaryTextColor;
-      car_name_text.shadowColor = theme.secondaryTextColor;
-      car_name_text.shadowRadius = 1;
-      car_name_text.shadowOffset = new Point(1, 1);
 
       //car_name_text.minimumScaleFactor = 1
       const lock_icon = car_name_container.addImage(
@@ -527,11 +784,13 @@ try {
         }
         header_stack.font = Font.thinMonospacedSystemFont(12);
         header_stack.textColor = theme.secondaryTextColor;
-        content_stack.font = Font.boldSystemFont(18);
+        content_stack.font = Font.systemFont(18);
         content_stack.textColor = theme.primaryTextColor;
         content_stack.minimumScaleFactor = 0.3;
+        content_stack.textOpacity = 0.7
         unit_stack.font = Font.mediumMonospacedSystemFont(14);
         unit_stack.textColor = theme.secondaryTextColor;
+        unit_stack.textOpacity = 0.5
       });
 
       const background_image = await loadImage("背景图");
@@ -539,9 +798,7 @@ try {
     }
     if (token == "" || token == null || token == undefined) {
       console.error("请参照文档配置authorization");
-      const t = LW.addText(
-        "请参照文档配置authorization"
-      );
+      const t = LW.addText("请参照文档配置authorization");
       t.font = Font.boldSystemFont(18);
       t.textColor = Color.red();
     }
@@ -587,7 +844,7 @@ try {
     const img_map = {
       车: "https://i.328888.xyz/2023/03/20/PMpHE.png",
       LOGO: "https://deepal.com.cn/202303112321/share_logo.png",
-      锁屏车: "https://i.328888.xyz/2023/03/27/inBH5a.png"
+      锁屏车: "https://i.328888.xyz/2023/03/27/inBH5a.png",
     };
     const user_defined_settings_name_map = {
       车: "car_img_path",
@@ -669,7 +926,7 @@ try {
       // download once
       const req = new Request(url);
       let indexjs = await req.load();
-      if(req.response.statusCode == 200){
+      if (req.response.statusCode == 200) {
         // 只有响应正常时才写入文件，避免写入错误的内容
         fm.write(lib_file, indexjs);
       }
@@ -734,8 +991,12 @@ try {
         action: async () => await renderAccessoryCircularWidget(),
       },
       {
-        title: "📱桌面组件",
+        title: "📱桌面组件(中)",
         action: async () => await renderMediumWidget(),
+      },
+      {
+        title: "📱桌面组件(小)",
+        action: async () => await renderSmallWidget(),
       },
     ];
     preview_actions.map((action) => {
@@ -816,7 +1077,9 @@ try {
     const alert = new Alert();
     alert.title = "请选择第" + (i + 1) + "个数据块的数据";
     data_name_list.map((data_name) => {
-      alert.addAction(data_name == curr_selection ? data_name + "(当前)" : data_name);
+      alert.addAction(
+        data_name == curr_selection ? data_name + "(当前)" : data_name
+      );
     });
     alert.addCancelAction("取消");
     const selection = await alert.presentAlert();
@@ -828,7 +1091,7 @@ try {
   async function listDataBlocks() {
     const alert = new Alert();
     alert.title = "请选择数据块";
-    alert.message = "分别代表小组件右侧的四个数据块"
+    alert.message = "分别代表小组件右侧的四个数据块";
     const data_block_list = [1, 2, 3, 4];
     data_block_list.map((data_block) => {
       alert.addAction("第" + data_block + "个数据块");
@@ -997,6 +1260,26 @@ try {
     saveSetting("theme_name", "跟随系统(渐变)");
     saveSetting("widget_data_block_info", null);
   }
+
+
+  function getImageSize(image_width, image_height, canvas_width, canvas_height, resize_rate = 0.85){
+    let a = image_width;
+    let b = image_height;
+
+    if (a > canvas_width || b > canvas_height) {
+        if (resize_rate >= 1) {
+            resize_rate = 0.99;
+        }
+        a *= resize_rate;
+        b *= resize_rate;
+        return getImageSize(a, b, canvas_width, canvas_height);
+    }
+
+    return {width: a, height: b}; 
+  }
+
+
+  
 } catch (e) {
   console.error(e);
   console.error(e.stack);
