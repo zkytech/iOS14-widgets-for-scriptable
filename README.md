@@ -275,3 +275,4 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 
 
 
+> 本项目部分样式基于[bmw-scriptable-widgets](https://github.com/opp100/bmw-scriptable-widgets)开发，感谢作者的开源精神。
