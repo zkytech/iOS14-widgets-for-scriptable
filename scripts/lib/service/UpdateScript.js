@@ -16,8 +16,8 @@ async function update(file_url) {
       const req = new Request(file_url);
       let scriptTxt = await req.loadString();
       const filename = `/${Script.name()}.js`;
-      if (req.response.statusCode == 200) {
-          fm.writeString(folder + filename, scriptTxt);
+      if (req.response.statusCode == 200 && scriptTxt.trim() != "" ) {
+        fm.writeString(folder + filename, scriptTxt);
       }
     }catch(e){
       console.log(`文件更新出错:${file_url}`);
