@@ -22,56 +22,58 @@ try {
   const screenSize = Device.screenResolution();
   const scale = Device.screenScale();
   const DEVICE_SIZE = {
-    '428x926': {
-        small: {width: 176, height: 176},
-        medium: {width: 374, height: 176},
-        large: {width: 374, height: 391}
+    "428x926": {
+      small: { width: 176, height: 176 },
+      medium: { width: 374, height: 176 },
+      large: { width: 374, height: 391 },
     },
-    '390x844': {
-        small: {width: 161, height: 161},
-        medium: {width: 342, height: 161},
-        large: {width: 342, height: 359}
+    "390x844": {
+      small: { width: 161, height: 161 },
+      medium: { width: 342, height: 161 },
+      large: { width: 342, height: 359 },
     },
-    '414x896': {
-        small: {width: 169, height: 169},
-        medium: {width: 360, height: 169},
-        large: {width: 360, height: 376}
+    "414x896": {
+      small: { width: 169, height: 169 },
+      medium: { width: 360, height: 169 },
+      large: { width: 360, height: 376 },
     },
-    '375x812': {
-        small: {width: 155, height: 155},
-        medium: {width: 329, height: 155},
-        large: {width: 329, height: 345}
+    "375x812": {
+      small: { width: 155, height: 155 },
+      medium: { width: 329, height: 155 },
+      large: { width: 329, height: 345 },
     },
-    '414x736': {
-        small: {width: 159, height: 159},
-        medium: {width: 348, height: 159},
-        large: {width: 348, height: 357}
+    "414x736": {
+      small: { width: 159, height: 159 },
+      medium: { width: 348, height: 159 },
+      large: { width: 348, height: 357 },
     },
-    '375x667': {
-        small: {width: 148, height: 148},
-        medium: {width: 322, height: 148},
-        large: {width: 322, height: 324}
+    "375x667": {
+      small: { width: 148, height: 148 },
+      medium: { width: 322, height: 148 },
+      large: { width: 322, height: 324 },
     },
-    '320x568': {
-        small: {width: 141, height: 141},
-        medium: {width: 291, height: 141},
-        large: {width: 291, height: 299}
-    }
-  }
-  const device_size = DEVICE_SIZE[`${screenSize.width / scale}x${screenSize.height / scale}`] || DEVICE_SIZE['375x812'];;
+    "320x568": {
+      small: { width: 141, height: 141 },
+      medium: { width: 291, height: 141 },
+      large: { width: 291, height: 299 },
+    },
+  };
+  const device_size =
+    DEVICE_SIZE[`${screenSize.width / scale}x${screenSize.height / scale}`] ||
+    DEVICE_SIZE["375x812"];
   class WidgetTheme {
     constructor(
       name,
       backgroundGradient,
       primaryTextColor,
       secondaryTextColor,
-      focousBackgroundColor,
+      focousBackgroundColor
     ) {
       this.name = name;
       this.backgroundGradient = backgroundGradient;
       this.primaryTextColor = primaryTextColor;
       this.secondaryTextColor = secondaryTextColor;
-      this.focousBackgroundColor = focousBackgroundColor
+      this.focousBackgroundColor = focousBackgroundColor;
     }
   }
 
@@ -84,59 +86,57 @@ try {
 
   const themes = [
     new WidgetTheme(
-      "跟随系统",
-      getGradient([Color.dynamic(Color.white(), Color.black())], [1]),
-      Color.dynamic(Color.black(), Color.white()),
-      Color.dynamic(new Color("#4b4b4b"), new Color("#bfbfbf")),
+      "白色",
+      getGradient([
+        Color.dynamic(new Color("#c7c7c7"), new Color("#232323")),
+        Color.dynamic(new Color("#fff"),new Color("#5b5d61"))    
+    ], [0, 1]),
+      Color.dynamic(new Color("#1d1d1d"),new Color("#fff")),
+      Color.dynamic(new Color("#1d1d1d",0.8),new Color("#fff",0.8)),
       Color.dynamic(new Color('#f5f5f8', 0.45), new Color('#fff', 0.2))
     ),
     new WidgetTheme(
-      "白色主题",
-      getGradient([Color.white()], [1]),
-      Color.black(),
-      new Color("#4b4b4b"),
-      new Color('#f5f5f8', 0.45)
-    ),
-    new WidgetTheme(
-      "黑色主题",
-      getGradient([Color.black()], [1]),
-      Color.white(),
-      new Color("#bfbfbf"),
-      new Color('#fff', 0.2)
-    ),
-    new WidgetTheme(
-      "跟随系统(渐变)",
-      getGradient(
-        [
-          Color.dynamic(new Color("#c7c7c7"), new Color("#2d2f40")),
-          Color.dynamic(new Color("#fff"), new Color("#666878")),
-        ],
-        [0, 1]
-      ),
-      Color.dynamic(Color.black(), Color.white()),
-      Color.dynamic(new Color("#4b4b4b"), new Color("#bfbfbf")),
+      "黑色",
+      getGradient([
+        Color.dynamic(new Color("#5e627d"), new Color("#2d2f40")),
+        Color.dynamic(new Color("#fff"),new Color("#666878"))     
+    ], [0, 1]),
+      Color.dynamic(new Color("#1d1d1d"),new Color("#fff")),
+      Color.dynamic(new Color("#1d1d1d",0.8),new Color("#fff",0.8)),
       Color.dynamic(new Color('#f5f5f8', 0.45), new Color('#fff', 0.2))
+
     ),
     new WidgetTheme(
-      "白色主题(渐变)",
-      getGradient([new Color("#c7c7c7"), new Color("#fff")], [0, 1]),
-      Color.black(),
-      new Color("#4b4b4b"),
-      new Color('#f5f5f8', 0.45)
+      "蓝色",
+      getGradient([
+        Color.dynamic(new Color("#6887d1"), new Color("#23345e")),
+        Color.dynamic(new Color("#fff"),new Color("#526387"))  
+      ], [0, 1]),
+      Color.dynamic(new Color("#1d1d1d"),new Color("#fff")),
+      Color.dynamic(new Color("#1d1d1d",0.8),new Color("#fff",0.8)),
+      Color.dynamic(new Color('#f5f5f8', 0.45), new Color('#fff', 0.2))
+
     ),
     new WidgetTheme(
-      "黑色主题(渐变)",
-      getGradient([new Color("#2d2f40"), new Color("#666878")], [0, 1]),
-      Color.white(),
-      new Color("#bfbfbf"),
-      new Color('#fff', 0.2)
+      "红色",
+      getGradient([
+        Color.dynamic(new Color("#b16968"), new Color("#a84242")),
+        Color.dynamic(new Color("#fff"),new Color("#540101"))  
+      ], [0, 1]),
+      Color.dynamic(new Color("#1d1d1d"),new Color("#fff")),
+      Color.dynamic(new Color("#1d1d1d",0.8),new Color("#fff",0.8)),
+      Color.dynamic(new Color('#f5f5f8', 0.45), new Color('#fff', 0.2))
+
     ),
     new WidgetTheme(
-      "蓝色主题(渐变)",
-      getGradient([new Color("#6887d1"), new Color("#fff")], [0, 1]),
-      Color.black(),
-      new Color("#4b4b4b"),
-      new Color('#f5f5f8', 0.45)
+      "橙色",
+      getGradient([
+        Color.dynamic(new Color("#ffc699"), new Color("#bd5608")),
+        Color.dynamic(new Color("#fff"),new Color("#732600"))  
+      ], [0, 1]),
+      Color.dynamic(new Color("#1d1d1d"),new Color("#fff")),
+      Color.dynamic(new Color("#1d1d1d",0.8),new Color("#fff",0.8)),
+      Color.dynamic(new Color('#f5f5f8', 0.45), new Color('#fff', 0.2))
     )
   ];
 
@@ -288,10 +288,10 @@ try {
   }
 
   async function renderSmallWidget() {
-    const height = device_size.small.height
-    const width = device_size.small.width
+    const height = device_size.small.height;
+    const width = device_size.small.width;
     const LW = new ListWidget(); // widget对象
-    const theme = getTheme()
+    const theme = getTheme();
     LW.url = url_scheme;
     LW.backgroundGradient = theme.backgroundGradient;
     let token;
@@ -307,13 +307,9 @@ try {
     // await refreshCarData()
     const car_status = await getCarStatus(token, car_id, authorization);
     const car_info = await getCarInfo(token, car_id, authorization);
-    const car_location = await getCarLocation(token, car_id, authorization);
-    const charge_status = await getChargeStatus(token, car_id, authorization);
-    const balance_info = await getBalanceInfo(token, car_id, authorization);
-    if (car_status != null && car_info != null && car_location != null) {
+    if (car_status != null && car_info != null ) {
       // 数据更新时间
-      const update_time = car_status.terminalTime.slice(11,16);
-      
+      const update_time = car_status.terminalTime;
 
       // 总里程
       const total_odometer = Math.round(car_status.totalOdometer);
@@ -324,28 +320,17 @@ try {
       // 剩余电量
       let remain_power = Math.round(car_status.remainPower);
       // 车辆名称
-      const car_name = car_info.carName;
+      const car_name = getCarName(car_info.carName);
       // 车辆配置名称，比如：515km
       const conf_name = car_info.confName
         ? car_info.confName.split("，")[2]
         : "";
-      // 车牌号
-      const plate_number = car_info.plateNumber;
-      // 型号
-      const series_name = car_info.seriesName;
-      // 车辆位置
-      const location_str = car_location.addrDesc;
       // 车门状态
-      const lock_status =
+      const door_locked =
         car_status.driverDoorLock == 0 && car_status.passengerDoorLock == 0;
       // 是否为增程车型
       const is_mix = car_status.remainedOilMile != undefined;
-      // 是否在充电
-      const is_charging = charge_status.chrgStatus == "1";
-      // 经度
-      const lng = car_location.lng;
-      // 纬度
-      const lat = car_location.lat;
+
       // 增程油箱续航里程
       let remained_oil_mile = is_mix
         ? Math.round(car_status.remainedOilMile)
@@ -373,18 +358,8 @@ try {
       const remain_oil = (remained_oil_mile / 846) * 100;
       // 综合续航(增程)
       const total_mixed_mile = remain_power_mile + remained_oil_mile;
-      // 剩余流量
-      let remained_packet_size = Math.round(balance_info[0].left);
-      // 剩余流量单位
-      let remained_packet_size_unit = balance_info[0].totalUnit;
-      if (remained_packet_size) {
-        saveSetting("remained_packet_size", remained_packet_size);
-        saveSetting("remained_packet_size_unit", remained_packet_size_unit);
-      } else {
-        remained_packet_size = getSetting("remained_packet_size");
-        remained_packet_size_unit = getSetting("remained_packet_size_unit");
-      }
-      LW.setPadding(0,0,0,0)
+
+      LW.setPadding(0, 0, 0, 0);
 
       const top_box = LW.addStack();
       top_box.layoutHorizontally();
@@ -400,14 +375,15 @@ try {
       car_name_text_size = Math.round(width * 0.12);
       car_name_text.textColor = theme.primaryTextColor;
       if (car_name.length >= 10) {
-        car_name_text_size = car_name_text_size - Math.round(car_name.length / 4);
+        car_name_text_size =
+          car_name_text_size - Math.round(car_name.length / 4);
       }
       car_name_text.font = Font.boldSystemFont(car_name_text_size);
       top_box.addSpacer();
-      const top_right_box = top_box.addStack()
-      top_right_box.setPadding(padding_left,0,0,padding_left)
-      const logo_image = await loadImage("LOGO")
-      const logo_image_container = top_right_box.addImage(logo_image)
+      const top_right_box = top_box.addStack();
+      top_right_box.setPadding(padding_left, 0, 0, padding_left);
+      const logo_image = await loadImage("LOGO");
+      const logo_image_container = top_right_box.addImage(logo_image);
       logo_container_width = Math.round(width * 0.1);
       const logo_image_size = getImageSize(
         logo_image.size.width,
@@ -416,31 +392,57 @@ try {
         logo_container_width,
         0.99
       );
-      logo_image_container.imageSize = new Size(logo_image_size.width,logo_image_size.height)
+      logo_image_container.imageSize = new Size(
+        logo_image_size.width,
+        logo_image_size.height
+      );
       // ---中间部件---
       const car_info_container = LW.addStack();
       car_info_container.layoutVertically();
       car_info_container.setPadding(8, padding_left, 0, 0);
+      let fontColor = theme.primaryTextColor;
 
-      const km_container = car_info_container.addStack();
-      km_container.layoutHorizontally();
-      km_container.bottomAlignContent();
+      if(!is_mix){
+        const kmContainer = car_info_container.addStack();
+        kmContainer.bottomAlignContent();
+        const kmText = kmContainer.addText(`${remain_power_mile + " " + "km"}`);
+        kmText.font = Font.systemFont(20);
+        kmText.textColor = fontColor;
 
-      const km_text = km_container.addText(`${remain_power_mile + ' ' + "km"}`);
-      km_text.font = Font.systemFont(17);
-      km_text.textColor = theme.secondaryTextColor;
+        const levelContainer = kmContainer.addStack();
+        const separator = levelContainer.addText(" / ");
+        separator.font = Font.systemFont(16);
+        separator.textColor = fontColor;
+        separator.textOpacity = 0.6;
 
-      const level_container = km_container.addStack();
-      const separator = level_container.addText(' / ');
-      separator.font = Font.systemFont(12);
-      separator.textColor = theme.secondaryTextColor;
-      separator.textOpacity = 0.6;
+        const levelText = levelContainer.addText(`${remain_power}${"%"}`);
+        levelText.font = Font.systemFont(18);
+        levelText.textColor = fontColor;
+        levelText.textOpacity = 0.6;
+    }else{
+        const kmContainer = car_info_container.addStack();
+        kmContainer.centerAlignContent();
+        kmContainer.spacing = 12
+        const oil_container = kmContainer.addStack();
+        oil_container.spacing = 5
+        oil_container.setPadding(0, 0, 0, 0);
+        oil_container.centerAlignContent();
+        const battery_container = kmContainer.addStack();
+        battery_container.spacing = 5
+        battery_container.setPadding(0, 0, 0, 0);
+        battery_container.centerAlignContent();
+        const oil_icon_container = oil_container.addImage(SFSymbol.named("fuelpump").image)
+        const oil_text = oil_container.addText(remained_oil_mile + " " + "km");
+        const battery_icon_container = battery_container.addImage(SFSymbol.named("bolt.batteryblock").image)
+        const battery_text = battery_container.addText(remain_power_mile + " " + "km")
+        oil_text.font = Font.systemFont(14);
+        oil_text.textColor = fontColor;
+        battery_text.font =  Font.systemFont(14);
+        battery_text.textColor = fontColor
+        oil_icon_container.imageSize = new Size(13, 13)
+        battery_icon_container.imageSize = new Size(13, 13)
+    }
 
-      const level_text = level_container.addText(`${remain_power}${"%"}`);
-      level_text.font = Font.systemFont(14);
-      level_text.textColor = theme.secondaryTextColor;
-      level_text.textOpacity = 0.6;
-      
       const car_status_container = car_info_container.addStack();
       car_status_container.setPadding(2, 0, 0, 0);
 
@@ -449,74 +451,557 @@ try {
       car_status_box.layoutHorizontally();
       car_status_box.centerAlignContent();
       car_status_box.cornerRadius = 4;
-      car_status_box.backgroundColor = Color.dynamic(new Color('#f5f5f8', 0.45), new Color('#fff', 0.2));
+      car_status_box.backgroundColor = Color.dynamic(
+        new Color("#f5f5f8", 0.45),
+        new Color("#fff", 0.2)
+      );
 
-      const car_status_txt = car_status_box.addText(`${lock_status ? "已上锁":"已解锁"}`);
+      const car_status_txt = car_status_box.addText(
+        `${door_locked ? "已上锁" : "已解锁"}`
+      );
 
       let display_font = Font.systemFont(10);
       let display_font_color = theme.primaryTextColor;
-      if (!lock_status) {
-          display_font_color = Color.red();
-          display_font = Font.semiboldSystemFont(10);
+      if (!door_locked) {
+        display_font_color = Color.red();
+        display_font = Font.semiboldSystemFont(10);
       }
-    
-      car_status_txt.font = display_font
+
+      car_status_txt.font = display_font;
       car_status_txt.textColor = display_font_color;
       car_status_txt.textOpacity = 0.7;
       car_status_box.addSpacer(5);
 
-      const update_txt = car_status_box.addText(update_time);
+      const update_txt = car_status_box.addText(formatStatusLabel(update_time));
       update_txt.font = Font.systemFont(10);
       update_txt.textColor = theme.secondaryTextColor;
       update_txt.textOpacity = 0.5;
-        // ---中间部件完---
+      // ---中间部件完---
 
-        LW.addSpacer();
+      LW.addSpacer();
 
-        // ---底部部件---
+      // ---底部部件---
 
-        const car_image_container = LW.addStack();
-        let canvas_width = Math.round(width * 0.85);
-        let canvas_height = Math.round(width * 0.4);
+      const car_image_container = LW.addStack();
+      let canvas_width = Math.round(width * 0.85);
+      let canvas_height = Math.round(width * 0.4);
 
-        car_image_container.setPadding(0, padding_left, 6, 0);
-        // if (!this.userConfigData.show_control_checks) {
-            car_image_container.layoutHorizontally();
-            car_image_container.addSpacer();
-            car_image_container.setPadding(6, padding_left, 6, padding_left);
-        // }
-        let image = await loadImage("车")
-        // let image = await this.getCarCanvasImage(data, canvasWidth, canvasHeight, 0.95);
+      car_image_container.setPadding(0, padding_left, 6, 0);
+      // if (!this.userConfigData.show_control_checks) {
+      car_image_container.layoutHorizontally();
+      car_image_container.addSpacer();
+      car_image_container.setPadding(6, padding_left, 6, padding_left);
+      // }
+      let image = await loadImage("车");
+      // let image = await this.getCarCanvasImage(data, canvasWidth, canvasHeight, 0.95);
 
-        let car_image = car_image_container.addImage(image);
-        const car_image_size = getImageSize(
-          image.size.width,
-          image.size.height,
-          canvas_width,
-          canvas_height,
-          0.95
-        );
-        car_image.size = new Size(car_image_size.width, car_image_size.height)
-        car_image.resizable = true
-        // ---底部部件完---
-        console.log("渲染结束");
-        await LW.presentSmall();
-        Script.setWidget(LW);
-        Script.complete();
-
+      let car_image = car_image_container.addImage(image);
+      const car_image_size = getImageSize(
+        image.size.width,
+        image.size.height,
+        canvas_width,
+        canvas_height,
+        0.95
+      );
+      car_image.size = new Size(car_image_size.width, car_image_size.height);
+      car_image.resizable = true;
+      // ---底部部件完---
+      console.log("渲染结束");
+      await LW.presentSmall();
+      Script.setWidget(LW);
+      Script.complete();
     }
   }
+
+
+  function formatStatusLabel(last_update_time_str) {
+
+    let lastUpdated = new Date(last_update_time_str);
+    const today = new Date();
+
+    let formatter = 'MM-dd HH:mm';
+    if (lastUpdated.getDate() == today.getDate()) {
+        formatter = 'HH:mm';
+    }
+
+    let dateFormatter = new DateFormatter();
+    dateFormatter.dateFormat = formatter;
+
+    let dateStr = dateFormatter.string(lastUpdated);
+    // get today
+    return `${dateStr}更新`;
+}
+
+  async function mediumStyleSimple(LW, data) {
+    const height = device_size.medium.height;
+    const width = device_size.medium.width;
+    const theme = getTheme();
+    let {
+      update_time,
+      total_odometer,
+      vehicle_temperature,
+      remain_power_mile,
+      remain_power,
+      car_name,
+      conf_name,
+      plate_number,
+      series_name,
+      location_str,
+      door_locked,
+      is_mix,
+      is_charging,
+      lng,
+      lat,
+      remained_oil_mile,
+      remain_oil,
+      total_mixed_mile,
+      remained_packet_size,
+      remained_packet_size_unit,
+      window_closed
+    } = data;
+    let w = LW;
+    let fontColor = theme.primaryTextColor;
+    w.setPadding(0, 0, 0, 0);
+
+    let paddingTop = Math.round(height * 0.09);
+    let paddingLeft = Math.round(width * 0.055);
+
+    let renderMediumContent = true;
+
+    const topContainer = w.addStack();
+    topContainer.layoutHorizontally();
+
+    const vehicleNameContainer = topContainer.addStack();
+    vehicleNameContainer.layoutHorizontally();
+    vehicleNameContainer.setPadding(paddingTop, paddingLeft, 0, 0);
+
+    let vehicleNameStr = car_name;
+    const vehicleNameText = vehicleNameContainer.addText(vehicleNameStr);
+
+    let vehicleNameSize = 24;
+
+    if (vehicleNameStr.length >= 10) {
+      vehicleNameSize = vehicleNameSize - Math.round(vehicleNameStr.length / 4);
+    }
+
+    vehicleNameText.font = Font.boldSystemFont(vehicleNameSize);
+    vehicleNameText.textColor = fontColor;
+    vehicleNameContainer.addSpacer();
+
+    const logoImageContainer = topContainer.addStack();
+    logoImageContainer.layoutHorizontally();
+    logoImageContainer.setPadding(paddingTop, 0, 0, paddingTop);
+
+    try {
+      let logoImage = logoImageContainer.addImage(await loadImage("LOGO"));
+      logoImage.rightAlignImage();
+    } catch (e) {}
+
+    const bodyContainer = w.addStack();
+    bodyContainer.layoutHorizontally();
+    const leftContainer = bodyContainer.addStack();
+
+    leftContainer.layoutVertically();
+    leftContainer.size = new Size(
+      Math.round(width * 0.85),
+      Math.round(height * 0.75)
+    );
+    if (renderMediumContent) {
+      leftContainer.size = new Size(
+        Math.round(width * 0.5),
+        Math.round(height * 0.75)
+      );
+    }
+    leftContainer.addSpacer();
+
+
+    if(!is_mix){
+        const kmContainer = leftContainer.addStack();
+        kmContainer.setPadding(0, paddingLeft, 0, 0);
+        kmContainer.bottomAlignContent();
+        const kmText = kmContainer.addText(`${remain_power_mile + " " + "km"}`);
+        kmText.font = Font.systemFont(20);
+        kmText.textColor = fontColor;
+
+        const levelContainer = kmContainer.addStack();
+        const separator = levelContainer.addText(" / ");
+        separator.font = Font.systemFont(16);
+        separator.textColor = fontColor;
+        separator.textOpacity = 0.6;
+
+        const levelText = levelContainer.addText(`${remain_power}${"%"}`);
+        levelText.font = Font.systemFont(18);
+        levelText.textColor = fontColor;
+        levelText.textOpacity = 0.6;
+    }else{
+        const kmContainer = leftContainer.addStack();
+        kmContainer.setPadding(0, paddingLeft, 0, 0);
+        kmContainer.centerAlignContent();
+        kmContainer.spacing = 12
+        const oil_container = kmContainer.addStack();
+        oil_container.spacing = 5
+        oil_container.setPadding(0, 0, 0, 0);
+        oil_container.centerAlignContent();
+        const battery_container = kmContainer.addStack();
+        battery_container.spacing = 5
+        battery_container.setPadding(0, 0, 0, 0);
+        battery_container.centerAlignContent();
+        const oil_icon_container = oil_container.addImage(SFSymbol.named("fuelpump").image)
+        const oil_text = oil_container.addText(remained_oil_mile + " " + "km");
+        const battery_icon_container = battery_container.addImage(SFSymbol.named("bolt.batteryblock").image)
+        const battery_text = battery_container.addText(remain_power_mile + " " + "km")
+        oil_text.font = Font.systemFont(14);
+        oil_text.textColor = fontColor;
+        battery_text.font =  Font.systemFont(14);
+        battery_text.textColor = fontColor
+        oil_icon_container.imageSize = new Size(13, 13)
+        battery_icon_container.imageSize = new Size(13, 13)
+    }
+
+
+      const mileageContainer = leftContainer.addStack();
+      mileageContainer.setPadding(0, paddingLeft, 0, 0);
+
+      let mileageText = mileageContainer.addText(
+        `总里程: ${total_odometer} km`
+      );
+      mileageText.font = Font.systemFont(9);
+      mileageText.textColor = fontColor;
+      mileageText.textOpacity = 0.7; 
+
+    const carStatusContainer = leftContainer.addStack();
+    carStatusContainer.setPadding(8, paddingLeft, 0, 0);
+
+    const carStatusBox = carStatusContainer.addStack();
+    carStatusBox.setPadding(3, 3, 3, 3);
+    carStatusBox.layoutHorizontally();
+    carStatusBox.centerAlignContent();
+    carStatusBox.cornerRadius = 4;
+    carStatusBox.backgroundColor = theme.focousBackgroundColor;
+
+    const carStatusTxt = carStatusBox.addText(
+      `${door_locked ? "已上锁" : "已解锁"}`
+    );
+
+    let displayFont = Font.systemFont(10);
+    let displayFontColor = fontColor;
+    if (!door_locked) {
+      displayFontColor = new Color(Color.red(), 1);
+      displayFont = Font.boldSystemFont(10);
+    }
+
+    carStatusTxt.font = displayFont;
+    carStatusTxt.textColor = displayFontColor;
+    carStatusTxt.textOpacity = 0.7;
+    carStatusBox.addSpacer(5);
+
+    const updateTxt = carStatusBox.addText(formatStatusLabel(update_time));
+    updateTxt.font = Font.systemFont(10)
+    updateTxt.textColor = fontColor;
+    updateTxt.textOpacity = 0.5;
+
+
+    const locationStr = location_str;
+
+
+    leftContainer.addSpacer();
+
+    const locationContainer = leftContainer.addStack();
+    locationContainer.setPadding(0, paddingLeft, 0, 0);
+    if (renderMediumContent) {
+      locationContainer.setPadding(0, paddingLeft, 16, 0);
+    }
+    const locationText = locationContainer.addText(locationStr);
+    locationText.font = Font.systemFont(10)
+    locationText.textColor = fontColor;
+    locationText.textOpacity = 0.5;
+    locationText.url = `iosamap://path?sourceApplication=SL03Widget&dlat=${lat}&dlon=${lng}`;
+
+    if (renderMediumContent) {
+      const rightContainer = bodyContainer.addStack();
+      rightContainer.setPadding(0, 0, 0, 0);
+      rightContainer.layoutVertically();
+      rightContainer.size = new Size(
+        Math.round(width * 0.5),
+        Math.round(height * 0.75)
+      );
+
+      const carImageContainer = rightContainer.addStack();
+      carImageContainer.bottomAlignContent();
+        carImageContainer.setPadding(0, 6, 0, paddingLeft);
+
+      let canvasWidth = Math.round(width * 0.45);
+      let canvasHeight = Math.round(height * 0.55);
+
+      let image = await loadImage("车")
+      const imageSize = getImageSize(
+        image.size.width,
+        image.size.height,
+        canvasWidth,
+        canvasHeight,
+        0.99
+      )
+      let carStatusImage = carImageContainer.addImage(image);
+      carStatusImage.size = new Size(imageSize.width,imageSize.height)
+      carStatusImage.resizable = true;
+        let windowStatusContainer = rightContainer.addStack();
+        windowStatusContainer.setPadding(6, 0, 12, 0);
+
+        windowStatusContainer.layoutHorizontally();
+        windowStatusContainer.addSpacer();
+        let windowStatus = `所有车门和车窗已关闭`;
+        if(!door_locked){
+          windowStatus = "车门未锁";
+        }else if(!window_closed){
+          windowStatus = "车窗未关"
+        }
+
+        let windowStatusText = windowStatusContainer.addText(windowStatus);
+
+        let displayFont = Font.systemFont(10);
+        let displayFontColor = fontColor;
+        if (!door_locked || !window_closed) {
+          displayFontColor = new Color(Color.red(), 1);
+          displayFont = Font.boldSystemFont(10);
+        }
+
+        windowStatusText.font = displayFont
+        windowStatusText.textColor = displayFontColor;
+        windowStatusText.textOpacity = 0.5;
+
+        windowStatusContainer.addSpacer();
+    }
+  }
+
+  async function mediumStyleModule(LW, data) {
+    const theme = getTheme();
+    const {
+      update_time,
+      total_odometer,
+      vehicle_temperature,
+      remain_power_mile,
+      remain_power,
+      car_name,
+      conf_name,
+      plate_number,
+      series_name,
+      location_str,
+      door_locked,
+      is_mix,
+      is_charging,
+      lng,
+      lat,
+      remained_oil_mile,
+      remain_oil,
+      total_mixed_mile,
+      remained_packet_size,
+      remained_packet_size_unit,
+    } = data;
+    const widget_data_map = {
+      电池续航: {
+        value: remain_power_mile,
+        unit: "km",
+      },
+      油箱续航: {
+        value: remained_oil_mile,
+        unit: "km",
+      },
+      剩余电量: {
+        value: remain_power,
+        unit: "%",
+      },
+      剩余油量: {
+        value: remain_oil,
+        unit: "%",
+      },
+      总里程: {
+        value: total_odometer,
+        unit: "km",
+      },
+      综合续航: {
+        value: total_mixed_mile,
+        unit: "km",
+      },
+      温度: {
+        value: vehicle_temperature,
+        unit: "°C",
+      },
+      位置: {
+        value: location_str,
+        unit: "",
+        url: `iosamap://path?sourceApplication=SL03Widget&dlat=${lat}&dlon=${lng}`,
+      },
+      剩余流量: {
+        value: remained_packet_size,
+        unit: remained_packet_size_unit,
+      },
+    };
+
+    //const power_img = LW.addImage(drawPowerImage(remain_power,remain_power_mile))
+    //power_img.cornerRadius=5
+    //power_img.imageSize=new Size(300,18)
+    /**
+      |    col0 |   col1_0|   col1_1 |
+      |---------|---------|----------|
+      |         | 总里程   | 续航里程  |
+      | 车辆图片 |  xxxkm |   xxkm   |
+      |         | t_space0| t_space1  |
+      | ------- |----------|---------|
+      | 车辆名称 |  温度     | 位置     |
+      | ------- | xx摄氏度. | xxx省xxx市 |
+      |         | t_space2 | t_space3  |
+      | 车牌号   |---------------------｜
+      |        | 数据更新时间          |
+      | col0   |        col1           |
+  */
+
+    const container = LW.addStack();
+    container.layoutHorizontally();
+    container.spacing = 15;
+    // 第1列
+    const col0 = container.addStack();
+    col0.layoutVertically();
+    col0.spacing = 6;
+    col0.size = new Size(110, 0);
+    // 车辆图片
+    const car_img = await loadImage("车");
+    const car_stack = col0.addStack();
+
+    const img_container = car_stack.addImage(car_img);
+
+    img_container.imageSize = new Size(100, 50);
+    // 车辆名称、型号
+    const car_name_container = col0.addStack();
+
+    car_name_container.layoutHorizontally();
+    car_name_container.spacing = 3;
+    car_name_container.bottomAlignContent();
+
+    // 车辆名称
+    const car_name_text = car_name_container.addText(car_name);
+    car_name_text.font = Font.boldSystemFont(15);
+    car_name_text.textColor = theme.primaryTextColor;
+
+    //car_name_text.minimumScaleFactor = 1
+    const lock_icon = car_name_container.addImage(
+      door_locked
+        ? SFSymbol.named("lock.fill").image
+        : SFSymbol.named("lock.open.fill").image
+    );
+    const charge_icon = car_name_container.addImage(
+      SFSymbol.named("bolt.fill").image
+    );
+    // = SFSymbol.named("lock.open.fill")
+    lock_icon.tintColor = door_locked
+      ? new Color("#27ae60")
+      : new Color("#c0392b");
+    charge_icon.tintColor = is_charging ? new Color("#27ae60") : Color.gray();
+    lock_icon.imageSize = new Size(15, 15);
+    charge_icon.imageSize = new Size(15, 15);
+    const car_seires_container = col0.addStack();
+    // 车辆logo
+    const logo = car_seires_container.addImage(await loadImage("LOGO"));
+    logo.imageSize = new Size(12, 12);
+    // 车辆型号
+    const user_defined_series_name = getSetting("car_series_name");
+    const car_series_text = car_seires_container.addText(
+      user_defined_series_name
+        ? user_defined_series_name
+        : series_name + " " + conf_name
+    );
+    car_series_text.font = Font.mediumSystemFont(11);
+    car_series_text.textColor = theme.secondaryTextColor;
+    //car_series_text.minimumScaleFactor = 0.5
+
+    // 车牌号
+    const plate_number_text = col0.addText(plate_number);
+    plate_number_text.font = Font.thinMonospacedSystemFont(10);
+    plate_number_text.textColor = theme.secondaryTextColor;
+    //car_series_text.minimumScaleFactor = 0.5
+
+    // 第2列
+    const col1 = container.addStack();
+
+    col1.layoutVertically();
+    col1.spacing = 8;
+    const col1_row0 = col1.addStack();
+    const col1_row1 = col1.addStack();
+    col1_row1.layoutHorizontally();
+    col1_row1.spacing = 5;
+
+    const refresh_icon = col1_row1.addImage(
+      SFSymbol.named("arrow.clockwise").image
+    );
+    refresh_icon.tintColor = theme.secondaryTextColor;
+    refresh_icon.imageSize = new Size(13, 13);
+    const refresh_time_text = col1_row1.addText(update_time);
+    refresh_time_text.textColor = theme.secondaryTextColor;
+    refresh_time_text.font = Font.thinMonospacedSystemFont(13);
+
+    col1_row0.layoutHorizontally();
+    col1_row0.spacing = 15;
+    const col1_row0_row0 = col1_row0.addStack();
+    const col1_row0_row1 = col1_row0.addStack();
+    col1_row0_row0.layoutVertically();
+    col1_row0_row1.layoutVertically();
+    col1_row0_row0.spacing = 8;
+    col1_row0_row1.spacing = 8;
+    const t_space0 = col1_row0_row0.addStack();
+    const t_space2 = col1_row0_row0.addStack();
+    const t_space1 = col1_row0_row1.addStack();
+    const t_space3 = col1_row0_row1.addStack();
+    const space_list = [t_space0, t_space1, t_space2, t_space3];
+    space_list.map((space, i) => {
+      space.layoutVertically();
+      const data_key = getWiegetDataSpaceName(i, is_mix);
+
+      // 标题
+      const header_stack = space.addText(data_key);
+      // 数据容器
+      const content_container = space.addStack();
+      content_container.spacing = 5;
+      content_container.bottomAlignContent();
+      // 数据-值
+      const content_stack = content_container.addText(
+        widget_data_map[data_key].value + ""
+      );
+      // 数据-单位
+      const unit_stack = content_container.addText(
+        widget_data_map[data_key].unit + ""
+      );
+      // 跳转地址
+      if (widget_data_map[data_key].url) {
+        space.url = widget_data_map[data_key].url;
+      }
+      header_stack.font = Font.thinMonospacedSystemFont(12);
+      header_stack.textColor = theme.secondaryTextColor;
+      content_stack.font = Font.systemFont(18);
+      content_stack.textColor = theme.primaryTextColor;
+      content_stack.minimumScaleFactor = 0.3;
+      content_stack.textOpacity = 0.7;
+      unit_stack.font = Font.mediumMonospacedSystemFont(14);
+      unit_stack.textColor = theme.secondaryTextColor;
+      unit_stack.textOpacity = 0.5;
+    });
+  }
+
 
   /**
    * 中等桌面组件
    * 接受参数 - authorization
    */
   async function renderMediumWidget() {
-    const height = device_size.small.height
-    const width = device_size.small.width
+    const height = device_size.small.height;
+    const width = device_size.small.width;
+    const theme = getTheme();
+
+    let curr_style = getSetting("style");
+    if (curr_style == undefined || curr_style == null) {
+      curr_style = "简约";
+      saveSetting("style", curr_style);
+    }
     const LW = new ListWidget(); // widget对象
     LW.url = url_scheme;
-    const theme = getTheme()
     LW.backgroundGradient = theme.backgroundGradient;
     let token;
     let authorization = getAuthorization();
@@ -546,7 +1031,7 @@ try {
       // 剩余电量
       let remain_power = Math.round(car_status.remainPower);
       // 车辆名称
-      const car_name = car_info.carName;
+      const car_name = getCarName(car_info.carName);
       // 车辆配置名称，比如：515km
       const conf_name = car_info.confName
         ? car_info.confName.split("，")[2]
@@ -558,7 +1043,7 @@ try {
       // 车辆位置
       const location_str = car_location.addrDesc;
       // 车门状态
-      const lock_status =
+      const door_locked =
         car_status.driverDoorLock == 0 && car_status.passengerDoorLock == 0;
       // 是否为增程车型
       const is_mix = car_status.remainedOilMile != undefined;
@@ -568,6 +1053,21 @@ try {
       const lng = car_location.lng;
       // 纬度
       const lat = car_location.lat;
+      // 车窗开度-左后
+      const left_rear_window_degree = car_status.leftRearWindowDegree
+      // 车窗开度-右后
+      const right_rear_window_degree = car_status.rightRearWindowDegree
+      // 车窗开度-左前
+      const left_anterior_window_degree = car_status.leftAnteriorWindowDegree
+      // 车窗开度-右前
+      const right_anterior_window_degree = car_status.rightAnteriorWindowDegree
+      // 车窗开闭状态
+      let window_closed = false
+      if(left_rear_window_degree <= 0.02 && right_rear_window_degree <= 0.02 && left_anterior_window_degree  <= 0.02 && right_anterior_window_degree  <= 0.02){
+        window_closed = true
+      }
+
+
       // 增程油箱续航里程
       let remained_oil_mile = is_mix
         ? Math.round(car_status.remainedOilMile)
@@ -606,196 +1106,41 @@ try {
         remained_packet_size = getSetting("remained_packet_size");
         remained_packet_size_unit = getSetting("remained_packet_size_unit");
       }
-
-      const widget_data_map = {
-        电池续航: {
-          value: remain_power_mile,
-          unit: "km",
-        },
-        油箱续航: {
-          value: remained_oil_mile,
-          unit: "km",
-        },
-        剩余电量: {
-          value: remain_power,
-          unit: "%",
-        },
-        剩余油量: {
-          value: remain_oil,
-          unit: "%",
-        },
-        总里程: {
-          value: total_odometer,
-          unit: "km",
-        },
-        综合续航: {
-          value: total_mixed_mile,
-          unit: "km",
-        },
-        温度: {
-          value: vehicle_temperature,
-          unit: "°C",
-        },
-        位置: {
-          value: location_str,
-          unit: "",
-          url: `iosamap://path?sourceApplication=SL03Widget&dlat=${lat}&dlon=${lng}`,
-        },
-        剩余流量: {
-          value: remained_packet_size,
-          unit: remained_packet_size_unit,
-        },
+      const data = {
+        update_time,
+        total_odometer,
+        vehicle_temperature,
+        remain_power_mile,
+        remain_power,
+        car_name,
+        conf_name,
+        plate_number,
+        series_name,
+        location_str,
+        door_locked,
+        is_mix,
+        is_charging,
+        lng,
+        lat,
+        remained_oil_mile,
+        remain_oil,
+        total_mixed_mile,
+        remained_packet_size,
+        remained_packet_size_unit,
+        window_closed
       };
 
-      //const power_img = LW.addImage(drawPowerImage(remain_power,remain_power_mile))
-      //power_img.cornerRadius=5
-      //power_img.imageSize=new Size(300,18)
-      /**
-        |    col0 |   col1_0|   col1_1 |
-        |---------|---------|----------|
-        |         | 总里程   | 续航里程  |
-        | 车辆图片 |  xxxkm |   xxkm   |
-        |         | t_space0| t_space1  |
-        | ------- |----------|---------|
-        | 车辆名称 |  温度     | 位置     |
-        | ------- | xx摄氏度. | xxx省xxx市 |
-        |         | t_space2 | t_space3  |
-        | 车牌号   |---------------------｜
-        |        | 数据更新时间          |
-        | col0   |        col1           |
-    */
-      const container = LW.addStack();
-      container.layoutHorizontally();
-      container.spacing = 15;
-      // 第1列
-      const col0 = container.addStack();
-      col0.layoutVertically();
-      col0.spacing = 6;
-      col0.size = new Size(110, 0);
-      // 车辆图片
-      const car_img = await loadImage("车");
-      const car_stack = col0.addStack();
-
-      const img_container = car_stack.addImage(car_img);
-
-      img_container.imageSize = new Size(100, 50);
-      // 车辆名称、型号
-      const car_name_container = col0.addStack();
-
-      car_name_container.layoutHorizontally();
-      car_name_container.spacing = 3;
-      car_name_container.bottomAlignContent();
-
-      // 车辆名称
-      const car_name_text = car_name_container.addText(car_name);
-      car_name_text.font = Font.boldSystemFont(15);
-      car_name_text.textColor = theme.primaryTextColor;
-
-      //car_name_text.minimumScaleFactor = 1
-      const lock_icon = car_name_container.addImage(
-        lock_status
-          ? SFSymbol.named("lock.fill").image
-          : SFSymbol.named("lock.open.fill").image
-      );
-      const charge_icon = car_name_container.addImage(
-        SFSymbol.named("bolt.fill").image
-      );
-      // = SFSymbol.named("lock.open.fill")
-      lock_icon.tintColor = lock_status
-        ? new Color("#27ae60")
-        : new Color("#c0392b");
-      charge_icon.tintColor = is_charging ? new Color("#27ae60") : Color.gray();
-      lock_icon.imageSize = new Size(15, 15);
-      charge_icon.imageSize = new Size(15, 15);
-      const car_seires_container = col0.addStack();
-      // 车辆logo
-      const logo = car_seires_container.addImage(await loadImage("LOGO"));
-      logo.imageSize = new Size(12, 12);
-      // 车辆型号
-      const user_defined_series_name = getSetting("car_series_name");
-      const car_series_text = car_seires_container.addText(
-        user_defined_series_name
-          ? user_defined_series_name
-          : series_name + " " + conf_name
-      );
-      car_series_text.font = Font.mediumSystemFont(11);
-      car_series_text.textColor = theme.secondaryTextColor;
-      //car_series_text.minimumScaleFactor = 0.5
-
-      // 车牌号
-      const plate_number_text = col0.addText(plate_number);
-      plate_number_text.font = Font.thinMonospacedSystemFont(10);
-      plate_number_text.textColor = theme.secondaryTextColor;
-      //car_series_text.minimumScaleFactor = 0.5
-
-      // 第2列
-      const col1 = container.addStack();
-
-      col1.layoutVertically();
-      col1.spacing = 8;
-      const col1_row0 = col1.addStack();
-      const col1_row1 = col1.addStack();
-      col1_row1.layoutHorizontally();
-      col1_row1.spacing = 5;
-
-      const refresh_icon = col1_row1.addImage(
-        SFSymbol.named("arrow.clockwise").image
-      );
-      refresh_icon.tintColor = theme.secondaryTextColor;
-      refresh_icon.imageSize = new Size(13, 13);
-      const refresh_time_text = col1_row1.addText(update_time);
-      refresh_time_text.textColor = theme.secondaryTextColor;
-      refresh_time_text.font = Font.thinMonospacedSystemFont(13);
-
-      col1_row0.layoutHorizontally();
-      col1_row0.spacing = 15;
-      const col1_row0_row0 = col1_row0.addStack();
-      const col1_row0_row1 = col1_row0.addStack();
-      col1_row0_row0.layoutVertically();
-      col1_row0_row1.layoutVertically();
-      col1_row0_row0.spacing = 8;
-      col1_row0_row1.spacing = 8;
-      const t_space0 = col1_row0_row0.addStack();
-      const t_space2 = col1_row0_row0.addStack();
-      const t_space1 = col1_row0_row1.addStack();
-      const t_space3 = col1_row0_row1.addStack();
-      const space_list = [t_space0, t_space1, t_space2, t_space3];
-      space_list.map((space, i) => {
-        space.layoutVertically();
-        const data_key = getWiegetDataSpaceName(i, is_mix);
-
-        // 标题
-        const header_stack = space.addText(data_key);
-        // 数据容器
-        const content_container = space.addStack();
-        content_container.spacing = 5;
-        content_container.bottomAlignContent();
-        // 数据-值
-        const content_stack = content_container.addText(
-          widget_data_map[data_key].value + ""
-        );
-        // 数据-单位
-        const unit_stack = content_container.addText(
-          widget_data_map[data_key].unit + ""
-        );
-        // 跳转地址
-        if (widget_data_map[data_key].url) {
-          space.url = widget_data_map[data_key].url;
-        }
-        header_stack.font = Font.thinMonospacedSystemFont(12);
-        header_stack.textColor = theme.secondaryTextColor;
-        content_stack.font = Font.systemFont(18);
-        content_stack.textColor = theme.primaryTextColor;
-        content_stack.minimumScaleFactor = 0.3;
-        content_stack.textOpacity = 0.7
-        unit_stack.font = Font.mediumMonospacedSystemFont(14);
-        unit_stack.textColor = theme.secondaryTextColor;
-        unit_stack.textOpacity = 0.5
-      });
+      if (curr_style == "模块化") {
+        await mediumStyleModule(LW, data);
+      }
+      if (curr_style == "简约") {
+        await mediumStyleSimple(LW, data);
+      }
 
       const background_image = await loadImage("背景图");
       background_image ? (LW.backgroundImage = background_image) : null;
     }
+
     if (token == "" || token == null || token == undefined) {
       console.error("请参照文档配置authorization");
       const t = LW.addText("请参照文档配置authorization");
@@ -1030,7 +1375,12 @@ try {
 
   function getTheme() {
     let theme_name = getSetting("theme_name");
-    if (!theme_name) theme_name = "跟随系统(渐变)";
+    const theme_name_list = themes.map((theme) => theme.name);
+    if (!theme_name || theme_name_list.indexOf(theme_name) == -1) 
+    {
+      theme_name = "黑色";
+      saveSetting("theme_name", theme_name);
+  }
     return themes.find((theme) => theme.name == theme_name);
   }
 
@@ -1146,6 +1496,28 @@ try {
         },
       },
       {
+        title: "🧩组件风格",
+        action: async () => {
+          let my_alert = new Alert();
+          let current_style = getSetting("style");
+          my_alert.title = "请选择组件风格";
+          const styles = ["简约", "模块化"];
+          styles.map((style) => {
+            my_alert.addAction(
+              style + (current_style == style ? "(当前)" : "")
+            );
+          });
+          my_alert.addCancelAction("取消");
+          const selection = await my_alert.presentAlert();
+          if (selection >= 0) {
+            saveSetting("style", styles[selection]);
+            await previewWidget();
+          } else {
+            console.log("取消");
+          }
+        },
+      },
+      {
         title: "💈选择主题",
         action: async () => {
           const selection = await selectTheme();
@@ -1194,6 +1566,25 @@ try {
         },
       },
       {
+        title: "💬自定义车辆名称",
+        action: async () => {
+          let my_alert = new Alert();
+          let car_name = getSetting("car_name");
+          my_alert.title = "请输入车辆名称";
+          my_alert.addTextField(
+            "请输入车辆名称",
+            car_name ? car_name : ""
+          );
+          my_alert.addCancelAction("取消");
+          my_alert.addAction("保存");
+          if ((await my_alert.present()) == 0) {
+            car_name = my_alert.textFieldValue(0);
+            saveSetting("car_name", car_name);
+            await previewWidget();
+          } else console.log("取消");
+        },
+      },
+      {
         title: "🚙自定义车辆图片",
         action: async () => {
           const image = await Photos.fromLibrary();
@@ -1219,13 +1610,13 @@ try {
           await previewWidget();
         },
       },
-      {
+      getSetting("style") == "模块化" ? {
         title: "⌗自定义数据块",
         action: async () => {
           await listDataBlocks();
           await previewWidget();
         },
-      },
+      }: null,
 
       {
         title: "♻️重置设定(保留token)",
@@ -1240,7 +1631,7 @@ try {
           await previewWidget();
         },
       },
-    ];
+    ].filter((item) => item != null);
     setting_actions.map((action) => {
       alert.addAction(action.title);
     });
@@ -1257,29 +1648,43 @@ try {
     saveSetting("car_img_path", "");
     saveSetting("car_series_name", "");
     saveSetting("widget_background_path", "");
+    saveSetting("style", "简约");
     saveSetting("theme_name", "跟随系统(渐变)");
+    saveSetting("car_name",null)
     saveSetting("widget_data_block_info", null);
   }
 
-
-  function getImageSize(image_width, image_height, canvas_width, canvas_height, resize_rate = 0.85){
+  function getImageSize(
+    image_width,
+    image_height,
+    canvas_width,
+    canvas_height,
+    resize_rate = 0.85
+  ) {
     let a = image_width;
     let b = image_height;
 
     if (a > canvas_width || b > canvas_height) {
-        if (resize_rate >= 1) {
-            resize_rate = 0.99;
-        }
-        a *= resize_rate;
-        b *= resize_rate;
-        return getImageSize(a, b, canvas_width, canvas_height);
+      if (resize_rate >= 1) {
+        resize_rate = 0.99;
+      }
+      a *= resize_rate;
+      b *= resize_rate;
+      return getImageSize(a, b, canvas_width, canvas_height);
     }
 
-    return {width: a, height: b}; 
+    return { width: a, height: b };
   }
 
+  function getCarName(api_car_name){
+    const user_defined_car_name = getSetting("car_name");
+    if(user_defined_car_name){
+      return user_defined_car_name;
+    }else{
+      return api_car_name;
+    }
 
-  
+  }
 } catch (e) {
   console.error(e);
   console.error(e.stack);
