@@ -457,7 +457,7 @@ try {
       let display_font_color = theme.primaryTextColor;
       if (!lock_status) {
           display_font_color = Color.red();
-          display_font = Font.systemFontBold(10);
+          display_font = Font.semiboldSystemFont(10);
       }
     
       car_status_txt.font = display_font
