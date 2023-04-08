@@ -277,8 +277,11 @@ try {
     }
 
     if (token == "" || token == null || token == undefined) {
-      console.warn("请参照文档配置authorization");
-      LW.addText("请参照文档配置authorization");
+      LW.url = "https://gitee.com/zkytech/iOS14-widgets-for-scriptable#%E5%B0%8F%E7%BB%84%E4%BB%B6%E6%B7%B1%E8%93%9Dsl03%E8%BD%A6%E8%BE%86%E7%8A%B6%E6%80%81"
+
+      const t = LW.addText("请参照教程配置authorization\n点击查看配置教程");
+      t.font = Font.boldSystemFont(18);
+      t.textColor = Color.red();
     }
 
     LW.presentAccessoryCircular();
@@ -1142,8 +1145,8 @@ try {
     }
 
     if (token == "" || token == null || token == undefined) {
-      console.error("请参照文档配置authorization");
-      const t = LW.addText("请参照文档配置authorization");
+      LW.url = "https://gitee.com/zkytech/iOS14-widgets-for-scriptable#%E5%B0%8F%E7%BB%84%E4%BB%B6%E6%B7%B1%E8%93%9Dsl03%E8%BD%A6%E8%BE%86%E7%8A%B6%E6%80%81"
+      const t = LW.addText("请参照教程配置authorization\n点击查看配置教程");
       t.font = Font.boldSystemFont(18);
       t.textColor = Color.red();
     }
