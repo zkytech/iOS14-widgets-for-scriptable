@@ -12,7 +12,6 @@
  *
  * - 不要在脚本代码里修改任何参数，所有参数必须通过组件设置界面填写
  */
-try {
   // 开发环境切换到dev分支，生产环境用master分支
   const branch = "master";
   const project_name = "深蓝小组件_by_zkytech";
@@ -179,34 +178,79 @@ try {
   }
 
   if (config.runsInWidget) {
-    try {
-      switch (config.widgetFamily) {
-        case "medium":
-          await renderMediumWidget();
-          break;
-        case "small":
-          await renderSmallWidget();
-          break;
-        case "accessoryCircular":
-          await renderAccessoryCircularWidget();
-          break;
-        default:
-          await renderWrongSizeAlert();
-          break;
-      }
-    } catch (e) {
-      console.log(e);
-    }
+      await renderWidget(config.widgetFamily)
   } else {
     // 在Scriptable中运行，弹出设置窗口
     await askSettings();
   }
 
+  async function renderLargeWidget(LW, data) {
+        const {
+          update_time,
+          total_odometer,
+          vehicle_temperature,
+          remain_power_mile,
+          remain_power,
+          car_name,
+          conf_name,
+          plate_number,
+          series_name,
+          location_str,
+          door_locked,
+          is_mix,
+          is_charging,
+          lng,
+          lat,
+          remained_oil_mile,
+          remain_oil,
+          total_mixed_mile,
+          remained_packet_size,
+          remained_packet_size_unit,
+          window_closed
+        } = data
+        await renderMediumWidget(LW, data);
+        const height = device_size.large.height * 0.5;
+        const width = device_size.large.width
+        const theme = getTheme()
+        let w = LW
+        w.setPadding(0,0,0,0)
+        w.addSpacer();
+        let fontColor = theme.primaryTextColor
+
+        let mapWidth = width;
+        let mapHeight = height;
+        let paddingLeft = Math.round(5);
+        let largeExtraContainer = w.addStack();
+        // largeExtraContainer.setPadding(0,paddingLeft,paddingLeft,0)
+        largeExtraContainer.layoutHorizontally();
+        largeExtraContainer.centerAlignContent();
+        largeExtraContainer.setPadding(0,0,0,0)
+        largeExtraContainer.size = new Size(mapWidth, mapHeight);
+        const map_api_key = getSetting("map_api_key")
+        if (map_api_key && map_api_key.length > 0) {
+            let latLng = null;
+            try {
+                latLng =
+                    lng +
+                    ',' +
+                    lat;
+            } catch (e) {}
+
+            let mapImage = await loadMapView(latLng, mapWidth-10, mapHeight-10);
+            let widget = largeExtraContainer.addImage(mapImage);
+            widget.centerAlignImage();
+            widget.cornerRadius = 20
+            widget.imageSize = new Size(mapWidth-10, mapHeight-10);
+            // widget.imageSize = new Size(mapWidth-20, mapHeight-20);
+            largeExtraContainer.url = `iosamap://path?sourceApplication=SL03Widget&dlat=${lat}&dlon=${lng}`;
+        }
+    }
+
   /**
    * 小号锁屏组件
    * 接受参数 - 显示模式，油/电
    */
-  async function renderAccessoryCircularWidget() {
+  async function renderAccessoryCircularWidget(LW,data) {
     const { drawArc } = await getService(
       "DrawShape",
       `https://public.zkytech.top/iOS14-widgets-for-scriptable/${branch}/lib/service/DrawShape.js`,
@@ -217,150 +261,67 @@ try {
       : [""];
     let mode = "电";
     if (params.length >= 1) mode = params[0].trim() == "油" ? "油" : "电";
-    const LW = new ListWidget(); // widget对象
-    LW.url = url_scheme;
-    let token;
-    let authorization = getAuthorization();
-
-    const token_result = await getToken(authorization);
-    if (token_result == null) {
-      token = null;
-    } else {
-      token = token_result.access_token;
-    }
-
-    const car_id = await getCarId(token, authorization);
-    const car_status = await getCarStatus(token, car_id, authorization);
-    const charge_status = await getChargeStatus(token, car_id, authorization);
-    // 可以确定 状态码3 = “未充电”
-    // 状态码1 = “充电中”
-    // 状态码2 目前未知
-    const is_charging = charge_status.chrgStatus == "1";
-    if (car_status && car_id) {
-      // 剩余电量
-      let remain_power =
-        car_status.remainPower == undefined || car_status.remainPower < 0
-          ? 0
-          : car_status.remainPower;
-      let remained_oil_mile = car_status.RemainedOilMile;
-      // 增程车型存在API数据错乱的问题，为了避免受到API错误数据的影响自动取上一次获取到的合理数据
-      if (remain_power && remain_power > 0) {
-        saveSetting("remain_power", remain_power);
-      } else {
-        remain_power = getSetting("remain_power");
-        remain_power = remain_power ? remain_power : 0;
-      }
-      if (remained_oil_mile && remained_oil_mile > 0) {
-        saveSetting("remained_oil_mile", remained_oil_mile);
-      } else {
-        remained_oil_mile = getSetting("remained_oil_mile");
-        remained_oil_mile = remained_oil_mile ? remained_oil_mile : 0;
-      }
-
-      const remain_oil = (remained_oil_mile / 846) * 100;
+      const {
+        update_time,
+        total_odometer,
+        vehicle_temperature,
+        remain_power_mile,
+        remain_power,
+        car_name,
+        conf_name,
+        plate_number,
+        series_name,
+        location_str,
+        door_locked,
+        is_mix,
+        is_charging,
+        lng,
+        lat,
+        remained_oil_mile,
+        remain_oil,
+        total_mixed_mile,
+        remained_packet_size,
+        remained_packet_size_unit,
+        window_closed
+      } = data
       const circle = await drawArc(
         LW,
         mode == "电" ? remain_power : remain_oil
       );
-
-      const car_symbol_name =
-        mode == "电"
-          ? is_charging
-            ? "bolt.car.fill"
-            : "car.rear.fill"
-          : "fuelpump.fill";
-      // const sf_car = circle.addImage(SFSymbol.named(car_symbol_name).image);
       const sf_car = circle.addImage(await loadImage("锁屏车"));
-
       sf_car.imageSize = new Size(29, 29);
       sf_car.tintColor = Color.white();
-    }
-
-    if (token == "" || token == null || token == undefined) {
-      LW.url = "https://gitee.com/zkytech/iOS14-widgets-for-scriptable#%E5%B0%8F%E7%BB%84%E4%BB%B6%E6%B7%B1%E8%93%9Dsl03%E8%BD%A6%E8%BE%86%E7%8A%B6%E6%80%81"
-
-      const t = LW.addText("请参照教程配置authorization\n点击查看配置教程");
-      t.font = Font.boldSystemFont(18);
-      t.textColor = Color.red();
-    }
-
-    LW.presentAccessoryCircular();
-
-    Script.setWidget(LW);
-    Script.complete();
+  
   }
 
-  async function renderSmallWidget() {
+  async function renderSmallWidget(LW, data) {
     const height = device_size.small.height;
     const width = device_size.small.width;
-    const LW = new ListWidget(); // widget对象
     const theme = getTheme();
-    LW.url = url_scheme;
-    LW.backgroundGradient = theme.backgroundGradient;
-    let token;
-    let authorization = getAuthorization();
-    const token_result = await getToken(authorization);
-    if (token_result == null) {
-      token = null;
-    } else {
-      token = token_result.access_token;
-    }
 
-    const car_id = await getCarId(token, authorization);
-    // await refreshCarData()
-    const car_status = await getCarStatus(token, car_id, authorization);
-    const car_info = await getCarInfo(token, car_id, authorization);
-    if (car_status != null && car_info != null ) {
-      // 数据更新时间
-      const update_time = car_status.terminalTime;
-
-      // 总里程
-      const total_odometer = Math.round(car_status.totalOdometer);
-      // 车内温度
-      const vehicle_temperature = Math.round(car_status.vehicleTemperature);
-      // 剩余里程
-      let remain_power_mile = Math.round(car_status.remainedPowerMile);
-      // 剩余电量
-      let remain_power = Math.round(car_status.remainPower);
-      // 车辆名称
-      const car_name = getCarName(car_info.carName);
-      // 车辆配置名称，比如：515km
-      const conf_name = car_info.confName
-        ? car_info.confName.split("，")[2]
-        : "";
-      // 车门状态
-      const door_locked =
-        car_status.driverDoorLock == 0 && car_status.passengerDoorLock == 0;
-      // 是否为增程车型
-      const is_mix = car_status.remainedOilMile != undefined;
-
-      // 增程油箱续航里程
-      let remained_oil_mile = is_mix
-        ? Math.round(car_status.remainedOilMile)
-        : 0;
-      // 增程车型存在API数据错乱的问题，这里为了受到API错误数据的影响自动取上一次获取到的合理数据
-      if (remain_power && remain_power > 0) {
-        saveSetting("remain_power", remain_power);
-      } else {
-        remain_power = getSetting("remain_power");
-        remain_power = remain_power ? remain_power : 0;
-      }
-      if (remain_power_mile && remain_power_mile > 0) {
-        saveSetting("remain_power_mile", remain_power_mile);
-      } else {
-        remain_power_mile = getSetting("remain_power_mile");
-        remain_power_mile = remain_power_mile ? remain_power_mile : 0;
-      }
-      if (remained_oil_mile && remained_oil_mile > 0) {
-        saveSetting("remained_oil_mile", remained_oil_mile);
-      } else {
-        remained_oil_mile = getSetting("remained_oil_mile");
-        remained_oil_mile = remained_oil_mile ? remained_oil_mile : 0;
-      }
-      // 剩余油量
-      const remain_oil = (remained_oil_mile / 846) * 100;
-      // 综合续航(增程)
-      const total_mixed_mile = remain_power_mile + remained_oil_mile;
+    const {
+      update_time,
+      total_odometer,
+      vehicle_temperature,
+      remain_power_mile,
+      remain_power,
+      car_name,
+      conf_name,
+      plate_number,
+      series_name,
+      location_str,
+      door_locked,
+      is_mix,
+      is_charging,
+      lng,
+      lat,
+      remained_oil_mile,
+      remain_oil,
+      total_mixed_mile,
+      remained_packet_size,
+      remained_packet_size_unit,
+      window_closed
+    } = data
 
       LW.setPadding(0, 0, 0, 0);
 
@@ -509,11 +470,7 @@ try {
       car_image.size = new Size(car_image_size.width, car_image_size.height);
       car_image.resizable = true;
       // ---底部部件完---
-      console.log("渲染结束");
-      await LW.presentSmall();
-      Script.setWidget(LW);
-      Script.complete();
-    }
+
   }
 
 
@@ -857,8 +814,11 @@ try {
       |        | 数据更新时间          |
       | col0   |        col1           |
   */
-
+    const height = device_size.medium.height
+    const width = device_size.medium.width
     const container = LW.addStack();
+    container.size = new Size(width, height);
+    container.setPadding(15,15,15,15)
     container.layoutHorizontally();
     container.spacing = 15;
     // 第1列
@@ -987,25 +947,7 @@ try {
       unit_stack.textOpacity = 0.5;
     });
   }
-
-
-  /**
-   * 中等桌面组件
-   * 接受参数 - authorization
-   */
-  async function renderMediumWidget() {
-    const height = device_size.small.height;
-    const width = device_size.small.width;
-    const theme = getTheme();
-
-    let curr_style = getSetting("style");
-    if (curr_style == undefined || curr_style == null) {
-      curr_style = "简约";
-      saveSetting("style", curr_style);
-    }
-    const LW = new ListWidget(); // widget对象
-    LW.url = url_scheme;
-    LW.backgroundGradient = theme.backgroundGradient;
+  async function getData(){
     let token;
     let authorization = getAuthorization();
     const token_result = await getToken(authorization);
@@ -1132,6 +1074,64 @@ try {
         remained_packet_size_unit,
         window_closed
       };
+      return data;
+  }else{
+    return null
+  }
+}
+
+async function renderWidget(widget_family){
+  const theme = getTheme();
+  const LW = new ListWidget(); // widget对象
+  LW.url = url_scheme;
+  LW.backgroundGradient = theme.backgroundGradient;
+  const background_image = await loadImage("背景图");
+  background_image ? (LW.backgroundImage = background_image) : null;
+  const data = await getData()
+  if(data == null){
+    LW.url = "https://gitee.com/zkytech/iOS14-widgets-for-scriptable#%E5%B0%8F%E7%BB%84%E4%BB%B6%E6%B7%B1%E8%93%9Dsl03%E8%BD%A6%E8%BE%86%E7%8A%B6%E6%80%81"
+    const t = LW.addText("请参照教程配置authorization\n点击查看配置教程");
+    t.font = Font.boldSystemFont(18);
+    t.textColor = Color.red();
+  }else{
+    if(widget_family == "small"){
+      await renderSmallWidget(LW,data)
+    }else if(widget_family == "medium"){
+      await renderMediumWidget(LW,data)
+    }else if(widget_family == "large"){
+      await renderLargeWidget(LW,data)
+    }else if(widget_family == "accessoryCircular"){
+      LW.backgroundImage = undefined
+      LW.backgroundGradient = undefined
+      await renderAccessoryCircularWidget(LW,data)
+    }
+  }
+  if(widget_family == "small"){
+    LW.presentSmall()
+  }else if(widget_family == "medium"){
+    LW.presentMedium()
+  }else if(widget_family == "large"){
+    LW.presentLarge()
+  }else if(widget_family == "accessoryCircular"){
+    LW.presentAccessoryCircular()
+  }
+  console.log("渲染结束");
+  Script.setWidget(LW);
+  Script.complete();
+
+}
+
+  /**
+   * 中等桌面组件
+   * 接受参数 - authorization
+   */
+  async function renderMediumWidget(LW,data) {
+
+    let curr_style = getSetting("style");
+    if (curr_style == undefined || curr_style == null) {
+      curr_style = "简约";
+      saveSetting("style", curr_style);
+    }
 
       if (curr_style == "模块化") {
         await mediumStyleModule(LW, data);
@@ -1139,22 +1139,8 @@ try {
       if (curr_style == "简约") {
         await mediumStyleSimple(LW, data);
       }
-
-      const background_image = await loadImage("背景图");
-      background_image ? (LW.backgroundImage = background_image) : null;
-    }
-
-    if (token == "" || token == null || token == undefined) {
-      LW.url = "https://gitee.com/zkytech/iOS14-widgets-for-scriptable#%E5%B0%8F%E7%BB%84%E4%BB%B6%E6%B7%B1%E8%93%9Dsl03%E8%BD%A6%E8%BE%86%E7%8A%B6%E6%80%81"
-      const t = LW.addText("请参照教程配置authorization\n点击查看配置教程");
-      t.font = Font.boldSystemFont(18);
-      t.textColor = Color.red();
-    }
-    console.log("渲染结束");
-    await LW.presentMedium();
-    Script.setWidget(LW);
-    Script.complete();
   }
+
   function getFileManager() {
     let fm;
     try {
@@ -1336,15 +1322,19 @@ try {
     const preview_actions = [
       {
         title: "🌤️锁屏组件",
-        action: async () => await renderAccessoryCircularWidget(),
+        action: async () => await renderWidget("accessoryCircular"),
+      },
+      {
+        title: "📱桌面组件(大)",
+        action: async () => await renderWidget("large"),
       },
       {
         title: "📱桌面组件(中)",
-        action: async () => await renderMediumWidget(),
+        action: async () => await renderWidget("medium"),
       },
       {
         title: "📱桌面组件(小)",
-        action: async () => await renderSmallWidget(),
+        action: async () => await renderWidget("small"),
       },
     ];
     preview_actions.map((action) => {
@@ -1494,6 +1484,26 @@ try {
           if ((await my_alert.present()) == 0) {
             authorization = my_alert.textFieldValue(0).trim();
             saveSetting("authorization", authorization);
+            await previewWidget();
+          } else console.log("取消");
+        },
+      },
+
+      {
+        title: "🛠️设置地图API KEY",
+        action: async () => {
+          let my_alert = new Alert();
+          let map_api_key = getSetting("map_api_key");
+          my_alert.title = "请输入map_api_key";
+          my_alert.addSecureTextField(
+            "请输入地图API KEY",
+            map_api_key == null ? map_api_key : ""
+          );
+          my_alert.addCancelAction("取消");
+          my_alert.addAction("保存");
+          if ((await my_alert.present()) == 0) {
+            map_api_key = my_alert.textFieldValue(0).trim();
+            saveSetting("map_api_key", map_api_key);
             await previewWidget();
           } else console.log("取消");
         },
@@ -1688,7 +1698,44 @@ try {
     }
 
   }
-} catch (e) {
-  console.error(e);
-  console.error(e.stack);
+
+async function loadMapView(latLng, width, height) {
+    try {
+        const map_api_key = getSetting("map_api_key")
+        if (!map_api_key) {
+            throw '获取地图失败，请检查API KEY';
+        }
+
+        width = parseInt(width);
+        height = parseInt(height);
+        
+        let mapApiKey = map_api_key;
+
+        let url = `https://restapi.amap.com/v3/staticmap?location=${latLng}&scale=2&zoom=15&size=${width}*${height}&markers=large,0x00CCFF,:${latLng}&key=${mapApiKey}&scale=2`;
+
+        console.warn('load map from URL: ' + url);
+        let req = new Request(url);
+
+        req.method = 'GET';
+
+        const img = await req.loadImage();
+        return img;
+    } catch (e) {
+        console.log('load map failed');
+        console.error(e.message);
+        let canvas = new DrawContext();
+        canvas.size = new Size(width, height);
+
+        canvas.setFillColor(new Color('#eee'));
+        canvas.fillRect(new Rect(0, 0, width, height));
+        canvas.drawTextInRect(e.message || '获取地图失败', new Rect(20, 20, width, height));
+
+        return await canvas.getImage();
+    }
 }
+
+function md5 (str) {
+  function d(n,t){var r=(65535&n)+(65535&t);return(n>>16)+(t>>16)+(r>>16)<<16|65535&r}function f(n,t,r,e,o,u){return d((c=d(d(t,n),d(e,u)))<<(f=o)|c>>>32-f,r);var c,f}function l(n,t,r,e,o,u,c){return f(t&r|~t&e,n,t,o,u,c)}function v(n,t,r,e,o,u,c){return f(t&e|r&~e,n,t,o,u,c)}function g(n,t,r,e,o,u,c){return f(t^r^e,n,t,o,u,c)}function m(n,t,r,e,o,u,c){return f(r^(t|~e),n,t,o,u,c)}function i(n,t){var r,e,o,u;n[t>>5]|=128<<t%32,n[14+(t+64>>>9<<4)]=t;for(var c=1732584193,f=-271733879,i=-1732584194,a=271733878,h=0;h<n.length;h+=16)c=l(r=c,e=f,o=i,u=a,n[h],7,-680876936),a=l(a,c,f,i,n[h+1],12,-389564586),i=l(i,a,c,f,n[h+2],17,606105819),f=l(f,i,a,c,n[h+3],22,-1044525330),c=l(c,f,i,a,n[h+4],7,-176418897),a=l(a,c,f,i,n[h+5],12,1200080426),i=l(i,a,c,f,n[h+6],17,-1473231341),f=l(f,i,a,c,n[h+7],22,-45705983),c=l(c,f,i,a,n[h+8],7,1770035416),a=l(a,c,f,i,n[h+9],12,-1958414417),i=l(i,a,c,f,n[h+10],17,-42063),f=l(f,i,a,c,n[h+11],22,-1990404162),c=l(c,f,i,a,n[h+12],7,1804603682),a=l(a,c,f,i,n[h+13],12,-40341101),i=l(i,a,c,f,n[h+14],17,-1502002290),c=v(c,f=l(f,i,a,c,n[h+15],22,1236535329),i,a,n[h+1],5,-165796510),a=v(a,c,f,i,n[h+6],9,-1069501632),i=v(i,a,c,f,n[h+11],14,643717713),f=v(f,i,a,c,n[h],20,-373897302),c=v(c,f,i,a,n[h+5],5,-701558691),a=v(a,c,f,i,n[h+10],9,38016083),i=v(i,a,c,f,n[h+15],14,-660478335),f=v(f,i,a,c,n[h+4],20,-405537848),c=v(c,f,i,a,n[h+9],5,568446438),a=v(a,c,f,i,n[h+14],9,-1019803690),i=v(i,a,c,f,n[h+3],14,-187363961),f=v(f,i,a,c,n[h+8],20,1163531501),c=v(c,f,i,a,n[h+13],5,-1444681467),a=v(a,c,f,i,n[h+2],9,-51403784),i=v(i,a,c,f,n[h+7],14,1735328473),c=g(c,f=v(f,i,a,c,n[h+12],20,-1926607734),i,a,n[h+5],4,-378558),a=g(a,c,f,i,n[h+8],11,-2022574463),i=g(i,a,c,f,n[h+11],16,1839030562),f=g(f,i,a,c,n[h+14],23,-35309556),c=g(c,f,i,a,n[h+1],4,-1530992060),a=g(a,c,f,i,n[h+4],11,1272893353),i=g(i,a,c,f,n[h+7],16,-155497632),f=g(f,i,a,c,n[h+10],23,-1094730640),c=g(c,f,i,a,n[h+13],4,681279174),a=g(a,c,f,i,n[h],11,-358537222),i=g(i,a,c,f,n[h+3],16,-722521979),f=g(f,i,a,c,n[h+6],23,76029189),c=g(c,f,i,a,n[h+9],4,-640364487),a=g(a,c,f,i,n[h+12],11,-421815835),i=g(i,a,c,f,n[h+15],16,530742520),c=m(c,f=g(f,i,a,c,n[h+2],23,-995338651),i,a,n[h],6,-198630844),a=m(a,c,f,i,n[h+7],10,1126891415),i=m(i,a,c,f,n[h+14],15,-1416354905),f=m(f,i,a,c,n[h+5],21,-57434055),c=m(c,f,i,a,n[h+12],6,1700485571),a=m(a,c,f,i,n[h+3],10,-1894986606),i=m(i,a,c,f,n[h+10],15,-1051523),f=m(f,i,a,c,n[h+1],21,-2054922799),c=m(c,f,i,a,n[h+8],6,1873313359),a=m(a,c,f,i,n[h+15],10,-30611744),i=m(i,a,c,f,n[h+6],15,-1560198380),f=m(f,i,a,c,n[h+13],21,1309151649),c=m(c,f,i,a,n[h+4],6,-145523070),a=m(a,c,f,i,n[h+11],10,-1120210379),i=m(i,a,c,f,n[h+2],15,718787259),f=m(f,i,a,c,n[h+9],21,-343485551),c=d(c,r),f=d(f,e),i=d(i,o),a=d(a,u);return[c,f,i,a]}function a(n){for(var t="",r=32*n.length,e=0;e<r;e+=8)t+=String.fromCharCode(n[e>>5]>>>e%32&255);return t}function h(n){var t=[];for(t[(n.length>>2)-1]=void 0,e=0;e<t.length;e+=1)t[e]=0;for(var r=8*n.length,e=0;e<r;e+=8)t[e>>5]|=(255&n.charCodeAt(e/8))<<e%32;return t}function e(n){for(var t,r="0123456789abcdef",e="",o=0;o<n.length;o+=1)t=n.charCodeAt(o),e+=r.charAt(t>>>4&15)+r.charAt(15&t);return e}function r(n){return unescape(encodeURIComponent(n))}function o(n){return a(i(h(t=r(n)),8*t.length));var t}function u(n,t){return function(n,t){var r,e,o=h(n),u=[],c=[];for(u[15]=c[15]=void 0,16<o.length&&(o=i(o,8*n.length)),r=0;r<16;r+=1)u[r]=909522486^o[r],c[r]=1549556828^o[r];return e=i(u.concat(h(t)),512+8*t.length),a(i(c.concat(e),640))}(r(n),r(t))}function t(n,t,r){return t?r?u(t,n):e(u(t,n)):r?o(n):e(o(n))}
+  return t(str)
+}
+

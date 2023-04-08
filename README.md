@@ -239,6 +239,13 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 ![](https://i.328888.xyz/2023/03/20/Pjc43.jpeg)
 ![](https://i.328888.xyz/2023/04/05/i8cBAa.png)
 
+### 地图API获取（仅大号组件需要）
+
+1. 前往[高德开放平台](https://console.amap.com/dev/user/permission)注册账号，并认证个人开发者
+2. 在[应用管理-我的应用]中创建一个应用命名为`sl03_widget`
+3. 点击应用右侧的`添加`按钮，key名称设置为`sl03_widget_key`，服务平台选择Web服务，提交确认
+4. 复制刚刚创建的`key`，输入到小组件的设置中，保存即可
+
 ### 常见问题
 
 1. SSL错误？
