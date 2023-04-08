@@ -199,7 +199,7 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 
 ##### 速通版本
 
-对深蓝APP进行抓包，获取API`/appapi/v1/member/ms/cacToken`响应里面的`Authorization`，然后把token填入组件参数里就行了，组件高级功能在Scriptable APP里直接运行脚本就能看到。（如果你能看懂就不用看下面的了）
+对深蓝APP进行抓包，获取API`/appapi/v1/member/ms/cacToken`请求体header里面的`Authorization`，然后把token填入组件参数里就行了，组件高级功能在Scriptable APP里直接运行脚本就能看到。（如果你能看懂就不用看下面的了）
 
 ##### 详细版本
 
