@@ -646,7 +646,7 @@
     let displayFont = Font.systemFont(10);
     let displayFontColor = fontColor;
     if (!door_locked) {
-      displayFontColor = new Color(Color.red(), 1);
+      displayFontColor = Color.red()
       displayFont = Font.boldSystemFont(10);
     }
 
@@ -721,7 +721,7 @@
         let displayFont = Font.systemFont(10);
         let displayFontColor = fontColor;
         if (!door_locked || !window_closed) {
-          displayFontColor = new Color(Color.red(), 1);
+          displayFontColor = Color.red()
           displayFont = Font.boldSystemFont(10);
         }
 
