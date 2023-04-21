@@ -955,6 +955,7 @@
       token = null;
     } else {
       token = token_result.access_token;
+      saveSetting("access_token", token);
     }
 
     const car_id = await getCarId(token, authorization);
