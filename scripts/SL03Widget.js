@@ -959,6 +959,9 @@
     }
 
     const car_id = await getCarId(token, authorization);
+    if(car_id){
+      saveSetting("car_id",car_id)
+    }
     // await refreshCarData()
     const car_status = await getCarStatus(token, car_id, authorization);
     const car_info = await getCarInfo(token, car_id, authorization);
