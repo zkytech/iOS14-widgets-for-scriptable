@@ -431,7 +431,7 @@
       if(!door_locked){
         statusTxt = "已解锁"
       }
-      const car_status_txt = carStatusBox.addText(
+      const car_status_txt = car_status_box.addText(
         statusTxt
       );
       let display_font = Font.systemFont(10);
