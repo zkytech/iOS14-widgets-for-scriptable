@@ -320,7 +320,8 @@
       total_mixed_mile,
       remained_packet_size,
       remained_packet_size_unit,
-      window_closed
+      window_closed,
+      trunk_closed
     } = data
 
       LW.setPadding(0, 0, 0, 0);
@@ -420,10 +421,19 @@
         new Color("#fff", 0.2)
       );
 
-      const car_status_txt = car_status_box.addText(
-        `${door_locked ? "已上锁" : "已解锁"}`
+      let statusTxt = "已上锁"
+      if(!window_closed){
+        statusTxt = "车窗开启"
+      }
+      if(!trunk_closed){
+        statusTxt = "后备箱开启"
+      }
+      if(!door_locked){
+        statusTxt = "已解锁"
+      }
+      const car_status_txt = carStatusBox.addText(
+        statusTxt
       );
-
       let display_font = Font.systemFont(10);
       let display_font_color = theme.primaryTextColor;
       if (!door_locked) {
@@ -517,7 +527,8 @@
       total_mixed_mile,
       remained_packet_size,
       remained_packet_size_unit,
-      window_closed
+      window_closed,
+      trunk_closed
     } = data;
     let w = LW;
     let fontColor = theme.primaryTextColor;
@@ -638,14 +649,23 @@
     carStatusBox.centerAlignContent();
     carStatusBox.cornerRadius = 4;
     carStatusBox.backgroundColor = theme.focousBackgroundColor;
-
+    let statusTxt = "已上锁"
+    if(!window_closed){
+      statusTxt = "车窗开启"
+    }
+    if(!trunk_closed){
+      statusTxt = "后备箱开启"
+    }
+    if(!door_locked){
+      statusTxt = "已解锁"
+    }
     const carStatusTxt = carStatusBox.addText(
-      `${door_locked ? "已上锁" : "已解锁"}`
+      statusTxt
     );
 
     let displayFont = Font.systemFont(10);
     let displayFontColor = fontColor;
-    if (!door_locked) {
+    if (!door_locked || !window_closed || !trunk_closed) {
       displayFontColor = Color.red()
       displayFont = Font.boldSystemFont(10);
     }
@@ -709,14 +729,22 @@
 
         windowStatusContainer.layoutHorizontally();
         windowStatusContainer.addSpacer();
-        let windowStatus = `所有车门和车窗已关闭`;
+        let statusTxt = "所有车门和车窗已关闭"
+        let bad_status_list = []
         if(!door_locked){
-          windowStatus = "车门未锁";
-        }else if(!window_closed){
-          windowStatus = "车窗未关"
+          bad_status_list.push("已解锁")
+        }
+        if(!trunk_closed){
+          bad_status_list.push("后备箱开启")
+        }
+        if(!window_closed){
+          bad_status_list.push("车窗开启")
+        }
+        if(bad_status_list.length != 0){
+          statusTxt = bad_status_list.join(",")
         }
 
-        let windowStatusText = windowStatusContainer.addText(windowStatus);
+        let windowStatusText = windowStatusContainer.addText(statusTxt);
 
         let displayFont = Font.systemFont(10);
         let displayFontColor = fontColor;
@@ -1056,6 +1084,8 @@
         remained_packet_size = getSetting("remained_packet_size");
         remained_packet_size_unit = getSetting("remained_packet_size_unit");
       }
+      // 后备箱开关状态
+      const trunk_closed = ![1, 2, 3, 4].includes(car_status.energytrunk);
       const data = {
         update_time,
         total_odometer,
@@ -1077,7 +1107,8 @@
         total_mixed_mile,
         remained_packet_size,
         remained_packet_size_unit,
-        window_closed
+        window_closed,
+        trunk_closed
       };
       return data;
   }else{
