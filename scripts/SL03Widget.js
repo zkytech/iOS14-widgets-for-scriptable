@@ -1291,15 +1291,20 @@ async function getService(name, url, force_download) {
   if (fm.fileExists(lib_file) && !force_download) {
     try {
       fm.downloadFileFromiCloud(lib_file);
-    } catch (e) {}
+    } catch (e) {console.error(e.message)};
   } else {
     // download once
-    const req = new Request(url);
-    let indexjs = await req.load();
-    if (req.response.statusCode == 200) {
-      // 只有响应正常时才写入文件，避免写入错误的内容
-      fm.write(lib_file, indexjs);
+    try{
+      const req = new Request(url);
+      let indexjs = await req.load();
+      if (req.response.statusCode == 200) {
+        // 只有响应正常时才写入文件，避免写入错误的内容
+        fm.write(lib_file, indexjs);
+      }
+    }catch(e){
+      console.error(e.message);
     }
+
   }
 
   let service = importModule("lib/service/" + name);
