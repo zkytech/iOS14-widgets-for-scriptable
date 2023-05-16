@@ -203,7 +203,7 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 
 ##### 视频教程
 
-<iframe src="//player.bilibili.com/player.html?aid=270532922&bvid=BV1Xc411K7ZN&cid=1114109523&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+[https://www.bilibili.com/video/BV1Xc411K7ZN/](https://www.bilibili.com/video/BV1Xc411K7ZN/)
 
 ##### 详细版本
 
