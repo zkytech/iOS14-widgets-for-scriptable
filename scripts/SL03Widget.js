@@ -1217,6 +1217,7 @@ async function loadImage(name) {
 		车: "https://i.328888.xyz/2023/03/20/PMpHE.png",
 		LOGO: "https://deepal.com.cn/202303112321/share_logo.png",
 		锁屏车: "https://i.328888.xyz/2023/03/27/inBH5a.png",
+		关注我们: "https://i.328888.xyz/2023/05/16/ViJdVc.jpeg"
 	};
 	const user_defined_settings_name_map = {
 		车: "car_img_path",
@@ -1509,6 +1510,13 @@ async function askSettings() {
 					"https://gitee.com/zkytech/iOS14-widgets-for-scriptable"
 				);
 			},
+		},
+		{
+			title: "🤝关注我们",
+			action: async () => {
+				QuickLook.present(await loadImage("关注我们"));
+			}
+
 		},
 		{
 			title: "🛠️设置authorization",
