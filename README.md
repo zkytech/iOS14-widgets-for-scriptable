@@ -201,6 +201,10 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 
 对深蓝APP进行抓包，获取API`/appapi/v1/member/ms/cacToken`请求体header里面的`Authorization`，然后把token填入组件参数里就行了，组件高级功能在Scriptable APP里直接运行脚本就能看到。（如果你能看懂就不用看下面的了）
 
+##### 视频教程
+
+<iframe src="//player.bilibili.com/player.html?aid=270532922&bvid=BV1Xc411K7ZN&cid=1114109523&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
 ##### 详细版本
 
 本组件需要获取`Authorization`，操作过程涉及抓包，幸运的是，<font color="green">IOS是抓包操作最简单的平台</font>，抓包方法我会讲。以桌面组件为例，`Authorization`获取及使用方法如下：
