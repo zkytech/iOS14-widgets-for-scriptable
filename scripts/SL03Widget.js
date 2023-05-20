@@ -17,7 +17,7 @@ const branch = "dev";
 const project_name = "深蓝小组件_by_zkytech";
 // const force_download = branch != "master";
 force_download = true;
-const url_scheme = "qiyuancar://";
+const url_scheme = "deepalcar://";
 const screenSize = Device.screenResolution();
 const scale = Device.screenScale();
 const DEVICE_SIZE = {
