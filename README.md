@@ -2,48 +2,45 @@
 > 
 > 联系邮箱：zhangkunyuan@hotmail.com ，PR请提交到[:link:Github](https://github.com/zkytech/iOS14-widgets-for-scriptable) 
 
-## 紧急通知：2023年4月4日，官方调整了API接口认证方式，导致旧版脚本无法正常使用，脚本已经完成更新适配，需要获取新的`Authorization`参数，具体方法请看下面文档。
 # iOS 14小组件
 <!-- vscode-markdown-toc -->
-- [iOS 14小组件](#ios-14小组件)
-  - [使用方法](#使用方法)
-    - [安装scriptable](#安装scriptable)
-    - [安装脚本](#安装脚本)
-    - [使用](#使用)
-  - [ 小组件：bilibili最近更新番剧列表](#-小组件bilibili最近更新番剧列表)
-    - [效果预览](#效果预览)
-    - [安装](#安装)
-    - [参数](#参数)
-  - [小组件：LOL近期赛事列表](#小组件lol近期赛事列表)
-    - [效果预览](#效果预览-1)
-    - [安装](#安装-1)
-  - [小组件：深蓝SL03车辆状态](#小组件深蓝sl03车辆状态)
-    - [效果预览](#效果预览-2)
-    - [安装](#安装-2)
-    - [参数](#参数-1)
-      - [`Authorization`获取方法](#Authorization获取方法)
-        - [速通版本](#速通版本)
-        - [详细版本](#详细版本)
-    - [主题设置、自定义车辆图片、LOGO、型号文本...](#主题设置自定义车辆图片logo型号文本)
+* [使用方法](#使用方法)
+  * [安装scriptable](#安装scriptable)
+  * [安装脚本](#安装脚本)
+  * [使用](#使用)
+* [ 小组件：bilibili最近更新番剧列表](#-小组件：bilibili最近更新番剧列表)
+  * [效果预览](#效果预览)
+  * [安装](#安装)
+  * [参数](#参数)
+* [小组件：LOL近期赛事列表](#小组件：lol近期赛事列表)
+  * [效果预览](#效果预览-1)
+  * [安装](#安装-1)
+* [小组件：深蓝SL03车辆状态](#小组件：深蓝sl03车辆状态)
+  * [效果预览](#效果预览-2)
+  * [安装](#安装-2)
+  * [参数](#参数-1)
+  * [主题设置、自定义车辆图片、LOGO、型号文本...](#主题设置、自定义车辆图片、logo、型号文本...)
+  * [地图API获取（仅大号组件需要）](#地图api获取（仅大号组件需要）)
+  * [常见问题](#常见问题)
 
 <!-- vscode-markdown-toc-config
 	numbering=false
 	autoSave=true
 	/vscode-markdown-toc-config -->
 <!-- /vscode-markdown-toc -->
-## 使用方法
-### 安装scriptable
+## <a name='使用方法'></a>使用方法
+### <a name='安装scriptable'></a>安装scriptable
 安装App Store中的[:link:Scriptable](https://apps.apple.com/cn/app/scriptable/id1405459188)
 <!-- > 这里建议安装测试版，因为测试版支持更多特性，且我的脚本一般是以测试版为基础编写的。 -->
 
-### 安装脚本
+### <a name='安装脚本'></a>安装脚本
 
 下方各组件的章节内有对应脚本的安装链接，点击下载后用`Scriptable APP`打开。选择`Add to my scripts`即可。
 
 
 ![](./preview/安装脚本.jpg)
 
-### 使用
+### <a name='使用'></a>使用
 
 1. 安装scriptable后会自动创建几个Demo脚本，其中有一个脚本是`Random Scriptable API`，先点击运行一次这个脚本。
 
@@ -52,17 +49,17 @@
 3. 编辑 小组件，点击`选取 script` 并选择前面导入的脚本。
 
 
-## <a name='2-bilibili最近更新番剧列表'></a> 小组件：bilibili最近更新番剧列表
+## <a name='-小组件：bilibili最近更新番剧列表'></a> 小组件：bilibili最近更新番剧列表
 
-### <a name='2.1-效果预览'></a>效果预览
+### <a name='效果预览'></a>效果预览
 
 ![](./preview/bilibili预览.JPEG)
 
-### <a name='2.2-安装'></a>安装
+### <a name='安装'></a>安装
 
 下载[:link:安装脚本](https://public.zkytech.top/iOS14-widgets-for-scriptable/bilibili.scriptable)后，用`scriptable`打开
 
-### <a name='2.3-参数'></a>参数
+### <a name='参数'></a>参数
 
 小组件的parameter可以设置以下几个值
 
@@ -127,24 +124,24 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 
 ![](preview/bilibili配置2.jpg)
 
-## 小组件：LOL近期赛事列表
+## <a name='小组件：lol近期赛事列表'></a>小组件：LOL近期赛事列表
 
-### 效果预览
+### <a name='效果预览-1'></a>效果预览
 
 ![](./preview/LOL%E9%A2%84%E8%A7%88.PNG)
 
-### 安装
+### <a name='安装-1'></a>安装
 
 下载[:link:安装脚本](https://public.zkytech.top/iOS14-widgets-for-scriptable/lol.scriptable)后，用`scriptable`打开
 
-## 小组件：深蓝SL03车辆状态
+## <a name='小组件：深蓝sl03车辆状态'></a>小组件：深蓝SL03车辆状态
 
 <font color="red"><b>声明</b></font>：
 - 脚本所展示的信息不保证准确无误，锁车、充电、电量、油量等所有信息仅供参考，请勿将桌面组件展示的数据作为决策依据，由于脚本展示数据错误/误差造成的任何后果，本人概不负责。
 - 脚本需要使用深蓝APP的登录信息来获取数据，安装即代表您同意脚本使用您的登录信息。
   - 所有数据只会存储在您的iCloud云盘或者手机本地，不会上传到任何第三方服务器。
 
-### 效果预览
+### <a name='效果预览-2'></a>效果预览
 
 特性:
  - 支持 中/小 桌面组件 以及 锁屏组件
@@ -166,7 +163,7 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 自定义数据块
 ![](https://i.328888.xyz/2023/03/24/i4ZMcb.png)
 
-### 安装
+### <a name='安装-2'></a>安装
 
 为了节省你的时间，<font color="red"><b>请认真阅读下面的操作步骤</b></font>，并依照文档进行操作，<font color="red"><b>跳过任何一个字都只会成倍地浪费你的时间</b></font>。为了帮助小白理解，最下面有抓包操作流程图。
 
@@ -188,49 +185,19 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 4. 安装scriptable后会自动创建几个Demo脚本，其中有一个脚本是`Random Scriptable API`，先点击运行一次这个脚本。(如果没有看到`Random Scriptable API`脚本就在`Gallery标签页 -> Great WIdgets`里面添加)。
 5. 按照下面章节讲的方法获取`Authorization`并设置到脚本中。
 
-### 参数
+### <a name='参数-1'></a>参数
 
 - 桌面组件参数: `Authorization`
 - 锁屏组件参数: `模式`
   - 非必填，可以填写:`电`、`油`，默认显示电量
   - 请先设置好桌面组件再使用锁屏组件
+##### 教程
+关注公众号查看视频教程
 
-#### `Authorization`获取方法
-
-##### 速通版本
-
-对深蓝APP进行抓包，获取API`/appapi/v1/member/ms/cacToken`请求体header里面的`Authorization`，然后把token填入组件参数里就行了，组件高级功能在Scriptable APP里直接运行脚本就能看到。（如果你能看懂就不用看下面的了）
-
-##### 视频教程
-
-[https://www.bilibili.com/video/BV1Xc411K7ZN/](https://www.bilibili.com/video/BV1Xc411K7ZN/)
-
-##### 详细版本
-
-本组件需要获取`Authorization`，操作过程涉及抓包，幸运的是，<font color="green">IOS是抓包操作最简单的平台</font>，抓包方法我会讲。以桌面组件为例，`Authorization`获取及使用方法如下：
-
-**为了你的数据安全请不要在公开场合发送抓包截图，拿到token相当于拿到了你的账号，通过token可以随时拿到你车子的定位和车门闭锁等数据，甚至可能直接操控车辆**
+![](https://i.imgloc.com/2023/05/30/Vt1snP.jpeg)
 
 
-1. 安装[:link:Stream APP](https://apps.apple.com/cn/app/stream/id1312141691)，并开启<font color="red"><b>HTTPS抓包</b></font>功能，必须要显示“<font color="blue">设置成功：CA证书已经安装且信任</font>”。
-![](./preview/HTTPS%E6%8A%93%E5%8C%85%E5%BC%80%E5%90%AF%E7%95%8C%E9%9D%A2.PNG)
-1. 点击`开始抓包`
-2. 打开`深蓝`APP，进入控车页面，下拉刷新车辆状态，为了确保请求能被抓到，建议多刷几次。
-3. 回到`Stream` APP，停止抓包
-4. 进入抓包历史，查看刚刚生成的抓包记录，搜索`cacToken`(注意搜索框里不要输入空格)，可以看到URI为`/appapi/v1/member/ms/cacToken`的请求
-5. 点击查看请求详情，查看`请求-请求头部`
-6. 将`Authorization`的<font color="red"><b>值</b></font>复制下来（比如你看到的是`Authorization : asd_iIAASHUDjmsdxxxxx`,这里要复制的就是`asd_iIAASHUDjmsdxxxxx`，千万不要复制多余的东西）
-7. 打开`Scriptable`，运行脚本`SL03Widget`，选择`设置authorization`，粘贴刚刚复制的内容并保存
-8. 回到桌面，新增桌面组件，创建Scriptable**中等大小**组件。
-9.  在桌面**长按**上一步添加的小组件，在弹出菜单中选择**编辑小组件**，此时会出现小组件的设置界面，修改下面1项设置：
-   -  `Script`：点击选择前面安装的脚本`SL03Widget`，
-10.  点击空白处回到桌面，等待小组件完成加载。
-
-> 锁屏组件目前只支持小号电量/油量圆环，锁屏组件的添加方法请参考[:link:视频教程](https://www.bilibili.com/video/BV19d4y1q7vi/?spm_id_from=333.337.search-card.all.click&vd_source=5b7cf4daa7d98506767a0757e0b64d77)进行操作。
-
-<!-- ![](https://i.328888.xyz/2023/03/20/PjjEk.jpeg) -->
-
-### 主题设置、自定义车辆图片、LOGO、型号文本...
+### <a name='主题设置、自定义车辆图片、logo、型号文本...'></a>主题设置、自定义车辆图片、LOGO、型号文本...
 
 目前支持自定义的内容：
 - `型号`
@@ -243,14 +210,14 @@ type,onlyFollowed,uid  //注意必须用英文逗号
 ![](https://i.328888.xyz/2023/03/20/Pjc43.jpeg)
 ![](https://i.328888.xyz/2023/04/05/i8cBAa.png)
 
-### 地图API获取（仅大号组件需要）
+### <a name='地图api获取（仅大号组件需要）'></a>地图API获取（仅大号组件需要）
 
 1. 前往[高德开放平台](https://console.amap.com/dev/user/permission)注册账号，并认证个人开发者
 2. 在[应用管理-我的应用]中创建一个应用命名为`sl03_widget`
 3. 点击应用右侧的`添加`按钮，key名称设置为`sl03_widget_key`，服务平台选择Web服务，提交确认
 4. 复制刚刚创建的`key`，输入到小组件的设置中，保存即可
 
-### 常见问题
+### <a name='常见问题'></a>常见问题
 
 1. SSL错误？
 
