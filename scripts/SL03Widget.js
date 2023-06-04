@@ -1214,10 +1214,10 @@ function getImageDir() {
 // 加载图片
 async function loadImage(name) {
 	const img_map = {
-		车: "https://i.328888.xyz/2023/03/20/PMpHE.png",
+		车: "https://i.imgloc.com/2023/03/20/PMpHE.png",
 		LOGO: "https://deepal.com.cn/202303112321/share_logo.png",
-		锁屏车: "https://i.328888.xyz/2023/03/27/inBH5a.png",
-		关注我们: "https://i.328888.xyz/2023/05/16/ViJdVc.jpeg"
+		锁屏车: "https://i.imgloc.com/2023/03/27/inBH5a.png",
+		关注我们: "https://i.imgloc.com/2023/05/16/ViJdVc.jpeg"
 	};
 	const user_defined_settings_name_map = {
 		车: "car_img_path",
@@ -1318,23 +1318,23 @@ async function selectCarColor() {
 	const colors = [
 		{
 			name: "星云青",
-			img_url: "https://i.328888.xyz/2023/03/20/PM3NF.png",
+			img_url: "https://i.imgloc.com/2023/03/20/PM3NF.png",
 		},
 		{
 			name: "月岩灰",
-			img_url: "https://i.328888.xyz/2023/03/20/PMrAZ.png",
+			img_url: "https://i.imgloc.com/2023/03/20/PMrAZ.png",
 		},
 		{
 			name: "天河蓝",
-			img_url: "https://i.328888.xyz/2023/03/20/PMRhH.png",
+			img_url: "https://i.imgloc.com/2023/03/20/PMRhH.png",
 		},
 		{
 			name: "星矿黑",
-			img_url: "https://i.328888.xyz/2023/03/20/PMcuQ.png",
+			img_url: "https://i.imgloc.com/2023/03/20/PMcuQ.png",
 		},
 		{
 			name: "彗星白",
-			img_url: "https://i.328888.xyz/2023/03/20/PMpHE.png",
+			img_url: "https://i.imgloc.com/2023/03/20/PMpHE.png",
 		},
 	];
 	const alert = new Alert();
