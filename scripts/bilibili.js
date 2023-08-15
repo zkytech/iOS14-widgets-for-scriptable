@@ -382,7 +382,7 @@ try {
     const fm = FileManager.iCloud();
     const folder = fm.documentsDirectory();
     const req = new Request(
-      "https://public.zkytech.top/iOS14-widgets-for-scriptable/master/bilibili.js"
+      "https://widget.deepal.fun/iOS14-widgets-for-scriptable/master/bilibili.js"
     );
     let scriptTxt = await req.loadString();
     const filename = `/${Script.name()}.js`;
