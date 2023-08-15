@@ -16,7 +16,7 @@
 const branch = "dev";
 const project_name = "深蓝小组件_by_zkytech";
 // const force_download = branch != "master";
-force_download = true;
+const force_download = false;
 const url_scheme = "deepalcar://";
 const screenSize = Device.screenResolution();
 const scale = Device.screenScale();
