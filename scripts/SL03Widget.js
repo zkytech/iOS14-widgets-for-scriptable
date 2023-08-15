@@ -4,7 +4,7 @@
  * 联系邮箱: zhangkunyuan@hotmail.com
  *
  *
- * 参数获取和填写方法见文档: https://public.zkytech.top/iOS14-widgets-for-scriptable/${branch}#4-%E6%B7%B1%E8%93%9Dsl03%E8%BD%A6%E8%BE%86%E7%8A%B6%E6%80%81
+ * 参数获取和填写方法见文档: https://widget.deepal.fun/iOS14-widgets-for-scriptable/${branch}#4-%E6%B7%B1%E8%93%9Dsl03%E8%BD%A6%E8%BE%86%E7%8A%B6%E6%80%81
  * - 组件依赖深蓝APP登录信息（authorization）
  * - 本组件仅用于学习交流
  * - 本组件为开源软件，不会进行收费！！！
@@ -162,17 +162,17 @@ const {
 	getChargeStatus,
 } = await getService(
 	"SL03Api",
-	`https://public.zkytech.top/iOS14-widgets-for-scriptable/${branch}/lib/service/SL03Api.js`,
+	`https://widget.deepal.fun/iOS14-widgets-for-scriptable/${branch}/lib/service/SL03Api.js`,
 	force_download
 );
 const { update } = await getService(
 	"UpdateScript",
-	`https://public.zkytech.top/iOS14-widgets-for-scriptable/${branch}/lib/service/UpdateScript.js`,
+	`https://widget.deepal.fun/iOS14-widgets-for-scriptable/${branch}/lib/service/UpdateScript.js`,
 	force_download
 );
 let { getDataFromSettings, saveDataToSettings } = await getService(
 	"Settings",
-	`https://public.zkytech.top/iOS14-widgets-for-scriptable/${branch}/lib/service/Settings.js`,
+	`https://widget.deepal.fun/iOS14-widgets-for-scriptable/${branch}/lib/service/Settings.js`,
 	force_download
 );
 function getSetting(key) {
@@ -185,7 +185,7 @@ function saveSetting(key, value) {
 if (branch == "master") {
 	// 更新组件代码
 	await update(
-		`https://public.zkytech.top/iOS14-widgets-for-scriptable/${branch}/SL03Widget.js`
+		`https://widget.deepal.fun/iOS14-widgets-for-scriptable/${branch}/SL03Widget.js`
 	);
 }
 try {
@@ -264,7 +264,7 @@ async function renderLargeWidget(LW, data) {
 async function renderAccessoryCircularWidget(LW, data) {
 	const { drawArc } = await getService(
 		"DrawShape",
-		`https://public.zkytech.top/iOS14-widgets-for-scriptable/${branch}/lib/service/DrawShape.js`,
+		`https://widget.deepal.fun/iOS14-widgets-for-scriptable/${branch}/lib/service/DrawShape.js`,
 		force_download
 	);
 	const params = args.widgetParameter ? args.widgetParameter.split(",") : [""];
